@@ -1,47 +1,30 @@
-<!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+	<title></title>
 </head>
 <body>
-<img src="http://puu.sh/y4o0s/7ab9ad6e26.jpg"> 
+<h2 style="text-align: center;"><span style="font-family:tahoma,geneva,sans-serif;">Update 1.00.000 is now released!</span></h2>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<p>Update to the latest version by clicking the update button bottom-left corner.</p>
 
-<a href="http://puu.sh/y4o0s/7ab9ad6e26.jpg">link to img</a>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
+<p>Patch notes: <a href="https://github.com/1Ridav/PengueeBot/wiki/Patch-notes">link</a></p>
 
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
-<p>Loooongg</p>
+<ul>
+	<li>Penguee on Github <a href="https://github.com/1Ridav/PengueeBot/">link</a></li>
+	<li>Visit&nbsp; <a href="https://github.com/1Ridav/PengueeBot/wiki/Manual">manual page [eng]</a> or <a href="https://github.com/1Ridav/PengueeBot/wiki/Manual-%5Brus%5D">manual page [rus]</a></li>
+	<li>Wiki <a href="https://github.com/1Ridav/PengueeBot/wiki">page</a></li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>Support author</p>
+
+<p>Donate:</p>
+
+<ul>
+	<li>Webmoney:</li>
+	<li>WME: E169563136502</li>
+	<li>WMZ: Z349748353724</li>
+</ul>
 </body>
 </html>
