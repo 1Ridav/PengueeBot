@@ -46,12 +46,12 @@ public class SettingsPanel extends JPanel {
 
 		menuCentral.setLayout(null);
 
-		JLabel ramSliderLabel = new JLabel("2048");
+		final JLabel ramSliderLabel = new JLabel("2048");
 		ramSliderLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		ramSliderLabel.setForeground(Color.WHITE);
 		ramSliderLabel.setBounds(177, 11, 64, 52);
 		menuCentral.add(ramSliderLabel);
-		JSlider ramSlider = new JSlider();
+		final JSlider ramSlider = new JSlider();
 		ramSlider.setForeground(Color.WHITE);
 		ramSlider.setBackground(Color.DARK_GRAY);
 		ramSlider.setPaintLabels(true);
@@ -78,7 +78,7 @@ public class SettingsPanel extends JPanel {
 		menuCentral.add(ramSlider);
 		ramSlider.setValue(Integer.parseInt(Data.xmxValue));
 
-		JLabelToggle useCacheToggle = new JLabelToggle();
+		final JLabelToggle useCacheToggle = new JLabelToggle();
 		useCacheToggle.setIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_off.png")));
 		useCacheToggle.setSelectedIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_on.png")));
 		useCacheToggle.setSelected(Data.useInternalCache);
@@ -104,7 +104,7 @@ public class SettingsPanel extends JPanel {
 		lblNewLabel_2.setBounds(28, 137, 330, 50);
 		menuCentral.add(lblNewLabel_2);
 
-		JLabelToggle forceGPUToggle = new JLabelToggle();
+		final JLabelToggle forceGPUToggle = new JLabelToggle();
 		forceGPUToggle.setIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_off.png")));
 		forceGPUToggle.setSelectedIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_on.png")));
 		forceGPUToggle.setSelected(Data.forceUseGPU);

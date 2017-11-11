@@ -79,7 +79,7 @@ public class GrabPanel extends JPanel {
 		grabCentral.setBounds(0, 55, 834, 530);
 		grabCentral.setLayout(null);
 
-		JPanel grabPanelScreenshot = new JPanel() {
+		final JPanel grabPanelScreenshot = new JPanel() {
 			/**
 			 * 
 			 */

@@ -19,7 +19,7 @@ import java.net.URL;
 public class Update {
 	public final static String version = "1.0.0";
 	private static String versionURL = "https://raw.githubusercontent.com/1Ridav/PengueeBot/master/Install/version";
-	private static String downloadURL = "https://github.com/1Ridav/PengueeBot/raw/master/Install/pengueebot-latest-release.zip";
+	private static String downloadURL = "https://github.com/1Ridav/PengueeBot/releases/download/v";
 	private static String newsURL = "https://raw.githubusercontent.com/1Ridav/PengueeBot/master/Install/news";
 
 	public Update() {
@@ -44,7 +44,8 @@ public class Update {
 
 	public static void update() {
 		try {
-	        Desktop.getDesktop().browse(new URL(downloadURL).toURI());
+			
+	        Desktop.getDesktop().browse(new URL(downloadURL + getLatestVersionID(versionURL)+"/penguee-latest-release.zip").toURI());
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }

@@ -211,19 +211,19 @@ public class Action {
 		screen.grab();
 	}
 
-	public void grabRect(int x, int y, int w, int h) {
+	public void grab(int x, int y, int w, int h) {
 		screen.grab_rect(x, y, w, h);
 	}
 
-	public void grabRect(MatrixPosition mp, int w, int h) {
+	public void grab(MatrixPosition mp, int w, int h) {
 		screen.grab_rect(mp.x, mp.y, w, h);
 	}
 
-	public void grab_rect(MatrixPosition p1, MatrixPosition p2) {
+	public void grab(MatrixPosition p1, MatrixPosition p2) {
 		screen.grab_rect(p1, p2);
 	}
 
-	public void grab_rect(Rectangle rect) {
+	public void grab(Rectangle rect) {
 		screen.grab_rect(rect);
 	}
 
