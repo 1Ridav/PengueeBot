@@ -72,12 +72,11 @@ public class Screen {
 
 	void grab_rect(Rectangle rect) {
 		try {
-			image = robot.createScreenCapture(rect);
 
 			if (screenFrag == null) {
-				screenFrag = new Frag(new int[rect.height][rect.width]);
-				screenFrag.getIntRGB(image, rect.x, rect.y);
+				grab();
 			} else {
+				image = robot.createScreenCapture(rect);
 				// REFRESH MATRIX BUFFER
 				screenFrag.getIntRGB(image, rect.x, rect.y);
 			}
