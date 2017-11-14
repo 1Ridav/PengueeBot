@@ -33,9 +33,8 @@ public class Data {
 			System.out.println("CORE: Error occured while loading "
 					+ failedToLoadFragmentsList.size()
 					+ " fragments. Here is the list:");
-			for (File k : failedToLoadFragmentsList) {
+			for (File k : failedToLoadFragmentsList)
 				System.out.println("     " + k.getAbsolutePath());
-			}
 		}
 	}
 

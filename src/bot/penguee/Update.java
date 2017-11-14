@@ -43,8 +43,7 @@ public class Update {
 	}
 
 	public static void update() {
-		try {
-			
+		try {		
 	        Desktop.getDesktop().browse(new URL(downloadURL + getLatestVersionID(versionURL)+"/penguee-latest-release.zip").toURI());
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -52,13 +51,11 @@ public class Update {
 	}
 
 	public static boolean available() {
-
 		try {
 			String result = getLatestVersionID(versionURL).replace('.', '0');
 			String myVersion = version.replace('.', '0');
-			if (Long.parseLong(myVersion) < Long.parseLong(result)) {
+			if (Long.parseLong(myVersion) < Long.parseLong(result))
 				return true;
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.err.println("Failed to check for updates");
