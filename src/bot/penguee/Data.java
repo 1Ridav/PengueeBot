@@ -19,7 +19,7 @@ public class Data {
 	public static String xmxValue = null;
 	public static boolean useInternalCache = true;
 	private static ArrayList<File> failedToLoadFragmentsList = null;
-	public static MyQueue queue = new MyQueue(7);
+	public static MyQueue recentScripts = new MyQueue(7);
 
 	public Data() {
 		// TODO Auto-generated constructor stub
@@ -33,8 +33,9 @@ public class Data {
 			System.out.println("CORE: Error occured while loading "
 					+ failedToLoadFragmentsList.size()
 					+ " fragments. Here is the list:");
-			for (File k : failedToLoadFragmentsList)
+			for (File k : failedToLoadFragmentsList) {
 				System.out.println("     " + k.getAbsolutePath());
+			}
 		}
 	}
 

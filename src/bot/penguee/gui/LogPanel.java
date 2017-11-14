@@ -118,7 +118,7 @@ public class LogPanel extends JPanel {
 		lblNewLabel.setBounds(723, 11, 101, 33);
 		logUpper.add(lblNewLabel);
 
-		currentScriptNameLabel = new JLabel((String) Data.queue.getFirst());
+		currentScriptNameLabel = new JLabel((String) Data.recentScripts.getFirst());
 		currentScriptNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		currentScriptNameLabel.setForeground(Color.WHITE);
 		currentScriptNameLabel.setBounds(131, 11, 588, 33);
@@ -203,7 +203,7 @@ public class LogPanel extends JPanel {
 			e.printStackTrace();
 		}
 		//push script name to front of the list in properties, so it can be run from Home panel
-		Data.queue.addFirst(name);
+		Data.recentScripts.addFirst(name);
 		MyProperties.save();
 		//change buttons visibility
 		labelRun.setVisible(false);

@@ -181,28 +181,30 @@ public class Screen {
 		return mp;
 	}
 
-	MatrixPosition find(String name) {
+	MatrixPosition find(String name) throws FragmentNotLoadedException {
 		return find(name, name);
 	}
 
-	MatrixPosition find(String name, String customName) {
+	MatrixPosition find(String name, String customName)
+			throws FragmentNotLoadedException {
 		Frag f = (Frag) Data.fragments.get(name);
 		if (f != null) {
 			MatrixPosition mp = find(f);
 			if (mp != null)
 				return mp.setName(customName);
 		} else {
-			// throw new FragmentNotLoaded();
-			System.out.println("CORE: Fragment " + name + " is not loaded");
+			// System.out.println("CORE: Fragment " + name + " is not loaded");
+			throw new FragmentNotLoadedException(name);
 		}
 		return null;
 	}
 
-	MatrixPosition[] find_all(String name) {
+	MatrixPosition[] find_all(String name) throws FragmentNotLoadedException {
 		return find_all(name, name);
 	}
 
-	MatrixPosition[] find_all(String name, String customName) {
+	MatrixPosition[] find_all(String name, String customName)
+			throws FragmentNotLoadedException {
 		Frag f = (Frag) Data.fragments.get(name);
 		if (f != null) {
 			MatrixPosition mp[] = find_all(f);
@@ -211,10 +213,10 @@ public class Screen {
 					mp[i].setName(customName);
 			return mp;
 		} else {
-			// throw new FragmentNotLoaded();
-			System.out.println("CORE: Fragment " + name + " is not loaded");
+			// System.out.println("CORE: Fragment " + name + " is not loaded");
+			throw new FragmentNotLoadedException(name);
+
 		}
-		return null;
 	}
 
 	void loadFragments() {// need to remove soon
@@ -224,18 +226,18 @@ public class Screen {
 
 }
 
-class FragmentNotLoaded extends Exception {
+class FragmentNotLoadedException extends Exception {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	// Parameterless Constructor
-	public FragmentNotLoaded() {
+	public FragmentNotLoadedException() {
 	}
 
 	// Constructor that accepts a message
-	public FragmentNotLoaded(String message) {
+	public FragmentNotLoadedException(String message) {
 		super(message);
 	}
 }

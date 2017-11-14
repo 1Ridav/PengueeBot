@@ -39,7 +39,7 @@ import org.jocl.cl_mem;
 import org.jocl.cl_platform_id;
 import org.jocl.cl_program;
 
-public class Screen_GPU extends Screen {
+public class ScreenGPU extends Screen {
 
 	private int resultArraySize = 100;
 
@@ -63,7 +63,7 @@ public class Screen_GPU extends Screen {
 
 	HashMap<String, cl_mem> fragMemObjects = new HashMap<String, cl_mem>();
 
-	Screen_GPU() {
+	ScreenGPU() {
 		super();
 
 		String programSource = null;
@@ -112,7 +112,7 @@ public class Screen_GPU extends Screen {
 		context = clCreateContext(contextProperties, 1,
 				new cl_device_id[] { device }, null, null, null);
 
-		// Create a command-queue for the selected device
+		// Create a command-recentScripts for the selected device
 		commandQueue = clCreateCommandQueue(context, device, 0, null);
 
 		// Create the program from the source code
@@ -270,7 +270,7 @@ public class Screen_GPU extends Screen {
 		return null;
 	}
 
-	public MatrixPosition[] find_all(String name, String customName) {
+	public MatrixPosition[] find_all(String name, String customName) throws FragmentNotLoadedException {
 		MatrixPosition mp[] = find_all(name);
 		if (mp != null)
 			for (int i = 0; i < mp.length; i++)

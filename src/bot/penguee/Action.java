@@ -117,7 +117,8 @@ public class Action {
 	// ////////////////////END OF MOUSE DRAG METHODS////////////////////////
 
 	// /////////////////////FIND//////////////////////////////////////////
-	public boolean findClick(String fragName) throws AWTException {
+	public boolean findClick(String fragName) throws AWTException,
+			FragmentNotLoadedException {
 		if (find(fragName)) {
 			mouseMove(lastCoord);
 			return true;
@@ -125,7 +126,8 @@ public class Action {
 		return false;
 	}
 
-	public boolean findMove(String fragName) throws AWTException {
+	public boolean findMove(String fragName) throws AWTException,
+			FragmentNotLoadedException {
 		if (find(fragName)) {
 			mouseMove(lastCoord);
 			return true;
@@ -133,7 +135,8 @@ public class Action {
 		return false;
 	}
 
-	public boolean find(String fragName) throws AWTException {
+	public boolean find(String fragName) throws AWTException,
+			FragmentNotLoadedException {
 		MatrixPosition mp = screen.find(fragName);
 		if (mp != null) {
 			lastCoord = mp;
@@ -142,24 +145,26 @@ public class Action {
 		return false;
 	}
 
-	public MatrixPosition findPos(String fragName) throws AWTException {
+	public MatrixPosition findPos(String fragName) throws AWTException,
+			FragmentNotLoadedException {
 		return findPos(fragName, fragName);
 	}
 
 	public MatrixPosition findPos(String fragName, String customPosName)
-			throws AWTException {
+			throws AWTException, FragmentNotLoadedException {
 		MatrixPosition mp = screen.find(fragName, customPosName);
 		if (mp != null)
 			lastCoord = mp;
 		return mp;
 	}
 
-	public MatrixPosition[] findAllPos(String fragName) throws AWTException {
+	public MatrixPosition[] findAllPos(String fragName) throws AWTException,
+			FragmentNotLoadedException {
 		return screen.find_all(fragName);
 	}
 
 	public MatrixPosition[] findAllPos(String fragName, String customPosName)
-			throws AWTException {
+			throws AWTException, FragmentNotLoadedException {
 		return screen.find_all(fragName, customPosName);
 	}
 
@@ -187,15 +192,31 @@ public class Action {
 	public void keyPress(int key_mask) {
 		bot.keyPress(key_mask);
 	}
+	
+	public void keyPressAll(int ... keys) {
+		for(int key : keys)
+			bot.keyPress(key);
+	}
 
 	public void keyRelease(int key_mask) {
 		bot.keyRelease(key_mask);
+	}
+	
+	public void keyReleaseAll(int ... keys) {
+		for(int key : keys)
+			bot.keyRelease(key);
 	}
 
 	public void keyClick(int key_mask) {
 		bot.keyPress(key_mask);
 		sleep(keyboardDelay);
 		bot.keyRelease(key_mask);
+	}
+	
+	public void keyClickAll(int ... keys) {
+		keyPressAll(keys);
+		sleep(keyboardDelay);
+		keyReleaseAll(keys);
 	}
 
 	public void print(String text) throws AWTException {

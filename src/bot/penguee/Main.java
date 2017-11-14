@@ -44,9 +44,10 @@ public class Main {
 		Thread t = new Thread(r);
 		t.setDaemon(true);
 		t.start();
+		Object fragmentsLoad = new Object();
 
 		if (Data.forceUseGPU) {
-			Data.screenObject = new Screen_GPU();
+			Data.screenObject = new ScreenGPU();
 		} else {
 			Data.screenObject = new Screen();
 		}

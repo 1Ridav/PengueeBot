@@ -85,7 +85,7 @@ public class HomePanel extends JPanel {
 		homeCentral.add(scrollPane);
 		
 		int yy = 311;
-		for(Object o: Data.queue.toArray()){
+		for(Object o: Data.recentScripts.toArray()){
 			String s = (String) o;
 			JLabel lbl = new MyJLabel(s);
 			lbl.addMouseListener(new MouseAdapter() {

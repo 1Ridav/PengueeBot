@@ -28,7 +28,7 @@ public class MyProperties {
 					.equals("1") ? true : false;
 			String[] scriptsList = p.getProperty("recent_scripts").split(":::");
 			for (String s : scriptsList)
-				Data.queue.add(s);
+				Data.recentScripts.add(s);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -49,8 +49,8 @@ public class MyProperties {
 		try (FileOutputStream fis = new FileOutputStream(configFile)) {
 			Properties p = new Properties();
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < Data.queue.size(); i++) {
-				String name = (String) Data.queue.get(i);
+			for (int i = 0; i < Data.recentScripts.size(); i++) {
+				String name = (String) Data.recentScripts.get(i);
 				sb.append(name);
 				sb.append(":::");
 			}

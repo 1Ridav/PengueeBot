@@ -8,7 +8,7 @@ public class MyQueue extends LinkedList{
 		this.mysize = size;
 	}
 	
-	public void addFirst(String s){
+	public void addFirst(Object s){
 		remove(s);
 		super.addFirst(s);
 		if(size() > mysize)
