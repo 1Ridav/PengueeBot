@@ -137,12 +137,7 @@ public class Action {
 
 	public boolean find(String fragName) throws AWTException,
 			FragmentNotLoadedException {
-		MatrixPosition mp = screen.find(fragName);
-		if (mp != null) {
-			lastCoord = mp;
-			return true;
-		}
-		return false;
+		return findPos(fragName, fragName) != null;
 	}
 
 	public MatrixPosition findPos(String fragName) throws AWTException,
@@ -192,18 +187,18 @@ public class Action {
 	public void keyPress(int key_mask) {
 		bot.keyPress(key_mask);
 	}
-	
-	public void keyPressAll(int ... keys) {
-		for(int key : keys)
+
+	public void keyPressAll(int... keys) {
+		for (int key : keys)
 			bot.keyPress(key);
 	}
 
 	public void keyRelease(int key_mask) {
 		bot.keyRelease(key_mask);
 	}
-	
-	public void keyReleaseAll(int ... keys) {
-		for(int key : keys)
+
+	public void keyReleaseAll(int... keys) {
+		for (int key : keys)
 			bot.keyRelease(key);
 	}
 
@@ -212,8 +207,8 @@ public class Action {
 		sleep(keyboardDelay);
 		bot.keyRelease(key_mask);
 	}
-	
-	public void keyClickAll(int ... keys) {
+
+	public void keyClickAll(int... keys) {
 		keyPressAll(keys);
 		sleep(keyboardDelay);
 		keyReleaseAll(keys);
@@ -228,23 +223,23 @@ public class Action {
 
 	// ///////////SCREEN METHODS///////////////////////
 
-	public void grab() {
+	public void grab() throws Exception {
 		screen.grab();
 	}
 
-	public void grab(int x, int y, int w, int h) {
+	public void grab(int x, int y, int w, int h) throws Exception {
 		screen.grab_rect(x, y, w, h);
 	}
 
-	public void grab(MatrixPosition mp, int w, int h) {
+	public void grab(MatrixPosition mp, int w, int h) throws Exception {
 		screen.grab_rect(mp.x, mp.y, w, h);
 	}
 
-	public void grab(MatrixPosition p1, MatrixPosition p2) {
+	public void grab(MatrixPosition p1, MatrixPosition p2) throws Exception {
 		screen.grab_rect(p1, p2);
 	}
 
-	public void grab(Rectangle rect) {
+	public void grab(Rectangle rect) throws Exception {
 		screen.grab_rect(rect);
 	}
 

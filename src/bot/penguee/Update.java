@@ -6,7 +6,6 @@
  * 
  */
 
-
 package bot.penguee;
 
 import java.awt.Desktop;
@@ -44,30 +43,28 @@ public class Update {
 
 	public static void update() {
 		try {
-			
-	        Desktop.getDesktop().browse(new URL(downloadURL + getLatestVersionID(versionURL)+"/penguee-latest-release.zip").toURI());
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+			Desktop.getDesktop().browse(
+					new URL(downloadURL + getLatestVersionID(versionURL)
+							+ "/penguee-latest-release.zip").toURI());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean available() {
-
 		try {
 			String result = getLatestVersionID(versionURL).replace('.', '0');
 			String myVersion = version.replace('.', '0');
-			if (Long.parseLong(myVersion) < Long.parseLong(result)) {
+			if (Long.parseLong(myVersion) < Long.parseLong(result))
 				return true;
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.err.println("Failed to check for updates");
 		}
-
 		return false;
 	}
-	
-	private static String getNews(String link) throws IOException{
+
+	private static String getNews(String link) throws IOException {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(link);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -75,15 +72,14 @@ public class Update {
 		BufferedReader rd = new BufferedReader(new InputStreamReader(
 				conn.getInputStream()));
 		String line;
-		while ((line = rd.readLine()) != null) {
+		while ((line = rd.readLine()) != null) 
 			result.append(line);
-		}
 		rd.close();
 
 		return result.toString();
 	}
-	
-	public static String getNews(){
+
+	public static String getNews() {
 		try {
 			return getNews(newsURL);
 		} catch (IOException e) {

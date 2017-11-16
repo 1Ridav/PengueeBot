@@ -137,7 +137,7 @@ public class ScreenGPU extends Screen {
 		return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
 	}
 
-	public void grab() {
+	public void grab() throws Exception {
 		super.grab();
 		// create buffers
 		// bigMatrixArray = new int[screenRect.width * screenRect.height];

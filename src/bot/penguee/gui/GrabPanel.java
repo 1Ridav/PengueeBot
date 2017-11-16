@@ -23,10 +23,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.border.CompoundBorder;
 import javax.swing.UIManager;
+import javax.swing.border.CompoundBorder;
 
 import bot.penguee.Frag;
+import bot.penguee.FragMono;
 import bot.penguee.MatrixPosition;
 import bot.penguee.Screen;
 
@@ -59,7 +60,12 @@ public class GrabPanel extends JPanel {
 	GrabPanel(JFrame frame) {
 		this.frame = frame;
 		this.scr = new Screen(false);
-		scr.grab();
+		try {
+			scr.grab();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		image = scr.getImage();
 
 		init();
@@ -198,12 +204,13 @@ public class GrabPanel extends JPanel {
 		JPopupMenu popupMenu_1 = new JPopupMenu();
 		addPopup(lblTest, popupMenu_1);
 		
-		MyJLabel lblCountAllMatches = new MyJLabel("Count all matches");
-		lblCountAllMatches.setActiveColor(new Color(0, 153, 153));
-		lblCountAllMatches.addMouseListener(new MouseAdapter() {
+		MyJLabel labelCountAllMatches = new MyJLabel("Count all matches");
+		labelCountAllMatches.setActiveColor(new Color(0, 153, 153));
+		labelCountAllMatches.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
+					
 					testFrag = new Frag(copyImage(imageFragment));
 					long t1 = System.nanoTime();
 					MatrixPosition[] list = scr.find_all(testFrag);
@@ -218,10 +225,39 @@ public class GrabPanel extends JPanel {
 				}
 			}
 		});
-		lblCountAllMatches.setForeground(new Color(0, 102, 102));
-		lblCountAllMatches.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblCountAllMatches.setBackground(new Color(0, 102, 102));
-		popupMenu_1.add(lblCountAllMatches);
+		labelCountAllMatches.setForeground(new Color(0, 102, 102));
+		labelCountAllMatches.setFont(new Font("Tahoma", Font.BOLD, 15));
+		labelCountAllMatches.setBackground(new Color(0, 102, 102));
+		popupMenu_1.add(labelCountAllMatches);
+		
+		MyJLabel labelTestMono = new MyJLabel("Test mono");
+		labelTestMono.setActiveColor(new Color(0, 153, 153));
+		labelTestMono.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					
+					
+					
+					testFrag = new FragMono(copyImage(imageFragment), pixel_color_num);
+					long t1 = System.nanoTime();
+					MatrixPosition[] list = scr.find_all(testFrag);
+					long t2 = System.nanoTime();
+					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
+					grabPanelScreenshot.repaint();
+					JOptionPane.showMessageDialog(frame, (list != null ? list.length : 0) + " matches found");
+					
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		labelTestMono.setForeground(new Color(0, 102, 102));
+		labelTestMono.setFont(new Font("Tahoma", Font.BOLD, 15));
+		labelTestMono.setBackground(new Color(0, 102, 102));
+		popupMenu_1.add(labelTestMono);
+
 
 		JLabel lblNewLabel_1 = new MyJLabel("SAVE");
 		lblNewLabel_1.addMouseListener(new MouseAdapter() {

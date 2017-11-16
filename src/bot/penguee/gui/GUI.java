@@ -40,10 +40,7 @@ public class GUI {
 		} catch (Exception e) {
 		}
 		initialize();
-		logMainPanel.setVisible(false);
-		grabMainPanel.setVisible(false);
-		settingsMainPanel.setVisible(false);
-		homeMainPanel.setVisible(true);
+		showHomePanel();
 	}
 
 	private void initialize() {
@@ -89,10 +86,7 @@ public class GUI {
 		menuLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				logMainPanel.setVisible(false);
-				grabMainPanel.setVisible(false);
-				settingsMainPanel.setVisible(true);
-				homeMainPanel.setVisible(false);
+				showSettingsPanel();
 			}
 		});
 		menuLabel.setIcon(new ImageIcon(GUI.class
@@ -116,10 +110,7 @@ public class GUI {
 		grabLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				logMainPanel.setVisible(false);
-				grabMainPanel.setVisible(true);
-				settingsMainPanel.setVisible(false);
-				homeMainPanel.setVisible(false);
+				showGrabPanel();
 			}
 		});
 		grabLabel.setIcon(new ImageIcon(GUI.class
@@ -164,10 +155,7 @@ public class GUI {
 		homeLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				logMainPanel.setVisible(false);
-				grabMainPanel.setVisible(false);
-				settingsMainPanel.setVisible(false);
-				homeMainPanel.setVisible(true);
+				showHomePanel();
 			}
 		});
 		homeLabel.setIcon(new ImageIcon(GUI.class
@@ -194,10 +182,32 @@ public class GUI {
 		checkForUpdates();
 	}
 
-	protected static void showLogPanel() {
+	private static void showLogPanel() {
 		logMainPanel.setVisible(true);
 		grabMainPanel.setVisible(false);
 		settingsMainPanel.setVisible(false);
+		homeMainPanel.setVisible(false);
+		
+	}
+	private static void showGrabPanel() {
+		logMainPanel.setVisible(false);
+		grabMainPanel.setVisible(true);
+		settingsMainPanel.setVisible(false);
+		homeMainPanel.setVisible(false);
+		
+	}
+	
+	private static void showHomePanel() {
+		logMainPanel.setVisible(false);
+		grabMainPanel.setVisible(false);
+		settingsMainPanel.setVisible(false);
+		homeMainPanel.setVisible(true);
+		
+	}
+	private static void showSettingsPanel() {
+		logMainPanel.setVisible(false);
+		grabMainPanel.setVisible(false);
+		settingsMainPanel.setVisible(true);
 		homeMainPanel.setVisible(false);
 		
 	}

@@ -47,8 +47,7 @@ public class Screen {
 		return screenFrag;
 	}
 
-	public void grab() {
-		try {
+	public void grab() throws Exception {
 			image = robot.createScreenCapture(screenRect);
 
 			if (screenFrag == null) {
@@ -57,21 +56,17 @@ public class Screen {
 				// REFRESH MATRIX BUFFER
 				screenFrag.getIntRGB(image);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	void grab_rect(int x, int y, int w, int h) {
+	void grab_rect(int x, int y, int w, int h) throws Exception {
 		grab_rect(new Rectangle(x, y, w, h));
 	}
 
-	void grab_rect(MatrixPosition p1, MatrixPosition p2) {
+	void grab_rect(MatrixPosition p1, MatrixPosition p2) throws Exception {
 		grab_rect(new Rectangle(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y));
 	}
 
-	void grab_rect(Rectangle rect) {
-		try {
+	void grab_rect(Rectangle rect) throws Exception {
 
 			if (screenFrag == null) {
 				grab();
@@ -80,9 +75,6 @@ public class Screen {
 				// REFRESH MATRIX BUFFER
 				screenFrag.getIntRGB(image, rect.x, rect.y);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	// SETS RECTANGLE WHERE FRAGMENS BEING SEARCHED
@@ -107,7 +99,7 @@ public class Screen {
 		if (useCache)
 			cachedPos = (MatrixPosition) cache.get(small);
 		MatrixPosition mp = null;
-		if (cachedPos != null) { // fragment is cached previously, ensure it is
+		if (cachedPos != null) { // fragment was cached previously, ensure it is
 									// still there
 			if (search_in_region) {
 				if (search_rect_pos1.x <= cachedPos.x
@@ -146,7 +138,7 @@ public class Screen {
 		if (mp != null) {
 			if (useCache)
 				cache.put(small, new MatrixPosition(mp));
-			return mp.add(small.center());
+			return mp.add(small.center());//change position to center of fragment and return
 		}
 
 		return null;
@@ -172,10 +164,10 @@ public class Screen {
 		}
 
 		mp = small.findAllIn(screenFrag, x_start, y_start, x_stop, y_stop);
-		if (mp != null) {
+		if (mp != null) {//change position to center of fragment
 			MatrixPosition center = small.center();
-			for (int i = 0; i < mp.length; i++)
-				mp[i].add(center);
+			for (MatrixPosition p: mp)
+				p.add(center);
 		}
 
 		return mp;
@@ -192,11 +184,11 @@ public class Screen {
 			MatrixPosition mp = find(f);
 			if (mp != null)
 				return mp.setName(customName);
+			return null;
 		} else {
 			// System.out.println("CORE: Fragment " + name + " is not loaded");
 			throw new FragmentNotLoadedException(name);
 		}
-		return null;
 	}
 
 	MatrixPosition[] find_all(String name) throws FragmentNotLoadedException {
@@ -209,13 +201,12 @@ public class Screen {
 		if (f != null) {
 			MatrixPosition mp[] = find_all(f);
 			if (mp != null)
-				for (int i = 0; i < mp.length; i++)
-					mp[i].setName(customName);
+				for (MatrixPosition p : mp)
+					p.setName(customName);
 			return mp;
 		} else {
 			// System.out.println("CORE: Fragment " + name + " is not loaded");
 			throw new FragmentNotLoadedException(name);
-
 		}
 	}
 

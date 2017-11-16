@@ -1,6 +1,7 @@
 package bot.penguee;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class FragMono extends Frag {
@@ -12,6 +13,13 @@ public class FragMono extends Frag {
 		String color = file.substring(file.lastIndexOf("((") + 2,
 				file.lastIndexOf("))"));
 		monoColor = Integer.parseInt(color);
+		prepareMonoPixelMap();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public FragMono(BufferedImage image, int color) throws Exception {
+		super(image);
+		monoColor = color;
 		prepareMonoPixelMap();
 		// TODO Auto-generated constructor stub
 	}
@@ -37,7 +45,7 @@ public class FragMono extends Frag {
 			monoXY_Map[0][i] = (int) p.getX();
 			monoXY_Map[1][i] = (int) p.getY();
 		}
-		rgbData = null;
+		//rgbData = null;
 	}
 
 	@Override
