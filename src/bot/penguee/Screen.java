@@ -48,14 +48,14 @@ public class Screen {
 	}
 
 	public void grab() throws Exception {
-			image = robot.createScreenCapture(screenRect);
+		image = robot.createScreenCapture(screenRect);
 
-			if (screenFrag == null) {
-				screenFrag = new Frag(image);
-			} else {
-				// REFRESH MATRIX BUFFER
-				screenFrag.getIntRGB(image);
-			}
+		if (screenFrag == null) {
+			screenFrag = new Frag(image);
+		} else {
+			// REFRESH MATRIX BUFFER
+			screenFrag.getIntRGB(image);
+		}
 	}
 
 	void grab_rect(int x, int y, int w, int h) throws Exception {
@@ -68,13 +68,13 @@ public class Screen {
 
 	void grab_rect(Rectangle rect) throws Exception {
 
-			if (screenFrag == null) {
-				grab();
-			} else {
-				image = robot.createScreenCapture(rect);
-				// REFRESH MATRIX BUFFER
-				screenFrag.getIntRGB(image, rect.x, rect.y);
-			}
+		if (screenFrag == null) {
+			grab();
+		} else {
+			image = robot.createScreenCapture(rect);
+			// REFRESH MATRIX BUFFER
+			screenFrag.getIntRGB(image, rect.x, rect.y);
+		}
 	}
 
 	// SETS RECTANGLE WHERE FRAGMENS BEING SEARCHED
@@ -116,21 +116,18 @@ public class Screen {
 		}
 
 		if (mp == null) {// cache miss
-			int[][] b, s;
 			int x_start, y_start, x_stop, y_stop;
-			b = screenFrag.getRgbData();
-			s = small.getRgbData();
 			if (search_in_region) {
 				y_start = search_rect_pos1.y;
 				x_start = search_rect_pos1.x;
-				y_stop = search_rect_pos2.y - s.length + 1;
-				x_stop = search_rect_pos2.x - s[0].length;
+				y_stop = search_rect_pos2.y - small.getHeight() + 1;
+				x_stop = search_rect_pos2.x - small.getWidth();
 
 			} else {
 				y_start = 0;
 				x_start = 0;
-				y_stop = b.length - s.length + 1;
-				x_stop = b[0].length - s[0].length;
+				y_stop = screenFrag.getHeight() - small.getHeight() + 1;
+				x_stop = screenFrag.getWidth() - small.getWidth();
 			}
 			mp = small.findIn(screenFrag, x_start, y_start, x_stop, y_stop);
 		}
@@ -146,27 +143,24 @@ public class Screen {
 
 	public MatrixPosition[] find_all(Frag small) {
 		MatrixPosition[] mp = null;
-		int[][] big_matrix, small_matrix;
 		int x_start, y_start, x_stop, y_stop;
-		big_matrix = screenFrag.getRgbData();
-		small_matrix = small.getRgbData();
 		if (search_in_region) {
 			y_start = search_rect_pos1.y;
 			x_start = search_rect_pos1.x;
-			y_stop = search_rect_pos2.y - small_matrix.length + 1;
-			x_stop = search_rect_pos2.x - small_matrix[0].length;
+			y_stop = search_rect_pos2.y - small.getHeight() + 1;
+			x_stop = search_rect_pos2.x - small.getWidth();
 
 		} else {
 			y_start = 0;
 			x_start = 0;
-			y_stop = big_matrix.length - small_matrix.length + 1;
-			x_stop = big_matrix[0].length - small_matrix[0].length;
+			y_stop = screenFrag.getHeight() - small.getHeight() + 1;
+			x_stop = screenFrag.getWidth() - small.getWidth();
 		}
 
 		mp = small.findAllIn(screenFrag, x_start, y_start, x_stop, y_stop);
-		if (mp != null) {//change position to center of fragment
+		if (mp != null) {// change position to center of fragment
 			MatrixPosition center = small.center();
-			for (MatrixPosition p: mp)
+			for (MatrixPosition p : mp)
 				p.add(center);
 		}
 

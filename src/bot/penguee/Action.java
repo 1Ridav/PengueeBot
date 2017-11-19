@@ -188,7 +188,7 @@ public class Action {
 		bot.keyPress(key_mask);
 	}
 
-	public void keyPressAll(int... keys) {
+	public void keyPress(int... keys) {
 		for (int key : keys)
 			bot.keyPress(key);
 	}
@@ -197,7 +197,7 @@ public class Action {
 		bot.keyRelease(key_mask);
 	}
 
-	public void keyReleaseAll(int... keys) {
+	public void keyRelease(int... keys) {
 		for (int key : keys)
 			bot.keyRelease(key);
 	}
@@ -208,10 +208,10 @@ public class Action {
 		bot.keyRelease(key_mask);
 	}
 
-	public void keyClickAll(int... keys) {
-		keyPressAll(keys);
+	public void keyClick(int... keys) {
+		keyPress(keys);
 		sleep(keyboardDelay);
-		keyReleaseAll(keys);
+		keyRelease(keys);
 	}
 
 	public void print(String text) throws AWTException {

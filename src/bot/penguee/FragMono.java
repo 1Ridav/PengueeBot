@@ -45,7 +45,7 @@ public class FragMono extends Frag {
 			monoXY_Map[0][i] = (int) p.getX();
 			monoXY_Map[1][i] = (int) p.getY();
 		}
-		//rgbData = null;
+		rgbData = null;
 	}
 
 	@Override

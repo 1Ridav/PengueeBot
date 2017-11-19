@@ -45,7 +45,7 @@ public class Frag {
 	}
 
 	public MatrixPosition center() {
-		return new MatrixPosition(rgbData[0].length / 2, rgbData.length / 2);
+		return new MatrixPosition(getWidth() / 2, getHeight() / 2);
 	}
 
 	// USED FOR ROBOT SCREENSHOT BUFFERED_IMAGE
