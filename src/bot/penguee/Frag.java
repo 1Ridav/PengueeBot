@@ -19,17 +19,19 @@ public class Frag {
 
 		image = ImageIO.read(new File(file));
 		rgbData = loadFromFile(image);
-		/*for (int i = 0; i < image.getHeight(); i++) {
-			hashes.add(hash(rgbData, 0, i, rgbData[0].length));
-		}*/
+		
+		 /* for (int i = 0; i < image.getHeight(); i++) {
+		  hashes.add(hash(rgbData, 0, i, rgbData[0].length)); }
+		 */
 	}
 
 	public Frag(BufferedImage bi) throws Exception {
 		image = bi;
 		getIntRGB(bi);
-		/*for (int i = 0; i < image.getHeight(); i++) {
-			hashes.add(hash(rgbData, 0, i, rgbData[0].length));
-		}*/
+		/*
+		  for (int i = 0; i < image.getHeight(); i++) {
+		  hashes.add(hash(rgbData, 0, i, rgbData[0].length)); }
+		 */
 	}
 
 	Frag(int[][] rgb) throws Exception {
@@ -118,20 +120,20 @@ public class Frag {
 		ImageIO.write(image, "bmp", ff);
 	}
 
-	public long hash(int[][] b, int x, int y, int len) {
-		long r = 0;
+	/*private long hash(int[][] b, int x, int y, int len) {
+		long h = 0;
 		int[] c = b[y];
 		int stop = x + len;
-		for (int i = x; i < stop; i++) {
-			r += c[i];
-		}
-		return r;
-	}
-
-	public MatrixPosition findInRabinKarp(Frag b, int x_start, int y_start, int x_stop,
-			int y_stop) {
-				return null;
-		/*y_stop += getHeight() + 1;
+		for (int i = x; i < stop; i++) 
+			h = 33 * h + c[i];
+		
+		return h;
+	}*/
+/*
+	public MatrixPosition findIn(Frag b, int x_start, int y_start,
+			int x_stop, int y_stop) {
+		// return null;
+		y_stop += getHeight() + 1;
 		// x_stop += getHeight() + 1;
 
 		final int[][] small = this.rgbData;
@@ -143,9 +145,9 @@ public class Frag {
 		int[] cache;
 		int[] cache_small;
 		for (int y = y_start + small_height_minus_1; y < y_stop; y += small_height) {
-			long h = hash(big, x_start, y, small_width);
+			//long h = hash(big, x_start, y, small_width);
 			for (int x = x_start; x < x_stop; x++) {
-				if (hashes.contains(h)) {
+				if (hashes.contains(hash(big, x_start, y, small_width))) {
 					// System.out.println("partial found at " + j + " " + i);
 					gonext2: for (int l = small_height_minus_1; l >= 0; l--) {
 						if (big[y - l][x] == first_pixel) {
@@ -156,20 +158,20 @@ public class Frag {
 									if (cache[x + xx] != cache_small[xx])
 										continue gonext2;
 							}
-							//System.out.println("MATCH!");
+							// System.out.println("MATCH!");
 							return new MatrixPosition(x, y - l);
 						}
 
 					}
 				}
-				h -= big[y][x];
-				h += big[y][x + small_width];
+				//h -= big[y][x];
+				//h += big[y][x + small_width];
 			}
 		}
 
-		return null;*/
+		return null;
 	}
-
+*/
 	public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop,
 			int y_stop) {
 		// precalculate all frequently used data

@@ -316,15 +316,15 @@ public class GrabPanel extends JPanel {
 			}
 
 			public void mousePressed(java.awt.event.MouseEvent evt) {
-				System.out.println("mousePressed    " + evt.getX() + "   "
-						+ evt.getY());
+				/*System.out.println("mousePressed    " + evt.getX() + "   "
+						+ evt.getY());*/
 				p1 = p2 = null;
 				p1 = evt.getPoint();
 			}
 
 			public void mouseReleased(java.awt.event.MouseEvent evt) {
-				System.out.println("mouseReleased    " + evt.getX() + "   "
-						+ evt.getY());
+				/*System.out.println("mouseReleased    " + evt.getX() + "   "
+						+ evt.getY());*/
 				p2 = evt.getPoint();
 
 				if (p2.getX() != p1.getX() || p2.getY() != p1.getY()) {
