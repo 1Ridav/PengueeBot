@@ -48,6 +48,7 @@ public class Data {
 				String s = fileEntry.getAbsolutePath().replace(absPath, "")
 						.replace(File.separator, ".").replace(".bmp", "")
 						.replaceAll(colorRegex, "");
+				s = s.substring(1);
 				System.out.println(fileEntry.getName() + " " + s);
 				try {
 					if (fileEntry.getAbsolutePath().matches(colorRegex2))

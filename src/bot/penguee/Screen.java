@@ -129,7 +129,11 @@ public class Screen {
 				y_stop = screenFrag.getHeight() - small.getHeight() + 1;
 				x_stop = screenFrag.getWidth() - small.getWidth();
 			}
+			long t1, t2;
+			t1 = System.nanoTime();
 			mp = small.findIn(screenFrag, x_start, y_start, x_stop, y_stop);
+			t2 = System.nanoTime();
+			System.out.println("Time:  " + ((t2-t1) / 1000000));
 		}
 
 		if (mp != null) {

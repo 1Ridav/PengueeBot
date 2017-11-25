@@ -27,7 +27,7 @@ public class JythonVM {
 			synchronized (jythonLoad) {
 				jythonLoad.wait();
 			}
-		System.out.println("CORE: Running a script...\n\n");
+		System.out.println("CORE: Running " + script + "...\n\n");
 		pi.execfile(script);
 		System.out.println("CORE: Script execution finished.");
 	}

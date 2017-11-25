@@ -5,11 +5,13 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
 public class Frag {
-
+	//protected Set hashes = new HashSet();
 	protected int[][] rgbData = null;
 	protected BufferedImage image = null;
 
@@ -17,11 +19,17 @@ public class Frag {
 
 		image = ImageIO.read(new File(file));
 		rgbData = loadFromFile(image);
+		/*for (int i = 0; i < image.getHeight(); i++) {
+			hashes.add(hash(rgbData, 0, i, rgbData[0].length));
+		}*/
 	}
 
 	public Frag(BufferedImage bi) throws Exception {
 		image = bi;
 		getIntRGB(bi);
+		/*for (int i = 0; i < image.getHeight(); i++) {
+			hashes.add(hash(rgbData, 0, i, rgbData[0].length));
+		}*/
 	}
 
 	Frag(int[][] rgb) throws Exception {
@@ -82,34 +90,84 @@ public class Frag {
 		if (rgbData == null)
 			rgbData = new int[image.getHeight()][width];
 
-		int argb = 0;
-
-		final int pixelLength = 3;
-		for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
-			argb = -16777216; // 255 alpha
-			argb += ((int) pixels[pixel] & 0xFF); // blue
-			argb += (((int) pixels[pixel + 1] & 0xFF) << 8); // green
-			argb += (((int) pixels[pixel + 2] & 0xFF) << 16); // red
-			rgbData[row][col] = argb;
-			col++;
-			if (col == width) {
-				col = 0;
-				row++;
-			}
-		}
+		for (int pixel = 0, row = 0; pixel < pixels.length; row++)
+			for (int col = 0; col < width; col++, pixel += 3)
+				rgbData[row][col] = -16777216 + ((int) pixels[pixel] & 0xFF)
+						+ (((int) pixels[pixel + 1] & 0xFF) << 8)
+						+ (((int) pixels[pixel + 2] & 0xFF) << 16); // 255
+																	// alpha, r
+																	// g b;
 
 		return rgbData;
 	}
 
 	public void makeFile(String name) throws Exception {
 		File f = new File(Data.resourcesPath);
-		String s = name.substring(0, name.lastIndexOf("."));
-		s = s.replace(".", File.separator);
+		name = name.trim();
+		String s;
+		if (name.contains(".")) {
+			s = name.substring(0, name.lastIndexOf("."));
+			s = s.replace(".", File.separator);
+		} else {
+			s = "";
+		}
 		File ff = new File(f.getAbsolutePath() + File.separator + s,
 				name.substring(name.lastIndexOf(".") + 1, name.length())
 						+ ".bmp");
 		ff.mkdirs();
 		ImageIO.write(image, "bmp", ff);
+	}
+
+	public long hash(int[][] b, int x, int y, int len) {
+		long r = 0;
+		int[] c = b[y];
+		int stop = x + len;
+		for (int i = x; i < stop; i++) {
+			r += c[i];
+		}
+		return r;
+	}
+
+	public MatrixPosition findInRabinKarp(Frag b, int x_start, int y_start, int x_stop,
+			int y_stop) {
+				return null;
+		/*y_stop += getHeight() + 1;
+		// x_stop += getHeight() + 1;
+
+		final int[][] small = this.rgbData;
+		final int[][] big = b.rgbData;
+		final int small_height = small.length;
+		final int small_width = small[0].length;
+		final int small_height_minus_1 = small_height - 1;
+		final int first_pixel = small[0][0];
+		int[] cache;
+		int[] cache_small;
+		for (int y = y_start + small_height_minus_1; y < y_stop; y += small_height) {
+			long h = hash(big, x_start, y, small_width);
+			for (int x = x_start; x < x_stop; x++) {
+				if (hashes.contains(h)) {
+					// System.out.println("partial found at " + j + " " + i);
+					gonext2: for (int l = small_height_minus_1; l >= 0; l--) {
+						if (big[y - l][x] == first_pixel) {
+							for (int yy = 0; yy < small_height; yy++) {
+								cache = big[y + yy - l];
+								cache_small = small[yy];
+								for (int xx = 0; xx < small_width; xx++)
+									if (cache[x + xx] != cache_small[xx])
+										continue gonext2;
+							}
+							//System.out.println("MATCH!");
+							return new MatrixPosition(x, y - l);
+						}
+
+					}
+				}
+				h -= big[y][x];
+				h += big[y][x + small_width];
+			}
+		}
+
+		return null;*/
 	}
 
 	public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop,

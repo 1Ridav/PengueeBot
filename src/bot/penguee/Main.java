@@ -13,7 +13,7 @@ public class Main {
 			if (args[i].equals("-nogui")) {
 				consoleMode = true;
 			} else if (args[i].equals("-script")) {
-				Data.scriptFileName = args[i + 1];
+				Data.scriptFileName = args[++i];
 			} else if (args[i].equals("-forceUseGPU")) {
 				Data.forceUseGPU = true;
 			}

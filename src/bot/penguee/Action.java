@@ -248,11 +248,11 @@ public class Action {
 	// /////////////////////////////HELPER PUBLIC
 	// METHODS////////////////////////////
 
-	public BufferedImage screenBufferedImage() {
-		return screen.getFrag().getImage();
+	public BufferedImage screendImage() {
+		return screen.getImage();
 	}
 
-	public BufferedImage fragmentBufferedImage(String name) {
+	public BufferedImage fragImage(String name) {
 		return Data.fragments.get(name).getImage();
 	}
 

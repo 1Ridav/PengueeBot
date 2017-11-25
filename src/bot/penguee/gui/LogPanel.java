@@ -166,7 +166,8 @@ public class LogPanel extends JPanel {
 			params.add(pathToJar);
 			params.add("bot.penguee.Main");
 			params.add("-nogui");
-			params.add("-script " + name);
+			params.add("-script");
+			params.add(name);
 			if (Data.forceUseGPU)
 				params.add("-forceUseGPU");
 
