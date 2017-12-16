@@ -189,7 +189,7 @@ public class GrabPanel extends JPanel {
 					grabPanelScreenshot.repaint();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					 e1.printStackTrace();
+					e1.printStackTrace();
 				}
 
 			}
@@ -200,25 +200,27 @@ public class GrabPanel extends JPanel {
 		lblTest.setForeground(new Color(255, 255, 255));
 		lblTest.setBounds(146, 9, 107, 37);
 		grabUpper.add(lblTest);
-		
+
 		JPopupMenu popupMenu_1 = new JPopupMenu();
 		addPopup(lblTest, popupMenu_1);
-		
+
 		MyJLabel labelCountAllMatches = new MyJLabel("Count all matches");
 		labelCountAllMatches.setActiveColor(new Color(0, 153, 153));
 		labelCountAllMatches.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					
 					testFrag = new Frag(copyImage(imageFragment));
 					long t1 = System.nanoTime();
 					MatrixPosition[] list = scr.find_all(testFrag);
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();
-					JOptionPane.showMessageDialog(frame, (list != null ? list.length : 0) + " matches found");
-					
+					JOptionPane
+							.showMessageDialog(frame,
+									(list != null ? list.length : 0)
+											+ " matches found");
+
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					// e1.printStackTrace();
@@ -229,24 +231,22 @@ public class GrabPanel extends JPanel {
 		labelCountAllMatches.setFont(new Font("Tahoma", Font.BOLD, 15));
 		labelCountAllMatches.setBackground(new Color(0, 102, 102));
 		popupMenu_1.add(labelCountAllMatches);
-		
-		MyJLabel labelTestMono = new MyJLabel("Test mono");
+
+		MyJLabel labelTestMono = new MyJLabel("Test MONO");
 		labelTestMono.setActiveColor(new Color(0, 153, 153));
 		labelTestMono.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					
-					
-					
-					testFrag = new FragMono(copyImage(imageFragment), pixel_color_num);
+					showMonoImage();
+					testFrag = new FragMono(copyImage(imageFragment),
+							pixel_color_num);
 					long t1 = System.nanoTime();
-					MatrixPosition[] list = scr.find_all(testFrag);
+					testFragMP = scr.find(testFrag);
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();
-					JOptionPane.showMessageDialog(frame, (list != null ? list.length : 0) + " matches found");
-					
+
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -257,7 +257,35 @@ public class GrabPanel extends JPanel {
 		labelTestMono.setFont(new Font("Tahoma", Font.BOLD, 15));
 		labelTestMono.setBackground(new Color(0, 102, 102));
 		popupMenu_1.add(labelTestMono);
+		MyJLabel labelTestAllMono = new MyJLabel("Count all MONO");
+		labelTestAllMono.setActiveColor(new Color(0, 153, 153));
+		labelTestAllMono.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					showMonoImage();
+					testFrag = new FragMono(copyImage(imageFragment),
+							pixel_color_num);
+					long t1 = System.nanoTime();
+					MatrixPosition[] list = scr.find_all(testFrag);
+					long t2 = System.nanoTime();
+					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
+					grabPanelScreenshot.repaint();
+					JOptionPane
+							.showMessageDialog(frame,
+									(list != null ? list.length : 0)
+											+ " matches found");
 
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		labelTestAllMono.setForeground(new Color(0, 102, 102));
+		labelTestAllMono.setFont(new Font("Tahoma", Font.BOLD, 15));
+		labelTestAllMono.setBackground(new Color(0, 102, 102));
+		popupMenu_1.add(labelTestAllMono);
 
 		JLabel lblNewLabel_1 = new MyJLabel("SAVE");
 		lblNewLabel_1.addMouseListener(new MouseAdapter() {
@@ -316,15 +344,19 @@ public class GrabPanel extends JPanel {
 			}
 
 			public void mousePressed(java.awt.event.MouseEvent evt) {
-				/*System.out.println("mousePressed    " + evt.getX() + "   "
-						+ evt.getY());*/
+				/*
+				 * System.out.println("mousePressed    " + evt.getX() + "   " +
+				 * evt.getY());
+				 */
 				p1 = p2 = null;
 				p1 = evt.getPoint();
 			}
 
 			public void mouseReleased(java.awt.event.MouseEvent evt) {
-				/*System.out.println("mouseReleased    " + evt.getX() + "   "
-						+ evt.getY());*/
+				/*
+				 * System.out.println("mouseReleased    " + evt.getX() + "   " +
+				 * evt.getY());
+				 */
 				p2 = evt.getPoint();
 
 				if (p2.getX() != p1.getX() || p2.getY() != p1.getY()) {
@@ -505,7 +537,6 @@ public class GrabPanel extends JPanel {
 				try {
 					pixel_color_num = imageFragment.getRGB(evt.getX()
 							/ previewScaleRate, evt.getY() / previewScaleRate);
-					System.out.println(pixel_color_num);
 					panel_pixel_color.setBackground(new Color(pixel_color_num));
 				} catch (Exception e) {
 

@@ -21,7 +21,8 @@ public class IOredirect implements Runnable {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				// displayPane.replaceSelection( line + "\n" );
-				displayPane.append(line + "\n");
+				displayPane.append(line);
+				displayPane.append("\n");
 				displayPane.setCaretPosition(displayPane.getDocument()
 						.getLength());
 			}

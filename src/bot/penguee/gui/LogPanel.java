@@ -74,6 +74,7 @@ public class LogPanel extends JPanel {
 		logCentral.setLayout(null);
 
 		logTextArea = new JTextArea();
+		logTextArea.setText("");
 		logTextArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
 		logTextArea.setForeground(Color.WHITE);
 		logTextArea.setBackground(Color.DARK_GRAY);

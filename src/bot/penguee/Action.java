@@ -34,7 +34,7 @@ public class Action {
 			try {
 				Thread.sleep(ms);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+
 			}
 		}
 	}
@@ -110,9 +110,11 @@ public class Action {
 			throws AWTException {
 		bot.mouseMove(x1, y1);
 		bot.mousePress(button_mask);
+		sleep(mouseDelay);
 		bot.mouseMove(x2, y2);
 		bot.mouseRelease(button_mask);
 	}
+	
 
 	// ////////////////////END OF MOUSE DRAG METHODS////////////////////////
 
