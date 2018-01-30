@@ -15,16 +15,7 @@ import java.awt.event
 from bisect import bisect_left
 
 a = Action()
-#while True:
-a.grab()
-mp = a.findPos(".mytest1")
-if mp:
-  print("FOUND!!!!!" )
-  a.mouseClick(mp)
-  a.mouseClick(mp)
-  #print(mp.x, mp.y)
-  #a.mouseMove(mp)
-else:
-  print("FAIL.......")
-
-
+print("This is english")
+print("Это на русском")
+print(u"This is unicode english")
+print(u"Это юникод на русском")

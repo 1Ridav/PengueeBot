@@ -76,6 +76,7 @@ public class LogPanel extends JPanel {
 		logTextArea = new JTextArea();
 		logTextArea.setText("");
 		logTextArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
+		//logTextArea.setFont(new Font("123", Font.PLAIN, 16));
 		logTextArea.setForeground(Color.WHITE);
 		logTextArea.setBackground(Color.DARK_GRAY);
 		JScrollPane scrollPane = new JScrollPane(logTextArea);

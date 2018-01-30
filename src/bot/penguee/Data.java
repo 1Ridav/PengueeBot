@@ -1,6 +1,9 @@
 package bot.penguee;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,9 +29,19 @@ public class Data {
 	}
 
 	static void loadFragments() {
+		
 		File f = new File(resourcesPath);
 		Data.absPath = f.getAbsolutePath();
 		loadFragments(f);
+		String p = Data.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		String dp = null;
+		try {
+			dp = URLDecoder.decode(p, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if (failedToLoadFragmentsList != null) {
 			System.out.println("CORE: Error occured while loading "
 					+ failedToLoadFragmentsList.size()

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JTextArea;
 
@@ -13,7 +15,12 @@ public class IOredirect implements Runnable {
 
 	private IOredirect(JTextArea displayPane, InputStream os) {
 		this.displayPane = displayPane;
-		reader = new BufferedReader(new InputStreamReader(os));
+		try {
+			reader = new BufferedReader(new InputStreamReader(os, StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {

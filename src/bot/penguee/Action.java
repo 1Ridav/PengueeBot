@@ -250,7 +250,7 @@ public class Action {
 	// /////////////////////////////HELPER PUBLIC
 	// METHODS////////////////////////////
 
-	public BufferedImage screendImage() {
+	public BufferedImage screenImage() {
 		return screen.getImage();
 	}
 
