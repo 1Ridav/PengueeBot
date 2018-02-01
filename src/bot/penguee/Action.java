@@ -172,6 +172,10 @@ public class Action {
 	public void searchRect(int x1, int y1, int x2, int y2) {
 		screen.setSearchRect(x1, y1, x2, y2);
 	}
+	
+	public void searchRect(MatrixPosition mp1, int w, int h) {
+		screen.setSearchRect(mp1.x, mp1.y, mp1.x + w, mp1.y + h);
+	}
 
 	public void searchRect(MatrixPosition mp1, MatrixPosition mp2) {
 		screen.setSearchRect(mp1, mp2);
@@ -229,8 +233,8 @@ public class Action {
 		screen.grab();
 	}
 
-	public void grab(int x, int y, int w, int h) throws Exception {
-		screen.grab_rect(x, y, w, h);
+	public void grab(int x1, int y1, int x2, int y2) throws Exception {
+		screen.grab_rect(x1, y1, x2-x1, y2-y1);
 	}
 
 	public void grab(MatrixPosition mp, int w, int h) throws Exception {
