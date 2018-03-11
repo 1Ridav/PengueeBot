@@ -19,6 +19,7 @@ import static org.jocl.CL.clGetDeviceIDs;
 import static org.jocl.CL.clGetPlatformIDs;
 import static org.jocl.CL.clSetKernelArg;
 
+import java.awt.Rectangle;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ScreenGPU extends Screen {
 	// int kernel_instruction_buffers[] = new int[] { 1920, 1080, 24, 22, -2 };
 
 	private long global_work_size[];
-	//private long local_work_size[];
+	// private long local_work_size[];
 	private int kernel_instruction_buffers[];
 	private cl_mem memObjects[] = new cl_mem[4];
 	private cl_context context;
@@ -109,15 +110,13 @@ public class ScreenGPU extends Screen {
 		cl_device_id device = devices[deviceIndex];
 
 		// Create a context for the selected device
-		context = clCreateContext(contextProperties, 1,
-				new cl_device_id[] { device }, null, null, null);
+		context = clCreateContext(contextProperties, 1, new cl_device_id[] { device }, null, null, null);
 
 		// Create a command-recentScripts for the selected device
 		commandQueue = clCreateCommandQueue(context, device, 0, null);
 
 		// Create the program from the source code
-		program = clCreateProgramWithSource(context, 1,
-				new String[] { programSource }, null, null);
+		program = clCreateProgramWithSource(context, 1, new String[] { programSource }, null, null);
 
 		// Build the program
 		clBuildProgram(program, 0, null, null, null, null);
@@ -126,31 +125,45 @@ public class ScreenGPU extends Screen {
 		kernel = clCreateKernel(program, "findAll", null);
 
 		global_work_size = new long[] { screenRect.width, screenRect.height };
-		kernel_instruction_buffers = new int[] { screenRect.width,
-				screenRect.height, 0, 0, -2 };
+		kernel_instruction_buffers = new int[] { screenRect.width, screenRect.height, 0, 0, -2 };
 
 		createBuffers();
 		loadFragments();
 	}
 
-	public int[] flat(int[][] array) {
+	private int[] flat(int[][] array) {
 		return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
 	}
-
+	@Override
 	public void grab() throws Exception {
 		super.grab();
-		// create buffers
-		// bigMatrixArray = new int[screenRect.width * screenRect.height];
-		// load data
-		// bigMatrixArray = flat(screenFrag.rgbData);
+		loadScreenshotToGPU();
+	}
+
+	private void loadScreenshotToGPU() {
 		int[][] matrix = screenFrag.getRgbData();
 		int width = matrix[0].length;
 		for (int i = 0; i < matrix.length; i++)
 			System.arraycopy(matrix[i], 0, bigMatrixArray, width * i, width);
 
-		clEnqueueWriteBuffer(commandQueue, memObjects[0], CL_TRUE, 0,
-				bigMatrixArray.length * Sizeof.cl_int, bigMatrixPointer, 0,
-				null, null);
+		clEnqueueWriteBuffer(commandQueue, memObjects[0], CL_TRUE, 0, bigMatrixArray.length * Sizeof.cl_int,
+				bigMatrixPointer, 0, null, null);
+	}
+	@Override
+	void grab_rect(int x, int y, int w, int h) throws Exception {
+		super.grab_rect(new Rectangle(x, y, w, h));
+		loadScreenshotToGPU();
+	}
+	@Override
+	void grab_rect(MatrixPosition p1, MatrixPosition p2) throws Exception {
+		super.grab_rect(new Rectangle(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y));
+		loadScreenshotToGPU();
+	}
+
+	@Override
+	void grab_rect(Rectangle rect) throws Exception {
+		super.grab_rect(rect);
+		loadScreenshotToGPU();
 	}
 
 	void loadFragments() {
@@ -162,9 +175,8 @@ public class ScreenGPU extends Screen {
 			Pointer smallPointer = Pointer.to(smallMatrix); // create a pointer
 															// to that 1d buffer
 			// load data to GPU
-			cl_mem memObj = clCreateBuffer(context, CL_MEM_READ_ONLY
-					| CL_MEM_COPY_HOST_PTR, Sizeof.cl_int * smallMatrix.length,
-					smallPointer, null);
+			cl_mem memObj = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+					Sizeof.cl_int * smallMatrix.length, smallPointer, null);
 			// get pointer to data on GPU
 			fragMemObjects.put(k, memObj);
 		}
@@ -175,19 +187,15 @@ public class ScreenGPU extends Screen {
 		// load data
 		bigMatrixPointer = Pointer.to(bigMatrixArray); // create a pointer to
 														// that 1d buffer
-		memObjects[0] = clCreateBuffer(context, CL_MEM_READ_ONLY
-				| CL_MEM_COPY_HOST_PTR, Sizeof.cl_int * bigMatrixArray.length,
-				bigMatrixPointer, null);
+		memObjects[0] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+				Sizeof.cl_int * bigMatrixArray.length, bigMatrixPointer, null);
 		resultFromGPUArrayPointer = Pointer.to(resultFromGPUArray);
 		kernelInstrArrayPointer = Pointer.to(kernel_instruction_buffers);
 
-		memObjects[2] = clCreateBuffer(context, CL_MEM_READ_WRITE
-				| CL_MEM_COPY_HOST_PTR, Sizeof.cl_int * resultArraySize,
-				resultFromGPUArrayPointer, null);
-		memObjects[3] = clCreateBuffer(context, CL_MEM_READ_WRITE
-				| CL_MEM_COPY_HOST_PTR, Sizeof.cl_int
-				* kernel_instruction_buffers.length, kernelInstrArrayPointer,
-				null);
+		memObjects[2] = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+				Sizeof.cl_int * resultArraySize, resultFromGPUArrayPointer, null);
+		memObjects[3] = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+				Sizeof.cl_int * kernel_instruction_buffers.length, kernelInstrArrayPointer, null);
 
 	}
 
@@ -202,11 +210,9 @@ public class ScreenGPU extends Screen {
 
 		memObjects[1] = fragMemObjects.get(key);
 		Arrays.fill(resultFromGPUArray, -1);
-		clEnqueueWriteBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
-				resultArraySize * Sizeof.cl_int, resultFromGPUArrayPointer, 0,
-				null, null);
-		clEnqueueWriteBuffer(commandQueue, memObjects[3], CL_TRUE, 0,
-				kernel_instruction_buffers.length * Sizeof.cl_int,
+		clEnqueueWriteBuffer(commandQueue, memObjects[2], CL_TRUE, 0, resultArraySize * Sizeof.cl_int,
+				resultFromGPUArrayPointer, 0, null, null);
+		clEnqueueWriteBuffer(commandQueue, memObjects[3], CL_TRUE, 0, kernel_instruction_buffers.length * Sizeof.cl_int,
 				kernelInstrArrayPointer, 0, null, null);
 
 		clSetKernelArg(kernel, 0, Sizeof.cl_mem, Pointer.to(memObjects[0]));
@@ -214,32 +220,26 @@ public class ScreenGPU extends Screen {
 		clSetKernelArg(kernel, 2, Sizeof.cl_mem, Pointer.to(memObjects[2]));
 		clSetKernelArg(kernel, 3, Sizeof.cl_mem, Pointer.to(memObjects[3]));
 		// Execute the kernel
-		clEnqueueNDRangeKernel(commandQueue, kernel, 2, null, global_work_size,
-				null, 0, null, null);
+		clEnqueueNDRangeKernel(commandQueue, kernel, 2, null, global_work_size, null, 0, null, null);
 
 		// Read the output data
-		clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,
-				resultArraySize * Sizeof.cl_int, resultFromGPUArrayPointer, 0,
-				null, null);
+		clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, resultArraySize * Sizeof.cl_int,
+				resultFromGPUArrayPointer, 0, null, null);
 		// System.out.println(Arrays.toString(resultFromGPUArray));
 		ArrayList<MatrixPosition> al = null;
 		// MatrixPosition result = new MatrixPosition();
-		for (int i = 0; i < resultFromGPUArray.length
-				&& resultFromGPUArray[i] != -1; i += 2) {
+		for (int i = 0; i < resultFromGPUArray.length && resultFromGPUArray[i] != -1; i += 2) {
 			if (al == null)
 				al = new ArrayList<MatrixPosition>();
-			al.add(new MatrixPosition(resultFromGPUArray[i],
-					resultFromGPUArray[i + 1]));
+			al.add(new MatrixPosition(resultFromGPUArray[i], resultFromGPUArray[i + 1]));
 		}
 
-		if (search_in_region) {
+		if (searchInRegion && al != null) {
 
 			for (int i = 0; i < al.size(); i++) {
 				MatrixPosition frag = al.get(i);
-				if (search_rect_pos1.x <= frag.x
-						&& search_rect_pos2.x >= frag.x
-						&& search_rect_pos1.y <= frag.y
-						&& search_rect_pos2.y >= frag.y) {
+				if (searchRectPos1.x <= frag.x && searchRectPos2.x >= frag.x && searchRectPos1.y <= frag.y
+						&& searchRectPos2.y >= frag.y) {
 
 				} else {
 					al.remove(i);
@@ -285,12 +285,12 @@ public class ScreenGPU extends Screen {
 	 * // Read the output data clEnqueueReadBuffer(commandQueue, memObjects[2],
 	 * CL_TRUE, 0, resultArraySize Sizeof.cl_int, resultFromGPUArrayPointer, 0,
 	 * null, null); //System.out.println(Arrays.toString(resultFromGPUArray));
-	 * ArrayList al = null; // MatrixPosition result = new MatrixPosition();
-	 * for(int i = 0; i < resultFromGPUArray.length &&
-	 * resultFromGPUArray[i]!=-1; i+=2){ if(al == null) al = new ArrayList();
-	 * al.add(new MatrixPosition(resultFromGPUArray[i],
-	 * resultFromGPUArray[i+1])); } MatrixPosition mpList[] = null; if(al !=
-	 * null) mpList = (MatrixPosition[]) al.toArray(new MatrixPosition[0]);
+	 * ArrayList al = null; // MatrixPosition result = new MatrixPosition(); for(int
+	 * i = 0; i < resultFromGPUArray.length && resultFromGPUArray[i]!=-1; i+=2){
+	 * if(al == null) al = new ArrayList(); al.add(new
+	 * MatrixPosition(resultFromGPUArray[i], resultFromGPUArray[i+1])); }
+	 * MatrixPosition mpList[] = null; if(al != null) mpList = (MatrixPosition[])
+	 * al.toArray(new MatrixPosition[0]);
 	 * 
 	 * // Release kernel, program, and memory objects
 	 * 

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Data {
-	static final String resourcesPath = System.getProperty("user.dir")
-			+ File.separator + "frag";
+	String s = new File("").getAbsolutePath();
+	static final String resourcesPath = new File("").getAbsolutePath() + File.separator + "frag";
 	static HashMap<String, Frag> fragments = new HashMap<String, Frag>();
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
@@ -19,32 +19,23 @@ public class Data {
 
 	static JythonVM jython = null;
 	public static boolean forceUseGPU = false;
-	public static String xmxValue = null;
 	public static boolean useInternalCache = true;
 	private static ArrayList<File> failedToLoadFragmentsList = null;
 	public static MyQueue recentScripts = new MyQueue(7);
+	public static String xmxValue;
 
 	public Data() {
 		// TODO Auto-generated constructor stub
 	}
 
 	static void loadFragments() {
-		
+
 		File f = new File(resourcesPath);
 		Data.absPath = f.getAbsolutePath();
 		loadFragments(f);
-		String p = Data.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		String dp = null;
-		try {
-			dp = URLDecoder.decode(p, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	
 		if (failedToLoadFragmentsList != null) {
-			System.out.println("CORE: Error occured while loading "
-					+ failedToLoadFragmentsList.size()
+			System.out.println("CORE: Error occured while loading " + failedToLoadFragmentsList.size()
 					+ " fragments. Here is the list:");
 			for (File k : failedToLoadFragmentsList) {
 				System.out.println("     " + k.getAbsolutePath());
@@ -58,15 +49,13 @@ public class Data {
 			if (fileEntry.isDirectory()) {
 				loadFragments(fileEntry);
 			} else {// is file
-				String s = fileEntry.getAbsolutePath().replace(absPath, "")
-						.replace(File.separator, ".").replace(".bmp", "")
-						.replaceAll(colorRegex, "");
+				String s = fileEntry.getAbsolutePath().replace(absPath, "").replace(File.separator, ".")
+						.replace(".bmp", "").replaceAll(colorRegex, "");
 				s = s.substring(1);
 				System.out.println(fileEntry.getName() + " " + s);
 				try {
 					if (fileEntry.getAbsolutePath().matches(colorRegex2))
-						fragments.put(s,
-								new FragMono(fileEntry.getAbsolutePath()));
+						fragments.put(s, new FragMono(fileEntry.getAbsolutePath()));
 
 					else
 						fragments.put(s, new Frag(fileEntry.getAbsolutePath()));

@@ -5,11 +5,15 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -57,6 +61,9 @@ public class GrabPanel extends JPanel {
 	private JLabel lblXAndY;
 	private JPanel panel_pixel_color;
 
+	private boolean isCTRLdown;
+	private boolean isALTdown;
+
 	GrabPanel(JFrame frame) {
 		this.frame = frame;
 		this.scr = new Screen(false);
@@ -99,20 +106,16 @@ public class GrabPanel extends JPanel {
 					g.drawRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 				if (testFragMP != null) {
 					MatrixPosition c = testFrag.center();
-					MatrixPosition mp = testFragMP.relative(-c.x, -c.y);
+					MatrixPosition mp = testFragMP.sub(c.x, c.y);
 					g.setColor(Color.RED);
-					g.drawRect(mp.x, mp.y, testFrag.getWidth(),
-							testFrag.getHeight());
+					g.drawRect(mp.x, mp.y, testFrag.getWidth(), testFrag.getHeight());
 				}
 			}
 
 		};
-		Rectangle rect = new Rectangle(Toolkit.getDefaultToolkit()
-				.getScreenSize());
-		grabPanelScreenshot.setPreferredSize(new Dimension(rect.width,
-				rect.height));
-		JScrollPane grabPanelInternalScroller = new JScrollPane(
-				grabPanelScreenshot);
+		Rectangle rect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+		grabPanelScreenshot.setPreferredSize(new Dimension(rect.width, rect.height));
+		JScrollPane grabPanelInternalScroller = new JScrollPane(grabPanelScreenshot);
 		grabPanelInternalScroller.setBounds(0, 0, 834, 430);
 		grabCentral.add(grabPanelInternalScroller);
 		grabPanelInternalScroller.setPreferredSize(new Dimension(600, 400));
@@ -126,8 +129,7 @@ public class GrabPanel extends JPanel {
 		});
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel.setIcon(new ImageIcon(GUI.class
-				.getResource("/res/grab.png")));
+		lblNewLabel.setIcon(new ImageIcon(GUI.class.getResource("/res/grab.png")));
 		lblNewLabel.setBounds(10, 11, 107, 32);
 		grabUpper.add(lblNewLabel);
 
@@ -194,8 +196,7 @@ public class GrabPanel extends JPanel {
 
 			}
 		});
-		lblTest.setIcon(new ImageIcon(GrabPanel.class
-				.getResource("/res/search.png")));
+		lblTest.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/search.png")));
 		lblTest.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblTest.setForeground(new Color(255, 255, 255));
 		lblTest.setBounds(146, 9, 107, 37);
@@ -216,10 +217,7 @@ public class GrabPanel extends JPanel {
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();
-					JOptionPane
-							.showMessageDialog(frame,
-									(list != null ? list.length : 0)
-											+ " matches found");
+					JOptionPane.showMessageDialog(frame, (list != null ? list.length : 0) + " matches found");
 
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -239,8 +237,7 @@ public class GrabPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					showMonoImage();
-					testFrag = new FragMono(copyImage(imageFragment),
-							pixel_color_num);
+					testFrag = new FragMono(copyImage(imageFragment), pixel_color_num);
 					long t1 = System.nanoTime();
 					testFragMP = scr.find(testFrag);
 					long t2 = System.nanoTime();
@@ -264,17 +261,13 @@ public class GrabPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					showMonoImage();
-					testFrag = new FragMono(copyImage(imageFragment),
-							pixel_color_num);
+					testFrag = new FragMono(copyImage(imageFragment), pixel_color_num);
 					long t1 = System.nanoTime();
 					MatrixPosition[] list = scr.find_all(testFrag);
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();
-					JOptionPane
-							.showMessageDialog(frame,
-									(list != null ? list.length : 0)
-											+ " matches found");
+					JOptionPane.showMessageDialog(frame, (list != null ? list.length : 0) + " matches found");
 
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -297,8 +290,7 @@ public class GrabPanel extends JPanel {
 
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_1.setIcon(new ImageIcon(GrabPanel.class
-				.getResource("/res/diskette.png")));
+		lblNewLabel_1.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/diskette.png")));
 		lblNewLabel_1.setBounds(288, 11, 107, 32);
 		grabUpper.add(lblNewLabel_1);
 
@@ -309,8 +301,7 @@ public class GrabPanel extends JPanel {
 				saveMonoImage();
 			}
 		});
-		lblSaveMono.setIcon(new ImageIcon(GrabPanel.class
-				.getResource("/res/diskette.png")));
+		lblSaveMono.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/diskette.png")));
 		lblSaveMono.setForeground(Color.WHITE);
 		lblSaveMono.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblSaveMono.setBounds(423, 11, 164, 32);
@@ -323,8 +314,7 @@ public class GrabPanel extends JPanel {
 				showMonoImage();
 			}
 		});
-		lblShowMono.setIcon(new ImageIcon(GrabPanel.class
-				.getResource("/res/fingerprint.png")));
+		lblShowMono.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/fingerprint.png")));
 		lblShowMono.setForeground(Color.WHITE);
 		lblShowMono.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblShowMono.setBounds(631, 11, 177, 32);
@@ -335,7 +325,7 @@ public class GrabPanel extends JPanel {
 
 		grabPanelScreenshot.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				// System.out.println("mouseClicked    " + evt.getX() + "   " +
+				// System.out.println("mouseClicked " + evt.getX() + " " +
 				// evt.getY());
 				p1 = p2 = null;
 				pixel_color_num = image.getRGB(evt.getX(), evt.getY());
@@ -345,8 +335,7 @@ public class GrabPanel extends JPanel {
 
 			public void mousePressed(java.awt.event.MouseEvent evt) {
 				/*
-				 * System.out.println("mousePressed    " + evt.getX() + "   " +
-				 * evt.getY());
+				 * System.out.println("mousePressed    " + evt.getX() + "   " + evt.getY());
 				 */
 				p1 = p2 = null;
 				p1 = evt.getPoint();
@@ -354,29 +343,47 @@ public class GrabPanel extends JPanel {
 
 			public void mouseReleased(java.awt.event.MouseEvent evt) {
 				/*
-				 * System.out.println("mouseReleased    " + evt.getX() + "   " +
-				 * evt.getY());
+				 * System.out.println("mouseReleased    " + evt.getX() + "   " + evt.getY());
 				 */
 				p2 = evt.getPoint();
 
 				if (p2.getX() != p1.getX() || p2.getY() != p1.getY()) {
 					try {
-						imageFragment = getImage().getSubimage(p1.x, p1.y,
-								p2.x - p1.x, p2.y - p1.y);
-						panel_fragment_zoom.setPreferredSize(new Dimension(
-								imageFragment.getWidth() * previewScaleRate,
+						imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+						panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
 								imageFragment.getHeight() * previewScaleRate));
 						grabPanelScreenshot.repaint();
 						// SwingUtilities.updateComponentTreeUI(frame);
 						scrollPane.revalidate();
 						scrollPane.repaint();
 					} catch (Exception e) {
+						//e.printStackTrace();
+					}
+				}
+				// copy rectangle to clipboard in "x1, y1, x2, y2" format, works if CTRL is
+				// being pressed
+				if (isCTRLdown) {
+					try {
+						String preparedRectangleString = p1.x + ", " + p1.y;
+						Toolkit.getDefaultToolkit().getSystemClipboard()
+								.setContents(new StringSelection(preparedRectangleString), null);
+						System.out.println("Copied to clipboard: " + preparedRectangleString);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else if (isALTdown) {
+					try {
+						String preparedRectangleString = p1.x + ", " + p1.y + ", " + p2.x + ", " + p2.y;
+						Toolkit.getDefaultToolkit().getSystemClipboard()
+								.setContents(new StringSelection(preparedRectangleString), null);
+						System.out.println("Copied to clipboard: " + preparedRectangleString);
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
+
 				try {
-					imageCursorZoomFragment = getImage().getSubimage(p2.x - 10,
-							p2.y - 10, 20, 20);
+					imageCursorZoomFragment = getImage().getSubimage(p2.x - 10, p2.y - 10, 20, 20);
 					panel_cursor_zoom.repaint();
 				} catch (Exception e) {
 					// e.printStackTrace();
@@ -384,59 +391,44 @@ public class GrabPanel extends JPanel {
 			}
 		});
 
-		grabPanelScreenshot
-				.addMouseMotionListener(new java.awt.event.MouseAdapter() {
-					public void mouseDragged(java.awt.event.MouseEvent evt) {
-						// System.out.println("mouseDragged    " + evt.getX() +
-						// "   " + evt.getY());
-						p2 = evt.getPoint();
-						lblXAndY.setText("X: " + evt.getX() + "   Y: "
-								+ evt.getY());
-						if (p2.x != p1.x || p2.y != p1.y) {
-							// System.out.println("   " + (p2.x - p1.x) + " " +
-							// (p2.y - p1.y));
-							if ((p2.x - p1.x) > 0 && (p2.y - p1.y) > 0) {
-								imageFragment = getImage().getSubimage(p1.x,
-										p1.y, p2.x - p1.x, p2.y - p1.y);
+		grabPanelScreenshot.addMouseMotionListener(new java.awt.event.MouseAdapter() {
+			public void mouseDragged(java.awt.event.MouseEvent evt) {
+				p2 = evt.getPoint();
+				lblXAndY.setText("X: " + evt.getX() + "   Y: " + evt.getY());
+				if (p2.x != p1.x || p2.y != p1.y) {
+					if ((p2.x - p1.x) > 0 && (p2.y - p1.y) > 0) {
+						imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 
-								panel_fragment_zoom
-										.setPreferredSize(new Dimension(
-												imageFragment.getWidth()
-														* previewScaleRate,
-												imageFragment.getHeight()
-														* previewScaleRate));
+						panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
+								imageFragment.getHeight() * previewScaleRate));
 
-								// SwingUtilities.updateComponentTreeUI(frame);
-								grabPanelScreenshot.repaint();
-								scrollPane.revalidate();
-								scrollPane.repaint();
-							}
-						}
-
-						try {
-							imageCursorZoomFragment = getImage().getSubimage(
-									p2.x - 10, p2.y - 10, 20, 20);
-							panel_cursor_zoom.repaint();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						// SwingUtilities.updateComponentTreeUI(frame);
+						grabPanelScreenshot.repaint();
+						scrollPane.revalidate();
+						scrollPane.repaint();
 					}
+				}
 
-					public void mouseMoved(java.awt.event.MouseEvent evt) {
-						// System.out.println("mouseMoved    " + evt.getX() +
-						// "   " + evt.getY());
-						int x = evt.getX();
-						int y = evt.getY();
-						try {
-							lblXAndY.setText("X: " + x + "   Y: " + y);
-							imageCursorZoomFragment = getImage().getSubimage(
-									x - 10, y - 10, 20, 20);
-							panel_cursor_zoom.repaint();
-						} catch (Exception e) {
-							// e.printStackTrace();
-						}
-					}
-				});
+				try {
+					imageCursorZoomFragment = getImage().getSubimage(p2.x - 10, p2.y - 10, 20, 20);
+					panel_cursor_zoom.repaint();
+				} catch (Exception e) {
+					//e.printStackTrace();
+				}
+			}
+
+			public void mouseMoved(java.awt.event.MouseEvent evt) {
+				int x = evt.getX();
+				int y = evt.getY();
+				try {
+					lblXAndY.setText("X: " + x + "   Y: " + y);
+					imageCursorZoomFragment = getImage().getSubimage(x - 10, y - 10, 20, 20);
+					panel_cursor_zoom.repaint();
+				} catch (Exception e) {
+					//e.printStackTrace();
+				}
+			}
+		});
 
 		panel_fragment_zoom = new JPanel() {
 			/**
@@ -449,10 +441,8 @@ public class GrabPanel extends JPanel {
 				super.paintComponent(g);
 				if (imageFragment != null)
 					try {
-						g.drawImage(imageFragment, 0, 0,
-								imageFragment.getWidth() * previewScaleRate,
-								imageFragment.getHeight() * previewScaleRate,
-								null);
+						g.drawImage(imageFragment, 0, 0, imageFragment.getWidth() * previewScaleRate,
+								imageFragment.getHeight() * previewScaleRate, null);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -477,21 +467,12 @@ public class GrabPanel extends JPanel {
 				super.paintComponent(g);
 				// if (imageCursorZoomFragment != null)
 				try {
-					g.drawImage(
-							imageCursorZoomFragment,
-							0,
-							0,
-							imageCursorZoomFragment.getWidth() * zoomScaleRate,
-							imageCursorZoomFragment.getHeight() * zoomScaleRate,
-							null);
-					int x = imageCursorZoomFragment.getWidth() * zoomScaleRate
-							/ 2;
-					int y = imageCursorZoomFragment.getHeight() * zoomScaleRate
-							/ 2;
-					g.drawLine(x, 0, x, imageCursorZoomFragment.getHeight()
-							* zoomScaleRate);
-					g.drawLine(0, y, imageCursorZoomFragment.getWidth()
-							* zoomScaleRate, y);
+					g.drawImage(imageCursorZoomFragment, 0, 0, imageCursorZoomFragment.getWidth() * zoomScaleRate,
+							imageCursorZoomFragment.getHeight() * zoomScaleRate, null);
+					int x = imageCursorZoomFragment.getWidth() * zoomScaleRate / 2;
+					int y = imageCursorZoomFragment.getHeight() * zoomScaleRate / 2;
+					g.drawLine(x, 0, x, imageCursorZoomFragment.getHeight() * zoomScaleRate);
+					g.drawLine(0, y, imageCursorZoomFragment.getWidth() * zoomScaleRate, y);
 				} catch (Exception e) {
 					// e.printStackTrace();
 				}
@@ -532,16 +513,44 @@ public class GrabPanel extends JPanel {
 
 		panel_fragment_zoom.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				// System.out.println("mouseClicked    " + evt.getX() + "   " +
+				// System.out.println("mouseClicked " + evt.getX() + " " +
 				// evt.getY());
 				try {
-					pixel_color_num = imageFragment.getRGB(evt.getX()
-							/ previewScaleRate, evt.getY() / previewScaleRate);
+					pixel_color_num = imageFragment.getRGB(evt.getX() / previewScaleRate,
+							evt.getY() / previewScaleRate);
 					panel_pixel_color.setBackground(new Color(pixel_color_num));
 				} catch (Exception e) {
 
 				}
 			}
+		});
+
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				switch (e.getID()) {
+				case KeyEvent.KEY_PRESSED:
+					if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+						isCTRLdown = true;
+					}
+					if (e.getKeyCode() == KeyEvent.VK_ALT) {
+						isALTdown = true;
+					}
+					break;
+
+				case KeyEvent.KEY_RELEASED:
+					if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+						isCTRLdown = false;
+					}
+					if (e.getKeyCode() == KeyEvent.VK_ALT) {
+						isALTdown = false;
+					}
+					break;
+				}
+				return false;
+			}
+
 		});
 	}
 
@@ -566,8 +575,7 @@ public class GrabPanel extends JPanel {
 			image = scr.getImage();
 			testFragMP = null;
 			repaint();
-			imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x,
-					p2.y - p1.y);
+			imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 			panel_fragment_zoom.repaint();
 		} catch (Exception e) {
 
@@ -578,33 +586,28 @@ public class GrabPanel extends JPanel {
 
 	private void saveImage() {
 		try {
-			String s = (String) JOptionPane.showInputDialog(frame,
-					"Fragment name...", "Colored fragment",
+			String s = (String) JOptionPane.showInputDialog(frame, "Fragment name...", "Colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
 			if (s != null)
 				new Frag(imageFragment).makeFile(s);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(frame,
-					"Error occured while trying to save");
+			JOptionPane.showMessageDialog(frame, "Error occured while trying to save");
 		}
 	}
 
 	private void saveMonoImage() {
 		try {
 			imageFragment = optimizeMonoImage(imageFragment);
-			String s = (String) JOptionPane.showInputDialog(frame,
-					"Fragment name...", "One colored fragment",
+			String s = (String) JOptionPane.showInputDialog(frame, "Fragment name...", "One colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
 			if (s != null)
-				new Frag(imageFragment).makeFile(s + "_((" + pixel_color_num
-						+ "))");
+				new Frag(imageFragment).makeFile(s + "_((" + pixel_color_num + "))");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(frame,
-					"Error occured while trying to save");
+			JOptionPane.showMessageDialog(frame, "Error occured while trying to save");
 		}
 	}
 
@@ -620,9 +623,8 @@ public class GrabPanel extends JPanel {
 			}
 
 			imageFragment = optimizeMonoImage(imageFragment);
-			panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment
-					.getWidth() * previewScaleRate, imageFragment.getHeight()
-					* previewScaleRate));
+			panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
+					imageFragment.getHeight() * previewScaleRate));
 			SwingUtilities.updateComponentTreeUI(frame);
 			// panel_fragment_zoom.repaint();
 		} catch (Exception e) {
@@ -632,8 +634,7 @@ public class GrabPanel extends JPanel {
 	}
 
 	private BufferedImage copyImage(BufferedImage source) {
-		BufferedImage b = new BufferedImage(source.getWidth(),
-				source.getHeight(), source.getType());
+		BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 		Graphics g = b.getGraphics();
 		g.drawImage(source, 0, 0, null);
 		g.dispose();
@@ -651,8 +652,7 @@ public class GrabPanel extends JPanel {
 				}
 			}
 			if (canOptimizeLine) {
-				img = img
-						.getSubimage(0, 1, img.getWidth(), img.getHeight() - 1);
+				img = img.getSubimage(0, 1, img.getWidth(), img.getHeight() - 1);
 			}
 
 		}
@@ -666,8 +666,7 @@ public class GrabPanel extends JPanel {
 				}
 			}
 			if (canOptimizeLine) {
-				img = img
-						.getSubimage(0, 0, img.getWidth(), img.getHeight() - 1);
+				img = img.getSubimage(0, 0, img.getWidth(), img.getHeight() - 1);
 			}
 
 		}
@@ -681,8 +680,7 @@ public class GrabPanel extends JPanel {
 				}
 			}
 			if (canOptimizeLine) {
-				img = img
-						.getSubimage(1, 0, img.getWidth() - 1, img.getHeight());
+				img = img.getSubimage(1, 0, img.getWidth() - 1, img.getHeight());
 			}
 
 		}
@@ -696,8 +694,7 @@ public class GrabPanel extends JPanel {
 				}
 			}
 			if (canOptimizeLine) {
-				img = img
-						.getSubimage(0, 0, img.getWidth() - 1, img.getHeight());
+				img = img.getSubimage(0, 0, img.getWidth() - 1, img.getHeight());
 			}
 
 		}

@@ -8,16 +8,16 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class Screen {
-	protected final static Rectangle screenRect = new Rectangle(Toolkit
+	protected final Rectangle screenRect = new Rectangle(Toolkit
 			.getDefaultToolkit().getScreenSize());
 	private BufferedImage image = null;
 	protected Frag screenFrag = null;
 	private Robot robot;
 	private HashMap<Frag, MatrixPosition> cache;
 
-	protected boolean search_in_region = false;
-	protected MatrixPosition search_rect_pos1 = new MatrixPosition();
-	protected MatrixPosition search_rect_pos2 = new MatrixPosition();
+	protected boolean searchInRegion = false;
+	protected MatrixPosition searchRectPos1 = null;
+	protected MatrixPosition searchRectPos2 = null;
 
 	private boolean useCache = Data.useInternalCache;
 
@@ -84,84 +84,83 @@ public class Screen {
 
 	// SETS RECTANGLE WHERE FRAGMENS BEING SEARCHED
 	void setSearchRect(int x1, int y1, int x2, int y2) {
-		search_rect_pos1.set(x1, y1);
-		search_rect_pos2.set(x2, y2);
-		search_in_region = true;
+		searchRectPos1 = new MatrixPosition(x1, y1);
+		searchRectPos2 = new MatrixPosition(x2, y2);
+		searchInRegion = true;
 	}
 
 	// SETS SEARCH RECTANGLE TO WHOLE SCREEN
 	void setSearchRect() {
-		search_in_region = false;
+		searchInRegion = false;
 	}
 
-	public MatrixPosition find(Frag small) {
+	public MatrixPosition find(Frag smallFragment) {
 		MatrixPosition cachedPos = null;
 		if (useCache)
-			cachedPos = (MatrixPosition) cache.get(small);
+			cachedPos = (MatrixPosition) cache.get(smallFragment);
 		MatrixPosition mp = null;
 		if (cachedPos != null) { // fragment was cached previously, ensure it is
 									// still there
-			if (search_in_region) {
-				if (search_rect_pos1.x <= cachedPos.x
-						&& search_rect_pos2.x >= cachedPos.x
-						&& search_rect_pos1.y <= cachedPos.y
-						&& search_rect_pos2.y >= cachedPos.y) {
-					mp = small.findIn(screenFrag, cachedPos.x, cachedPos.y,
+			if (searchInRegion) {
+				if (searchRectPos1.x <= cachedPos.x
+						&& searchRectPos2.x >= cachedPos.x
+						&& searchRectPos1.y <= cachedPos.y
+						&& searchRectPos2.y >= cachedPos.y) {
+					mp = smallFragment.findIn(screenFrag, cachedPos.x, cachedPos.y,
 							cachedPos.x + 1, cachedPos.y + 1);
 				}
 			} else {
-				mp = small.findIn(screenFrag, cachedPos.x, cachedPos.y,
+				mp = smallFragment.findIn(screenFrag, cachedPos.x, cachedPos.y,
 						cachedPos.x + 1, cachedPos.y + 1);
 			}
 		}
 
 		if (mp == null) {// cache miss
 			int x_start, y_start, x_stop, y_stop;
-			if (search_in_region) {
-				y_start = search_rect_pos1.y;
-				x_start = search_rect_pos1.x;
-				y_stop = search_rect_pos2.y - small.getHeight() + 1;
-				x_stop = search_rect_pos2.x - small.getWidth();
+			if (searchInRegion) {
+				y_start = searchRectPos1.y;
+				x_start = searchRectPos1.x;
+				y_stop = searchRectPos2.y - smallFragment.getHeight() + 1;
+				x_stop = searchRectPos2.x - smallFragment.getWidth();
 
 			} else {
 				y_start = 0;
 				x_start = 0;
-				y_stop = screenFrag.getHeight() - small.getHeight() + 1;
-				x_stop = screenFrag.getWidth() - small.getWidth();
+				y_stop = screenFrag.getHeight() - smallFragment.getHeight() + 1;
+				x_stop = screenFrag.getWidth() - smallFragment.getWidth();
 			}
-			mp = small.findIn(screenFrag, x_start, y_start, x_stop, y_stop);
+			mp = smallFragment.findIn(screenFrag, x_start, y_start, x_stop, y_stop);
 		}
 
 		if (mp != null) {
 			if (useCache)
-				cache.put(small, new MatrixPosition(mp));
-			return mp.add(small.center());//change position to center of fragment and return
+				cache.put(smallFragment, mp);
+			return mp.add(smallFragment.center());//change position to center of fragment and return
 		}
-
 		return null;
 	}
 
-	public MatrixPosition[] find_all(Frag small) {
+	public MatrixPosition[] find_all(Frag smallFragment) {
 		MatrixPosition[] mp = null;
 		int x_start, y_start, x_stop, y_stop;
-		if (search_in_region) {
-			y_start = search_rect_pos1.y;
-			x_start = search_rect_pos1.x;
-			y_stop = search_rect_pos2.y - small.getHeight() + 1;
-			x_stop = search_rect_pos2.x - small.getWidth();
+		if (searchInRegion) {
+			y_start = searchRectPos1.y;
+			x_start = searchRectPos1.x;
+			y_stop = searchRectPos2.y - smallFragment.getHeight() + 1;
+			x_stop = searchRectPos2.x - smallFragment.getWidth();
 
 		} else {
 			y_start = 0;
 			x_start = 0;
-			y_stop = screenFrag.getHeight() - small.getHeight() + 1;
-			x_stop = screenFrag.getWidth() - small.getWidth();
+			y_stop = screenFrag.getHeight() - smallFragment.getHeight() + 1;
+			x_stop = screenFrag.getWidth() - smallFragment.getWidth();
 		}
 
-		mp = small.findAllIn(screenFrag, x_start, y_start, x_stop, y_stop);
+		mp = smallFragment.findAllIn(screenFrag, x_start, y_start, x_stop, y_stop);
 		if (mp != null) {// change position to center of fragment
-			MatrixPosition center = small.center();
-			for (MatrixPosition p : mp)
-				p.add(center);
+			MatrixPosition center = smallFragment.center();
+			for(int i = 0; i < mp.length; i++)
+				mp[i] = mp[i].add(center);
 		}
 
 		return mp;

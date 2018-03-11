@@ -21,7 +21,7 @@ public class Action {
 
 	public Action() {
 		try {
-			screen = Data.screenObject;
+			screen = Data.forceUseGPU ? new ScreenGPU() : new Screen();
 			bot = new Robot();
 		} catch (AWTException e) {
 			e.printStackTrace();
@@ -122,7 +122,7 @@ public class Action {
 	public boolean findClick(String fragName) throws AWTException,
 			FragmentNotLoadedException {
 		if (find(fragName)) {
-			mouseMove(lastCoord);
+			mouseClick(lastCoord);
 			return true;
 		}
 		return false;

@@ -22,7 +22,7 @@ public class Main {
 	}
 
 	Main() {
-		
+
 		if (consoleMode)
 			runConsoleMode();
 		else
@@ -45,19 +45,11 @@ public class Main {
 		t.setDaemon(true);
 		t.start();
 
-		if (Data.forceUseGPU) {
-			Data.screenObject = new ScreenGPU();
-		} else {
-			Data.screenObject = new Screen();
-		}
-
 		System.out.println("CORE: Loading fragments. ");
 		Data.loadFragments();
-		if (Data.forceUseGPU) {
-			Data.screenObject.loadFragments();
-		}
+
 		System.out.println("CORE: Done. " + Data.fragments.size() + " loaded");
-		
+
 		try {
 			Data.jython.run(Data.scriptFileName);
 		} catch (Exception e) {
