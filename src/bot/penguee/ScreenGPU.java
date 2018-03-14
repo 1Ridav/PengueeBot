@@ -167,8 +167,8 @@ public class ScreenGPU extends Screen {
 	}
 
 	void loadFragments() {
-		for (String k : Data.fragments.keySet()) {
-			Frag smallFrag = Data.fragments.get(k);// get fragment
+		for (String k : Data.fragments().keySet()) {
+			Frag smallFrag = Data.fragments().get(k);// get fragment
 			int[] smallMatrix = flat(smallFrag.getRgbData());// copy rgbData to
 																// 1d
 			// buffer
@@ -201,7 +201,7 @@ public class ScreenGPU extends Screen {
 
 	public MatrixPosition[] findAll(String key) {
 
-		Frag f = Data.fragments.get(key);
+		Frag f = Data.fragments().get(key);
 		int width = f.getRgbData()[0].length;
 		int height = f.getRgbData().length;
 		kernel_instruction_buffers[2] = width;

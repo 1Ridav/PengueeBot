@@ -21,7 +21,7 @@ public class Action {
 
 	public Action() {
 		try {
-			screen = Data.forceUseGPU ? new ScreenGPU() : new Screen();
+			screen = Data.isGPUForced() ? new ScreenGPU() : new Screen();
 			bot = new Robot();
 		} catch (AWTException e) {
 			e.printStackTrace();
@@ -48,8 +48,7 @@ public class Action {
 		mouseClick(x, y, button_mask, mouseDelay);
 	}
 
-	public void mouseClick(int x, int y, int button_mask, int sleepTime)
-			throws AWTException {
+	public void mouseClick(int x, int y, int button_mask, int sleepTime) throws AWTException {
 		bot.mouseMove(x, y);
 		bot.mousePress(button_mask);
 		sleep(sleepTime);
@@ -60,13 +59,11 @@ public class Action {
 		mouseClick(mp.x, mp.y);
 	}
 
-	public void mouseClick(MatrixPosition mp, int button_mask)
-			throws AWTException {
+	public void mouseClick(MatrixPosition mp, int button_mask) throws AWTException {
 		mouseClick(mp.x, mp.y, button_mask);
 	}
 
-	public void mouseClick(MatrixPosition mp, int button_mask, int sleepTime)
-			throws AWTException {
+	public void mouseClick(MatrixPosition mp, int button_mask, int sleepTime) throws AWTException {
 		mouseClick(mp.x, mp.y, button_mask, sleepTime);
 	}
 
@@ -101,26 +98,22 @@ public class Action {
 	// //////////////////////////MOUSE DRAG
 	// METHODS/////////////////////////////////
 
-	public void mouseDragDrop(int button_mask, MatrixPosition mp1,
-			MatrixPosition mp2) throws AWTException {
+	public void mouseDragDrop(int button_mask, MatrixPosition mp1, MatrixPosition mp2) throws AWTException {
 		mouseDragDrop(button_mask, mp1.x, mp1.y, mp2.x, mp2.y);
 	}
 
-	public void mouseDragDrop(int button_mask, int x1, int y1, int x2, int y2)
-			throws AWTException {
+	public void mouseDragDrop(int button_mask, int x1, int y1, int x2, int y2) throws AWTException {
 		bot.mouseMove(x1, y1);
 		bot.mousePress(button_mask);
 		sleep(mouseDelay);
 		bot.mouseMove(x2, y2);
 		bot.mouseRelease(button_mask);
 	}
-	
 
 	// ////////////////////END OF MOUSE DRAG METHODS////////////////////////
 
 	// /////////////////////FIND//////////////////////////////////////////
-	public boolean findClick(String fragName) throws AWTException,
-			FragmentNotLoadedException {
+	public boolean findClick(String fragName) throws AWTException, FragmentNotLoadedException {
 		if (find(fragName)) {
 			mouseClick(lastCoord);
 			return true;
@@ -128,8 +121,7 @@ public class Action {
 		return false;
 	}
 
-	public boolean findMove(String fragName) throws AWTException,
-			FragmentNotLoadedException {
+	public boolean findMove(String fragName) throws AWTException, FragmentNotLoadedException {
 		if (find(fragName)) {
 			mouseMove(lastCoord);
 			return true;
@@ -137,13 +129,11 @@ public class Action {
 		return false;
 	}
 
-	public boolean find(String fragName) throws AWTException,
-			FragmentNotLoadedException {
+	public boolean find(String fragName) throws AWTException, FragmentNotLoadedException {
 		return findPos(fragName, fragName) != null;
 	}
 
-	public MatrixPosition findPos(String fragName) throws AWTException,
-			FragmentNotLoadedException {
+	public MatrixPosition findPos(String fragName) throws AWTException, FragmentNotLoadedException {
 		return findPos(fragName, fragName);
 	}
 
@@ -155,8 +145,7 @@ public class Action {
 		return mp;
 	}
 
-	public MatrixPosition[] findAllPos(String fragName) throws AWTException,
-			FragmentNotLoadedException {
+	public MatrixPosition[] findAllPos(String fragName) throws AWTException, FragmentNotLoadedException {
 		return screen.find_all(fragName);
 	}
 
@@ -172,7 +161,7 @@ public class Action {
 	public void searchRect(int x1, int y1, int x2, int y2) {
 		screen.setSearchRect(x1, y1, x2, y2);
 	}
-	
+
 	public void searchRect(MatrixPosition mp1, int w, int h) {
 		screen.setSearchRect(mp1.x, mp1.y, mp1.x + w, mp1.y + h);
 	}
@@ -234,7 +223,7 @@ public class Action {
 	}
 
 	public void grab(int x1, int y1, int x2, int y2) throws Exception {
-		screen.grab_rect(x1, y1, x2-x1, y2-y1);
+		screen.grab_rect(x1, y1, x2 - x1, y2 - y1);
 	}
 
 	public void grab(MatrixPosition mp, int w, int h) throws Exception {
@@ -259,7 +248,7 @@ public class Action {
 	}
 
 	public BufferedImage fragImage(String name) {
-		return Data.fragments.get(name).getImage();
+		return Data.fragments().get(name).getImage();
 	}
 
 	public int getMouseDelay() {

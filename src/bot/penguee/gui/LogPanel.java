@@ -170,7 +170,7 @@ public class LogPanel extends JPanel {
 			params.add("-nogui");
 			params.add("-script");
 			params.add(name);
-			if (Data.forceUseGPU)
+			if (Data.isGPUForced())
 				params.add("-forceUseGPU");
 
 			ProcessBuilder pb = new ProcessBuilder(params);

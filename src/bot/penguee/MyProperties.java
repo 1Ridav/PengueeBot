@@ -18,14 +18,11 @@ public class MyProperties {
 		try (FileInputStream fis = new FileInputStream(configFile)) {
 			Properties p = new Properties();
 			p.load(fis);
-			Data.forceUseGPU = p.getProperty("force_use_GPU").equals("1") ? true
-					: false;
-			Data.xmxValue = p.getProperty("RAM_xmx") != null ? p
-					.getProperty("RAM_xmx") : "512";
-			Data.scriptFileName = p.getProperty("default_script") != null ? p
-					.getProperty("default_script") : "script.py";
-			Data.useInternalCache = p.getProperty("use_fragments_cache")
-					.equals("1") ? true : false;
+			Data.forceGPU(p.getProperty("force_use_GPU").equals("1") ? true : false);
+			Data.xmxValue = p.getProperty("RAM_xmx") != null ? p.getProperty("RAM_xmx") : "512";
+			Data.scriptFileName = p.getProperty("default_script") != null ? p.getProperty("default_script")
+					: "script.py";
+			Data.useInternalCache = p.getProperty("use_fragments_cache").equals("1") ? true : false;
 			String[] scriptsList = p.getProperty("recent_scripts").split(":::");
 			for (String s : scriptsList)
 				Data.recentScripts.add(s);
@@ -57,9 +54,8 @@ public class MyProperties {
 			p.setProperty("recent_scripts", sb.toString());
 			p.setProperty("default_script", "script.py");
 			p.setProperty("RAM_xmx", Data.xmxValue);
-			p.setProperty("force_use_GPU", Data.forceUseGPU ? "1" : "0");
-			p.setProperty("use_fragments_cache",
-					Data.useInternalCache == true ? "1" : "0");
+			p.setProperty("force_use_GPU", Data.isGPUForced() ? "1" : "0");
+			p.setProperty("use_fragments_cache", Data.useInternalCache == true ? "1" : "0");
 			p.store(new FileOutputStream(configFile), null);
 		} catch (IOException e1) {
 			e1.printStackTrace();

@@ -107,7 +107,7 @@ public class SettingsPanel extends JPanel {
 		final JLabelToggle forceGPUToggle = new JLabelToggle();
 		forceGPUToggle.setIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_off.png")));
 		forceGPUToggle.setSelectedIcon(new ImageIcon(SettingsPanel.class.getResource("/res/switch_on.png")));
-		forceGPUToggle.setSelected(Data.forceUseGPU);
+		forceGPUToggle.setSelected(Data.isGPUForced());
 		forceGPUToggle.setBounds(456, 137, 64, 50);
 		menuCentral.add(forceGPUToggle);
 
@@ -116,7 +116,7 @@ public class SettingsPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Data.xmxValue = String.valueOf(ramSlider.getValue());
-				Data.forceUseGPU = forceGPUToggle.isSelected() ? true : false;
+				Data.forceGPU(forceGPUToggle.isSelected() ? true : false);
 				Data.useInternalCache = useCacheToggle.isSelected() ? true
 						: false;
 				MyProperties.save();

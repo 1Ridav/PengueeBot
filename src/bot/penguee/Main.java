@@ -15,7 +15,7 @@ public class Main {
 			} else if (args[i].equals("-script")) {
 				Data.scriptFileName = args[++i];
 			} else if (args[i].equals("-forceUseGPU")) {
-				Data.forceUseGPU = true;
+				Data.forceGPU(true);
 			}
 		}
 		new Main();
@@ -48,7 +48,7 @@ public class Main {
 		System.out.println("CORE: Loading fragments. ");
 		Data.loadFragments();
 
-		System.out.println("CORE: Done. " + Data.fragments.size() + " loaded");
+		System.out.println("CORE: Done. " + Data.fragments().size() + " loaded");
 
 		try {
 			Data.jython.run(Data.scriptFileName);

@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Data {
 	String s = new File("").getAbsolutePath();
 	static final String resourcesPath = new File("").getAbsolutePath() + File.separator + "frag";
-	static HashMap<String, Frag> fragments = new HashMap<String, Frag>();
+	private static HashMap<String, Frag> fragments = new HashMap<String, Frag>();
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
 	private static String colorRegex2 = ".*" + colorRegex + ".*";
@@ -18,7 +18,7 @@ public class Data {
 	public static String scriptFileName = "script.py";
 
 	static JythonVM jython = null;
-	public static boolean forceUseGPU = false;
+	private static boolean forceUseGPU = false;
 	public static boolean useInternalCache = true;
 	private static ArrayList<File> failedToLoadFragmentsList = null;
 	public static MyQueue recentScripts = new MyQueue(7);
@@ -26,6 +26,19 @@ public class Data {
 
 	public Data() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static boolean isGPUForced() {
+		return forceUseGPU;
+	}
+	public static void forceGPU(boolean state) {
+		forceUseGPU = state;
+	}
+	static boolean useInternalCache() {
+		return useInternalCache;
+	}
+	public static HashMap<String, Frag> fragments() {
+		return fragments;
 	}
 
 	static void loadFragments() {

@@ -172,7 +172,7 @@ public class Screen {
 
 	MatrixPosition find(String name, String customName)
 			throws FragmentNotLoadedException {
-		Frag f = (Frag) Data.fragments.get(name);
+		Frag f = (Frag) Data.fragments().get(name);
 		if (f != null) {
 			MatrixPosition mp = find(f);
 			if (mp != null)
@@ -190,7 +190,7 @@ public class Screen {
 
 	MatrixPosition[] find_all(String name, String customName)
 			throws FragmentNotLoadedException {
-		Frag f = (Frag) Data.fragments.get(name);
+		Frag f = (Frag) Data.fragments().get(name);
 		if (f != null) {
 			MatrixPosition mp[] = find_all(f);
 			if (mp != null)

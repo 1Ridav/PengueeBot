@@ -16,8 +16,8 @@ public class IOredirect implements Runnable {
 	private IOredirect(JTextArea displayPane, InputStream os) {
 		this.displayPane = displayPane;
 		try {
-			//reader = new BufferedReader(new InputStreamReader(os, StandardCharsets.UTF_8));
-			reader = new BufferedReader(new InputStreamReader(os));
+			reader = new BufferedReader(new InputStreamReader(os, StandardCharsets.UTF_8));
+			//reader = new BufferedReader(new InputStreamReader(os));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
