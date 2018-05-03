@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestMatrixPosition" tests="14" skipped="0" failures="0" errors="0" timestamp="2018-04-28T20:49:26" hostname="OFF-PC" time="0.003">
+  <properties/>
+  <testcase name="testAdd" classname="TestMatrixPosition" time="0.001"/>
+  <testcase name="testSub" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testAdd2" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testGetX" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testGetY" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testSub2" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testConstructor1" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testConstructor2" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testConstructor3" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testConstructor4" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testConstructor5" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testGetName" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testEquals" classname="TestMatrixPosition" time="0.0"/>
+  <testcase name="testSetName" classname="TestMatrixPosition" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
