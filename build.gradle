@@ -11,13 +11,10 @@ apply plugin: 'java-library'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
+    mavenCentral()
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
-    
-    flatDir {
-       dirs 'lib'
-   }
 }
 
 
@@ -31,8 +28,8 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     
-    compile fileTree(include: ['*.jar'], dir: 'lib')
-
+    compile 'org.python:jython-standalone:2.7.1'
+    compile 'org.jocl:jocl:0.1.9'
 }
 
 jar {
