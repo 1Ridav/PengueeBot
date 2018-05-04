@@ -30,8 +30,7 @@ public class Update {
 		URL url = new URL(link);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
-		BufferedReader rd = new BufferedReader(new InputStreamReader(
-				conn.getInputStream()));
+		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String line;
 		while ((line = rd.readLine()) != null) {
 			result.append(line);
@@ -44,8 +43,7 @@ public class Update {
 	public static void update() {
 		try {
 			Desktop.getDesktop().browse(
-					new URL(downloadURL + getLatestVersionID(versionURL)
-							+ "/penguee-latest-release.zip").toURI());
+					new URL(downloadURL + getLatestVersionID(versionURL) + "/penguee-latest-release.zip").toURI());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,10 +67,9 @@ public class Update {
 		URL url = new URL(link);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
-		BufferedReader rd = new BufferedReader(new InputStreamReader(
-				conn.getInputStream()));
+		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String line;
-		while ((line = rd.readLine()) != null) 
+		while ((line = rd.readLine()) != null)
 			result.append(line);
 		rd.close();
 
@@ -88,5 +85,6 @@ public class Update {
 		}
 		return "Error occured while loading news";
 	}
+
 
 }
