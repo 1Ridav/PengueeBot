@@ -9,6 +9,12 @@
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     mavenCentral()
@@ -17,6 +23,11 @@ repositories {
     jcenter()
 }
 
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE")
+    }
+}
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -32,8 +43,4 @@ dependencies {
     compile 'org.jocl:jocl:0.1.9'
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'bot.penguee.Main'
-    }
-}
+apply plugin: 'org.springframework.boot'
