@@ -9,17 +9,25 @@
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
+    mavenCentral()
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
-    
-    flatDir {
-       dirs 'lib'
-   }
 }
 
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE")
+    }
+}
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -31,12 +39,8 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     
-    compile fileTree(include: ['*.jar'], dir: 'lib')
-
+    compile 'org.python:jython-standalone:2.7.1'
+    compile 'org.jocl:jocl:0.1.9'
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'bot.penguee.Main'
-    }
-}
+apply plugin: 'org.springframework.boot'
