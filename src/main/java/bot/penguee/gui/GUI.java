@@ -1,24 +1,20 @@
 package bot.penguee.gui;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.net.URISyntaxException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import bot.penguee.Main;
 import bot.penguee.Update;
 
 public class GUI {
@@ -214,8 +210,9 @@ public class GUI {
 
 	private void checkForUpdates() {
 		Thread checkUpdateThread = new Thread() {
+			@Override
 			public void run() {
-				lblUpdateAvailable.setVisible(update.available());
+				lblUpdateAvailable.setVisible(Update.available());
 			}
 		};
 		checkUpdateThread.setDaemon(true);

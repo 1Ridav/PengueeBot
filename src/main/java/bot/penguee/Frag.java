@@ -5,8 +5,6 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 

@@ -102,7 +102,7 @@ public class Screen {
 		if(screenFrag == null)
 			throw new ScreenNotGrabbedException();
 		if (useCache)
-			cachedPos = (MatrixPosition) cache.get(smallFragment);
+			cachedPos = cache.get(smallFragment);
 		MatrixPosition mp = null;
 		if (cachedPos != null) { // fragment was cached previously, ensure it is
 									// still there
@@ -182,7 +182,7 @@ public class Screen {
 
 	MatrixPosition find(String name, String customName)
 			throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		Frag f = (Frag) Data.fragments().get(name);
+		Frag f = Data.fragments().get(name);
 		if (f != null) {
 			MatrixPosition mp = find(f);
 			if (mp != null)
@@ -200,7 +200,7 @@ public class Screen {
 
 	MatrixPosition[] find_all(String name, String customName)
 			throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		Frag f = (Frag) Data.fragments().get(name);
+		Frag f = Data.fragments().get(name);
 		if (f != null) {
 			MatrixPosition mp[] = find_all(f);
 			if (mp != null)

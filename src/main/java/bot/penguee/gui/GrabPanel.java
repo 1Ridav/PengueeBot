@@ -324,6 +324,7 @@ public class GrabPanel extends JPanel {
 		grabPanelInternalScroller.getHorizontalScrollBar().setUnitIncrement(16);
 
 		grabPanelScreenshot.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				// System.out.println("mouseClicked " + evt.getX() + " " +
 				// evt.getY());
@@ -333,6 +334,7 @@ public class GrabPanel extends JPanel {
 
 			}
 
+			@Override
 			public void mousePressed(java.awt.event.MouseEvent evt) {
 				/*
 				 * System.out.println("mousePressed    " + evt.getX() + "   " + evt.getY());
@@ -341,6 +343,7 @@ public class GrabPanel extends JPanel {
 				p1 = evt.getPoint();
 			}
 
+			@Override
 			public void mouseReleased(java.awt.event.MouseEvent evt) {
 				/*
 				 * System.out.println("mouseReleased    " + evt.getX() + "   " + evt.getY());
@@ -392,6 +395,7 @@ public class GrabPanel extends JPanel {
 		});
 
 		grabPanelScreenshot.addMouseMotionListener(new java.awt.event.MouseAdapter() {
+			@Override
 			public void mouseDragged(java.awt.event.MouseEvent evt) {
 				p2 = evt.getPoint();
 				lblXAndY.setText("X: " + evt.getX() + "   Y: " + evt.getY());
@@ -417,6 +421,7 @@ public class GrabPanel extends JPanel {
 				}
 			}
 
+			@Override
 			public void mouseMoved(java.awt.event.MouseEvent evt) {
 				int x = evt.getX();
 				int y = evt.getY();
@@ -512,6 +517,7 @@ public class GrabPanel extends JPanel {
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 
 		panel_fragment_zoom.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				// System.out.println("mouseClicked " + evt.getX() + " " +
 				// evt.getY());
@@ -586,7 +592,7 @@ public class GrabPanel extends JPanel {
 
 	private void saveImage() {
 		try {
-			String s = (String) JOptionPane.showInputDialog(frame, "Fragment name...", "Colored fragment",
+			String s = JOptionPane.showInputDialog(frame, "Fragment name...", "Colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
 			if (s != null)
 				new Frag(imageFragment).makeFile(s);
@@ -600,7 +606,7 @@ public class GrabPanel extends JPanel {
 	private void saveMonoImage() {
 		try {
 			imageFragment = optimizeMonoImage(imageFragment);
-			String s = (String) JOptionPane.showInputDialog(frame, "Fragment name...", "One colored fragment",
+			String s = JOptionPane.showInputDialog(frame, "Fragment name...", "One colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
 			if (s != null)
 				new Frag(imageFragment).makeFile(s + "_((" + pixel_color_num + "))");
@@ -705,12 +711,14 @@ public class GrabPanel extends JPanel {
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
 				}
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);

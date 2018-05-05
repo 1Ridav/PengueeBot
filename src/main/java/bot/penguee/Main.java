@@ -1,7 +1,5 @@
 package bot.penguee;
 
-import java.net.URISyntaxException;
-
 import bot.penguee.gui.GUI;
 
 public class Main {
@@ -31,6 +29,7 @@ public class Main {
 
 	private void runConsoleMode() {
 		Runnable r = new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Data.jython = new JythonVM();
