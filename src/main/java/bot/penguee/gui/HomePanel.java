@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -14,11 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.SwingConstants;
 
 import bot.penguee.Data;
 import bot.penguee.Update;
@@ -64,7 +61,8 @@ public class HomePanel extends JPanel {
 		newsPane.setEditable(false);
 		newsPane.setBounds(0, 0, 834, 282);
 		newsPane.addHyperlinkListener(new HyperlinkListener() {
-		    public void hyperlinkUpdate(HyperlinkEvent e) {
+		    @Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
 		        if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 		            if(Desktop.isDesktopSupported()) {
 		                try {
@@ -110,6 +108,7 @@ public class HomePanel extends JPanel {
 	
 	private void getNews() {
 		Thread checkUpdateThread = new Thread() {
+			@Override
 			public void run() {
 				new Update();
 				newsPane.setText(Update.getNews());

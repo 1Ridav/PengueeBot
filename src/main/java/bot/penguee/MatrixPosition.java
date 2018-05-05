@@ -67,6 +67,14 @@ public class MatrixPosition {
 		return new MatrixPosition(this.x - that.x, this.y - that.y);
 	}
 	
+	public MatrixPosition relative(int x, int y) {
+		return add(x, y);
+	}
+	
+	public MatrixPosition relative(MatrixPosition that) {
+		return add(that);
+	}
+	
 
 	// set name to this position
 	public MatrixPosition setName(String name) {

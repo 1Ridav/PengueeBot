@@ -176,6 +176,7 @@ public class LogPanel extends JPanel {
 			// new thread to wait until process will not quit with ok status, then change
 			// buttons state
 			scriptThread = new Thread() {
+				@Override
 				public void run() {
 					try {
 						scriptProcess.waitFor();
