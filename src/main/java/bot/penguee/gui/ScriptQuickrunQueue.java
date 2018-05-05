@@ -9,6 +9,7 @@ public class ScriptQuickrunQueue extends LinkedList{
 	}
 	
 
+	@Override
 	public void addFirst(Object s){
 		remove(s);
 		super.addFirst(s);

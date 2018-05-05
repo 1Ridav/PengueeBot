@@ -41,7 +41,7 @@ public class FragMono extends Frag {
 
 		monoXY_Map = new int[2][al.size()];
 		for (int i = 0; i < al.size(); i++) {
-			Point p = (Point) al.get(i);
+			Point p = al.get(i);
 			monoXY_Map[0][i] = (int) p.getX();
 			monoXY_Map[1][i] = (int) p.getY();
 		}
@@ -107,7 +107,7 @@ public class FragMono extends Frag {
 			}
 		}
 		if (result != null) {
-			matrix_position_list = (MatrixPosition[]) result
+			matrix_position_list = result
 					.toArray(new MatrixPosition[0]);
 		}
 		return matrix_position_list;
