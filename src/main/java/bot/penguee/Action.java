@@ -1,15 +1,19 @@
 package bot.penguee;
 
 import java.awt.AWTException;
+import java.awt.HeadlessException;
 import java.awt.MouseInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
@@ -284,8 +288,16 @@ public class Action {
 	}
 
 	public void print(String text) throws AWTException {
-		copy(text);
+		write(text);
 		paste();
+	}
+	
+	public void writeClipboard(String text) {
+		write(text);
+	}
+	
+	public String readClipboard() {
+		return read();
 	}
 
 	// ///////////END OF KEYBOARD METHODS//////////////////
@@ -368,10 +380,28 @@ public class Action {
 	// /////////////////////////////HELPER INTERNAL
 	// METHODS////////////////////////////
 
-	private void copy(String text) {
+	private void write(String text) {
 		Clipboard clipboard = getSystemClipboard();
 		clipboard.setContents(new StringSelection(text), null);
 	}
+	
+	private String read(){
+	    try {
+	        return (String)getSystemClipboard().getData(DataFlavor.stringFlavor);
+	    } catch (HeadlessException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();            
+	    } catch (UnsupportedFlavorException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();            
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
+	    return "";
+	}
+	
+	
 
 	private void paste() throws AWTException {
 		keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_V);
