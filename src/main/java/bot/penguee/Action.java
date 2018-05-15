@@ -46,6 +46,9 @@ public class Action {
 	public void mouseClick(int x, int y) throws AWTException {
 		mouseClick(x, y, InputEvent.BUTTON1_MASK, mouseDelay);
 	}
+	public void mouseRightClick(int x, int y) throws AWTException {
+		mouseClick(x, y, InputEvent.BUTTON3_MASK, mouseDelay);
+	}
 
 	public void mouseRightClick(int x, int y) throws AWTException {
 		mouseClick(x, y, InputEvent.BUTTON3_MASK, mouseDelay);
@@ -72,6 +75,10 @@ public class Action {
 
 	public void mouseClick(MatrixPosition mp, int button_mask, int sleepTime) throws AWTException {
 		mouseClick(mp.x, mp.y, button_mask, sleepTime);
+	}
+	
+	public void mouseWheel(int wheel) {
+		robot.mouseWheel(wheel);
 	}
 
 	public void mouseWheel(int wheel) {
