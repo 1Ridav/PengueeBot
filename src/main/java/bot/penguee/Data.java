@@ -1,9 +1,6 @@
 package bot.penguee;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,11 +76,11 @@ public class Data {
 		return fragments;
 	}
 
-	static void loadFragments() {
+	static void loadFragments(boolean log) {
 
 		File f = new File(resourcesPath);
 		Data.absPath = f.getAbsolutePath();
-		loadFragments(f);
+		loadFragments(f, true);
 	
 		if (failedToLoadFragmentsList != null) {
 			System.out.println("CORE: Error occured while loading " + failedToLoadFragmentsList.size()
@@ -93,16 +90,20 @@ public class Data {
 			}
 		}
 	}
+	static void loadFragments() {
+		loadFragments(true);
+	}
 
-	private static void loadFragments(File folder) {
+	private static void loadFragments(File folder, boolean log) {
 		System.out.println(folder.getAbsolutePath());
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
-				loadFragments(fileEntry);
+				loadFragments(fileEntry, log);
 			} else {// is file
 				String s = fileEntry.getAbsolutePath().replace(absPath, "").replace(File.separator, ".")
 						.replace(".bmp", "").replaceAll(colorRegex, "");
 				s = s.substring(1);
+				if(log)
 				System.out.println(fileEntry.getName() + " " + s);
 				try {
 					if (fileEntry.getAbsolutePath().matches(colorRegex2))

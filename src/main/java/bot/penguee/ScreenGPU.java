@@ -159,6 +159,7 @@ public class ScreenGPU extends Screen {
 		loadScreenshotToGPU();
 	}
 
+	@Override
 	void loadFragments() {
 		for (String k : Data.fragments().keySet()) {
 			Frag smallFrag = Data.fragments().get(k);// get fragment
@@ -244,10 +245,11 @@ public class ScreenGPU extends Screen {
 		MatrixPosition mpList[] = null;
 
 		if (al != null)
-			mpList = (MatrixPosition[]) al.toArray(new MatrixPosition[0]);
+			mpList = al.toArray(new MatrixPosition[0]);
 		return mpList;
 	}
 
+	@Override
 	MatrixPosition find(String key) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		MatrixPosition[] mp = findAll(key);
 		MatrixPosition result = null;
@@ -256,6 +258,7 @@ public class ScreenGPU extends Screen {
 		return result;
 	}
 
+	@Override
 	MatrixPosition find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException{
 		MatrixPosition mp = find(name);
 		if (mp != null)
@@ -264,6 +267,7 @@ public class ScreenGPU extends Screen {
 		return null;
 	}
 
+	@Override
 	MatrixPosition[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		MatrixPosition mp[] = find_all(name);
 		if (mp != null)

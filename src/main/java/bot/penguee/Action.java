@@ -47,6 +47,10 @@ public class Action {
 		mouseClick(x, y, InputEvent.BUTTON1_MASK, mouseDelay);
 	}
 
+	public void mouseRightClick(int x, int y) throws AWTException {
+		mouseClick(x, y, InputEvent.BUTTON3_MASK, mouseDelay);
+	}
+
 	public void mouseClick(int x, int y, int button_mask) throws AWTException {
 		mouseClick(x, y, button_mask, mouseDelay);
 	}
@@ -70,6 +74,10 @@ public class Action {
 		mouseClick(mp.x, mp.y, button_mask, sleepTime);
 	}
 
+	public void mouseWheel(int wheel) {
+		robot.mouseWheel(wheel);
+	}
+
 	public MatrixPosition mousePos() {
 		return new MatrixPosition(MouseInfo.getPointerInfo().getLocation());
 	}
@@ -83,6 +91,22 @@ public class Action {
 
 	public void mouseRelease(int button_mask) {
 		robot.mouseRelease(button_mask);
+	}
+
+	public void mousePress() {
+		mousePress(InputEvent.BUTTON1_MASK);
+	}
+
+	public void mouseRelease() {
+		mouseRelease(InputEvent.BUTTON1_MASK);
+	}
+
+	public void mouseRightPress() {
+		mousePress(InputEvent.BUTTON3_MASK);
+	}
+
+	public void mouseRightRelease() {
+		mouseRelease(InputEvent.BUTTON3_MASK);
 	}
 
 	// //////////////////END OF MOUSE PRESS/RELEASE/////////////////
@@ -219,7 +243,7 @@ public class Action {
 	public void searchRect() {
 		screen.setSearchRect();
 	}
-	
+
 	public MatrixPosition[] getSearchRect() {
 		return screen.getSearchRect();
 	}
@@ -297,6 +321,10 @@ public class Action {
 		return screen.getImage();
 	}
 
+	public int screenPixel(int x, int y) {
+		return screenImage().getRGB(x, y);
+	}
+
 	public BufferedImage fragImage(String name) {
 		return Data.fragments().get(name).getImage();
 	}
@@ -319,6 +347,22 @@ public class Action {
 
 	public String getVersion() {
 		return Update.version;
+	}
+
+	public void reloadFrags() {
+		Data.loadFragments(false); // console log turned off by false argument
+	}
+
+	public void createFrag(String name, MatrixPosition p1, MatrixPosition p2) throws Exception {
+		createFrag(name, p1.x, p1.y, p2.x, p2.y);
+	}
+
+	public void createFrag(String name, int x1, int y1, int x2, int y2) throws Exception {
+		createFrag(name, x1, y1, x2 - x1, y2 - y1);
+	}
+
+	public void createFrag(String name, MatrixPosition p1, int w, int h) throws Exception {
+		new Frag(screenImage().getSubimage(p1.x, p1.y, w, h)).makeFile(name);
 	}
 
 	// /////////////////////////////HELPER INTERNAL

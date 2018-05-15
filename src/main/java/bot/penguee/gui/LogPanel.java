@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -161,9 +162,11 @@ public class LogPanel extends JPanel {
 			params.add("-classpath");
 			params.add(pathToJar);
 			params.add("bot.penguee.Main");
+			//params.add("org.springframework.boot.loader.JarLauncher");
 			params.add("-nogui");
 			params.add("-script");
 			params.add(name);
+			System.out.println(params.toString());
 			if (Data.getForceUseGPU())
 				params.add("-forceUseGPU");
 
@@ -176,6 +179,7 @@ public class LogPanel extends JPanel {
 			// new thread to wait until process will not quit with ok status, then change
 			// buttons state
 			scriptThread = new Thread() {
+				@Override
 				public void run() {
 					try {
 						scriptProcess.waitFor();
