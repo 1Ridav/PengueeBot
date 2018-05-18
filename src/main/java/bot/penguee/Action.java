@@ -262,7 +262,7 @@ public class Action {
 	}
 
 	public void keyRelease(int key_mask) {
-		keyRelease(key_mask);
+		robot.keyRelease(key_mask);
 	}
 
 	public void keyPress(int... keys) {

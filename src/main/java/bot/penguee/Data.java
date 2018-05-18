@@ -108,7 +108,6 @@ public class Data {
 				try {
 					if (fileEntry.getAbsolutePath().matches(colorRegex2))
 						fragments.put(s, new FragMono(fileEntry.getAbsolutePath()));
-
 					else
 						fragments.put(s, new Frag(fileEntry.getAbsolutePath()));
 				} catch (Exception e) {
