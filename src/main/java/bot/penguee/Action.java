@@ -77,7 +77,7 @@ public class Action {
 	public void mouseClick(MatrixPosition mp, int button_mask, int sleepTime) throws AWTException {
 		mouseClick(mp.x, mp.y, button_mask, sleepTime);
 	}
-	
+
 	public void mouseWheel(int wheel) {
 		robot.mouseWheel(wheel);
 	}
@@ -193,6 +193,7 @@ public class Action {
 			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
 		long timeStop = System.currentTimeMillis() + time;
 		MatrixPosition[] searchRectBackup = screen.getSearchRect();
+		boolean searchInRegionBackup = screen.getSearchInRegion();
 		searchRect(mp1, mp2);
 		boolean result = false;
 
@@ -204,7 +205,10 @@ public class Action {
 			}
 			sleep(delay);
 		}
-		searchRect(searchRectBackup[0], searchRectBackup[1]);
+		if (searchInRegionBackup)
+			searchRect(searchRectBackup[0], searchRectBackup[1]);
+		else
+			searchRect();
 		return result;
 	}
 
@@ -291,11 +295,11 @@ public class Action {
 		write(text);
 		paste();
 	}
-	
+
 	public void writeClipboard(String text) {
 		write(text);
 	}
-	
+
 	public String readClipboard() {
 		return read();
 	}
@@ -384,24 +388,22 @@ public class Action {
 		Clipboard clipboard = getSystemClipboard();
 		clipboard.setContents(new StringSelection(text), null);
 	}
-	
-	private String read(){
-	    try {
-	        return (String)getSystemClipboard().getData(DataFlavor.stringFlavor);
-	    } catch (HeadlessException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();            
-	    } catch (UnsupportedFlavorException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();            
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }
-	    return "";
+
+	private String read() {
+		try {
+			return (String) getSystemClipboard().getData(DataFlavor.stringFlavor);
+		} catch (HeadlessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedFlavorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
-	
-	
 
 	private void paste() throws AWTException {
 		keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_V);

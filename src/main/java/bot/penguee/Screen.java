@@ -95,6 +95,9 @@ public class Screen {
 	public MatrixPosition[] getSearchRect() {
 		return new MatrixPosition[] {searchRectPos1, searchRectPos2};
 	}
+	public boolean getSearchInRegion() {
+		return searchInRegion;
+	}
 
 	public MatrixPosition find(Frag smallFragment) throws ScreenNotGrabbedException {
 		MatrixPosition cachedPos = null;
