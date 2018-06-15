@@ -105,7 +105,7 @@ public class LogPanel extends JPanel {
 				String file = fileDialog.getFile();
 				String dir = fileDialog.getDirectory();
 				if (file != null && dir != null) {
-					Data.setScriptFileName(file + dir);
+					Data.setScriptFileName(dir + file);
 					currentScriptNameLabel.setText(Data.getScriptFileName());
 				}
 			}
@@ -139,6 +139,7 @@ public class LogPanel extends JPanel {
 
 	// create a new process. run console mode of this app and pass arguments
 	public void runScript(String name) {
+		System.out.println(name);
 		try {
 			Data.setScriptFileName(name);
 			logTextArea.setText("");
