@@ -135,8 +135,24 @@ public class ScreenGPU extends Screen {
 	}
 
 	private int[] flat(int[][] array) {
-		return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
+		//FOR JAVA 1.8
+		//return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
+		
+		//FOR JAVA 1.7  ALLOW TO RUN ON WINDOWS XP
+		int[] buff = new int[array.length * array[0].length];
+		int x_len = array[0].length;
+		int row_cache;
+		int[] row_cache2;
+		for(int y = 0; y < array.length; y++) {
+			row_cache = y * x_len;
+			row_cache2 = array[y];
+			for(int x = 0; x < x_len; x++) {
+				buff[row_cache + x] = row_cache2[x];
+			}
+		}
+		return buff;
 	}
+	
 	@Override
 	public void grab() throws Exception {
 		super.grab();

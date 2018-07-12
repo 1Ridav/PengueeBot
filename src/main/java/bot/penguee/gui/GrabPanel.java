@@ -60,6 +60,7 @@ public class GrabPanel extends JPanel {
 	JLabel testDelayLabel;
 	private JLabel lblXAndY;
 	private JPanel panel_pixel_color;
+	private JPanel grabPanelScreenshot;
 
 	private boolean isCTRLdown;
 	private boolean isALTdown;
@@ -92,7 +93,7 @@ public class GrabPanel extends JPanel {
 		grabCentral.setBounds(0, 55, 834, 530);
 		grabCentral.setLayout(null);
 
-		final JPanel grabPanelScreenshot = new JPanel() {
+		grabPanelScreenshot = new JPanel() {
 			/**
 			 * 
 			 */
@@ -351,17 +352,7 @@ public class GrabPanel extends JPanel {
 				p2 = evt.getPoint();
 
 				if (p2.getX() != p1.getX() || p2.getY() != p1.getY()) {
-					try {
-						imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-						panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
-								imageFragment.getHeight() * previewScaleRate));
-						grabPanelScreenshot.repaint();
-						// SwingUtilities.updateComponentTreeUI(frame);
-						scrollPane.revalidate();
-						scrollPane.repaint();
-					} catch (Exception e) {
-						//e.printStackTrace();
-					}
+					repaintScreen();
 				}
 				// copy rectangle to clipboard in "x1, y1, x2, y2" format, works if CTRL is
 				// being pressed
@@ -417,7 +408,7 @@ public class GrabPanel extends JPanel {
 					imageCursorZoomFragment = getImage().getSubimage(p2.x - 10, p2.y - 10, 20, 20);
 					panel_cursor_zoom.repaint();
 				} catch (Exception e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 
@@ -430,7 +421,7 @@ public class GrabPanel extends JPanel {
 					imageCursorZoomFragment = getImage().getSubimage(x - 10, y - 10, 20, 20);
 					panel_cursor_zoom.repaint();
 				} catch (Exception e) {
-					//e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 		});
@@ -537,20 +528,69 @@ public class GrabPanel extends JPanel {
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				switch (e.getID()) {
 				case KeyEvent.KEY_PRESSED:
-					if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+					switch (e.getKeyCode()) {
+					case KeyEvent.VK_CONTROL:
 						isCTRLdown = true;
-					}
-					if (e.getKeyCode() == KeyEvent.VK_ALT) {
+						break;
+					case KeyEvent.VK_ALT:
 						isALTdown = true;
+						break;
+					case KeyEvent.VK_UP:
+						if (p1 != null && p2 != null) {
+							if (isCTRLdown) {
+								p2.setLocation(p2.x, p2.y - 1);
+							} else {
+								p1.setLocation(p1.x, p1.y - 1);
+								p2.setLocation(p2.x, p2.y - 1);
+							}
+							repaintScreen();
+						}
+						break;
+					case KeyEvent.VK_DOWN:
+						if (p1 != null && p2 != null) {
+							if (isCTRLdown) {
+								p2.setLocation(p2.x, p2.y + 1);
+							} else {
+								p1.setLocation(p1.x, p1.y + 1);
+								p2.setLocation(p2.x, p2.y + 1);
+							}
+							repaintScreen();
+						}
+						break;
+					case KeyEvent.VK_LEFT:
+						if (p1 != null && p2 != null) {
+							if (isCTRLdown) {
+								p2.setLocation(p2.x - 1, p2.y);
+							} else {
+								p1.setLocation(p1.x - 1, p1.y);
+								p2.setLocation(p2.x - 1, p2.y);
+							}
+							repaintScreen();
+						}
+						break;
+					case KeyEvent.VK_RIGHT:
+						if (p1 != null && p2 != null) {
+							if (isCTRLdown) {
+								p2.setLocation(p2.x + 1, p2.y);
+							} else {
+								p1.setLocation(p1.x + 1, p1.y);
+								p2.setLocation(p2.x + 1, p2.y);
+							}
+							repaintScreen();
+						}
+						break;
 					}
 					break;
 
 				case KeyEvent.KEY_RELEASED:
-					if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+					switch (e.getKeyCode()) {
+					case KeyEvent.VK_CONTROL:
 						isCTRLdown = false;
-					}
-					if (e.getKeyCode() == KeyEvent.VK_ALT) {
+						break;
+					case KeyEvent.VK_ALT:
 						isALTdown = false;
+						break;
+
 					}
 					break;
 				}
@@ -562,6 +602,20 @@ public class GrabPanel extends JPanel {
 
 	private BufferedImage getImage() {
 		return image;
+	}
+
+	private void repaintScreen() {
+		try {
+			imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+			panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
+					imageFragment.getHeight() * previewScaleRate));
+			grabPanelScreenshot.repaint();
+			// SwingUtilities.updateComponentTreeUI(frame);
+			scrollPane.revalidate();
+			scrollPane.repaint();
+		} catch (Exception e2) {
+			// e.printStackTrace();
+		}
 	}
 
 	private void updateImage(int delay) {
