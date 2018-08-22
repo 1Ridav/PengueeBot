@@ -144,7 +144,7 @@ public class Screen {
 		return null;
 	}
 
-	public MatrixPosition findSimilar(Frag smallFragment, int rate) throws ScreenNotGrabbedException {
+	public MatrixPosition findSimilar(Frag smallFragment, double rate) throws ScreenNotGrabbedException {
 		MatrixPosition cachedPos = null;
 
 		if (screenFrag == null)
@@ -220,11 +220,11 @@ public class Screen {
 		return mp;
 	}
 	
-	MatrixPosition findSimilar(String name, int rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	MatrixPosition findSimilar(String name, double rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findSimilar(name, rate, name);
 	} 
 	
-	MatrixPosition findSimilar(String name, int rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	MatrixPosition findSimilar(String name, double rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Frag f = Data.fragments().get(name);
 		if (f != null) {
 			MatrixPosition mp = findSimilar(f, rate);

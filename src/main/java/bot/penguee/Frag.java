@@ -144,7 +144,7 @@ public class Frag {
 	 * return null; }
 	 */
 
-	public MatrixPosition findSimilarIn(Frag b, int rate, int x_start, int y_start, int x_stop, int y_stop) {
+	public MatrixPosition findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
@@ -152,28 +152,29 @@ public class Frag {
 		final int small_width = small[0].length;
 		rate = 100 - rate;// similarity rate 95% is qual to 5% difference rate.
 		final long maxDiff = 3 * 255 * small_height * small_width;
-		double leastDifference = 100;
+		final long maxBreakDiff = (long) ((rate / 100) * maxDiff);
+		long leastDifference = Long.MAX_VALUE;
 		MatrixPosition bestResultMatrixPosition = null;
 
 		int[] row_cache_big = null;
 		int[] row_cache_small = null;
 		for (int y = y_start; y < y_stop; y++) {
 			__columnscan: for (int x = x_start; x < x_stop; x++) {
-				long diff = 0;//sum difference values
+				long diff = 0;// sum difference values
 				for (int yy = 0; yy < small_height; yy++) {
 					row_cache_small = small[yy];
 					row_cache_big = big[y + yy];
-					for (int xx = 0; xx < small_width; xx++)
+					for (int xx = 0; xx < small_width; xx++) {
 						diff += pixelDiffARGB(row_cache_big[x + xx], row_cache_small[xx]);
+						if (diff > maxBreakDiff)
+							continue __columnscan; // no match
+					}
 				}
-				double diffResult = (100.0 * diff / maxDiff);
 
-				if (diffResult > rate)//this should be true much more frequent
-					continue __columnscan; // no match
-				else if (diffResult == 0.0)
+				if (diff == 0)
 					return new MatrixPosition(x, y); // full match
-				else if (diffResult < leastDifference) { // found better match
-					leastDifference = diffResult;
+				else if (diff < leastDifference) { // found better match
+					leastDifference = diff;
 					bestResultMatrixPosition = new MatrixPosition(x, y);
 				}
 			}

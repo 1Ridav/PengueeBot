@@ -264,15 +264,15 @@ public class Action {
 		return waitForHide(fragName, time, delay, 0, 0, (int) rect.getWidth(), (int) rect.getHeight());
 	}
 	
-	public boolean findSimilar(String fragName, int rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public boolean findSimilar(String fragName, double rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findSimilarPos(fragName, rate, fragName) != null;
 	}
 	
-	public MatrixPosition findSimilarPos(String fragName, int rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public MatrixPosition findSimilarPos(String fragName, double rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findSimilarPos(fragName, rate, fragName);
 	}
 	
-	public MatrixPosition findSimilarPos(String fragName, int rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public MatrixPosition findSimilarPos(String fragName, double rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		MatrixPosition mp = screen.findSimilar(fragName, rate, customName);
 		if (mp != null)
 			lastCoord = mp;
