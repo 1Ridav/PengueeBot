@@ -165,6 +165,7 @@ public class Action {
 	public boolean find(String fragName) throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findPos(fragName, fragName) != null;
 	}
+	
 
 	public MatrixPosition findPos(String fragName)
 			throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
@@ -188,9 +189,10 @@ public class Action {
 			throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
 		return screen.find_all(fragName, customPosName);
 	}
+	
 
-	public boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2)
-			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
+	private boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2,
+			boolean expect) throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
 		long timeStop = System.currentTimeMillis() + time;
 		MatrixPosition[] searchRectBackup = screen.getSearchRect();
 		boolean searchInRegionBackup = screen.getSearchInRegion();
@@ -199,7 +201,7 @@ public class Action {
 
 		while (timeStop > System.currentTimeMillis()) {
 			grab(mp1, mp2);
-			if (find(fragName)) {
+			if (find(fragName) == expect) {
 				result = true;
 				break;
 			}
@@ -210,6 +212,11 @@ public class Action {
 		else
 			searchRect();
 		return result;
+	}
+
+	public boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
+		return waitFor(fragName, time, delay, mp1, mp2, true);
 	}
 
 	public boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, int w, int h)
@@ -232,6 +239,46 @@ public class Action {
 		return waitFor(fragName, time, delay, 0, 0, (int) rect.getWidth(), (int) rect.getHeight());
 	}
 
+	public boolean waitForHide(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
+		return waitFor(fragName, time, delay, mp1, mp2, false);
+	}
+
+	public boolean waitForHide(String fragName, int time, int delay, MatrixPosition mp1, int w, int h)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
+		return waitForHide(fragName, time, delay, mp1, mp1.add(w, h));
+	}
+
+	public boolean waitForHide(String fragName, int time, int delay, int x1, int y1, int x2, int y2)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
+		return waitForHide(fragName, time, delay, new MatrixPosition(x1, y1), new MatrixPosition(x2, y2));
+	}
+
+	public boolean waitForHide(String fragName, int time) throws Exception {
+		Rectangle rect = screen.getRect();
+		return waitForHide(fragName, time, 0, 0, 0, (int) rect.getWidth(), (int) rect.getHeight());
+	}
+
+	public boolean waitForHide(String fragName, int time, int delay) throws Exception {
+		Rectangle rect = screen.getRect();
+		return waitForHide(fragName, time, delay, 0, 0, (int) rect.getWidth(), (int) rect.getHeight());
+	}
+	
+	public boolean findSimilar(String fragName, int rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		return findSimilarPos(fragName, rate, fragName) != null;
+	}
+	
+	public MatrixPosition findSimilarPos(String fragName, int rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		return findSimilarPos(fragName, rate, fragName);
+	}
+	
+	public MatrixPosition findSimilarPos(String fragName, int rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		MatrixPosition mp = screen.findSimilar(fragName, rate, customName);
+		if (mp != null)
+			lastCoord = mp;
+		return mp;
+	}
+	
 	public MatrixPosition recentPos() {
 		return lastCoord;
 	}

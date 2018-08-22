@@ -64,6 +64,7 @@ public class GrabPanel extends JPanel {
 
 	private boolean isCTRLdown;
 	private boolean isALTdown;
+	private boolean isSHIFTdown;
 
 	GrabPanel(JFrame frame) {
 		this.frame = frame;
@@ -526,6 +527,9 @@ public class GrabPanel extends JPanel {
 
 			@Override
 			public boolean dispatchKeyEvent(KeyEvent e) {
+				int speed = 1;
+				if(isSHIFTdown)
+					speed = 10;
 				switch (e.getID()) {
 				case KeyEvent.KEY_PRESSED:
 					switch (e.getKeyCode()) {
@@ -535,13 +539,16 @@ public class GrabPanel extends JPanel {
 					case KeyEvent.VK_ALT:
 						isALTdown = true;
 						break;
+					case KeyEvent.VK_SHIFT:
+						isSHIFTdown = true;
+						break;
 					case KeyEvent.VK_UP:
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
-								p2.setLocation(p2.x, p2.y - 1);
+								p2.setLocation(p2.x, p2.y - speed);
 							} else {
-								p1.setLocation(p1.x, p1.y - 1);
-								p2.setLocation(p2.x, p2.y - 1);
+								p1.setLocation(p1.x, p1.y - speed);
+								p2.setLocation(p2.x, p2.y - speed);
 							}
 							repaintScreen();
 						}
@@ -549,10 +556,10 @@ public class GrabPanel extends JPanel {
 					case KeyEvent.VK_DOWN:
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
-								p2.setLocation(p2.x, p2.y + 1);
+								p2.setLocation(p2.x, p2.y + speed);
 							} else {
-								p1.setLocation(p1.x, p1.y + 1);
-								p2.setLocation(p2.x, p2.y + 1);
+								p1.setLocation(p1.x, p1.y + speed);
+								p2.setLocation(p2.x, p2.y + speed);
 							}
 							repaintScreen();
 						}
@@ -560,10 +567,10 @@ public class GrabPanel extends JPanel {
 					case KeyEvent.VK_LEFT:
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
-								p2.setLocation(p2.x - 1, p2.y);
+								p2.setLocation(p2.x - speed, p2.y);
 							} else {
-								p1.setLocation(p1.x - 1, p1.y);
-								p2.setLocation(p2.x - 1, p2.y);
+								p1.setLocation(p1.x - speed, p1.y);
+								p2.setLocation(p2.x - speed, p2.y);
 							}
 							repaintScreen();
 						}
@@ -571,10 +578,10 @@ public class GrabPanel extends JPanel {
 					case KeyEvent.VK_RIGHT:
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
-								p2.setLocation(p2.x + 1, p2.y);
+								p2.setLocation(p2.x + speed, p2.y);
 							} else {
-								p1.setLocation(p1.x + 1, p1.y);
-								p2.setLocation(p2.x + 1, p2.y);
+								p1.setLocation(p1.x + speed, p1.y);
+								p2.setLocation(p2.x + speed, p2.y);
 							}
 							repaintScreen();
 						}
@@ -590,7 +597,9 @@ public class GrabPanel extends JPanel {
 					case KeyEvent.VK_ALT:
 						isALTdown = false;
 						break;
-
+					case KeyEvent.VK_SHIFT:
+						isSHIFTdown = false;
+						break;
 					}
 					break;
 				}

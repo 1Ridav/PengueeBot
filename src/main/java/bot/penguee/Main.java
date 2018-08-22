@@ -20,6 +20,31 @@ public class Main {
 	}
 
 	Main() {
+		/*
+		Screen scr = new Screen();
+		try {
+			Data.loadFragments();
+			scr.grab();
+			//scr.setSearchRect(98, 119, 130, 141);
+			long t1 = System.currentTimeMillis();
+			MatrixPosition mp = scr.findSimilar("mytest2", 98);
+			long t2 = System.currentTimeMillis();
+			System.out.println("Similarity find took " + (t2-t1));
+			if(mp != null)
+				System.out.println(mp.x + " similar " + mp.y);
+			else 
+				System.out.println("similar Fail");
+			 mp = scr.find("mytest2");
+			
+			if(mp != null)
+				System.out.println(mp.x + " standart " + mp.y);
+			else 
+				System.out.println("standart Fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.exit(0);*/
 
 		if (consoleMode)
 			runConsoleMode();
