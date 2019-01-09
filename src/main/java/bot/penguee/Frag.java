@@ -9,28 +9,17 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Frag {
-	// protected Set hashes = new HashSet();
 	protected int[][] rgbData = null;
 	protected BufferedImage image = null;
 
 	Frag(String file) throws Exception {
-
 		image = ImageIO.read(new File(file));
 		rgbData = loadFromFile(image);
-
-		/*
-		 * for (int i = 0; i < image.getHeight(); i++) { hashes.add(hash(rgbData, 0, i,
-		 * rgbData[0].length)); }
-		 */
 	}
 
 	public Frag(BufferedImage bi) throws Exception {
 		image = bi;
 		getIntRGB(bi);
-		/*
-		 * for (int i = 0; i < image.getHeight(); i++) { hashes.add(hash(rgbData, 0, i,
-		 * rgbData[0].length)); }
-		 */
 	}
 
 	Frag(int[][] rgb) throws Exception {
@@ -114,45 +103,16 @@ public class Frag {
 		ImageIO.write(image, "bmp", ff);
 	}
 
-	/*
-	 * private long hash(int[][] b, int x, int y, int len) { long h = 0; int[] c =
-	 * b[y]; int stop = x + len; for (int i = x; i < stop; i++) h = 33 * h + c[i];
-	 * 
-	 * return h; }
-	 */
-	/*
-	 * public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop,
-	 * int y_stop) { // return null; y_stop += getHeight() + 1; // x_stop +=
-	 * getHeight() + 1;
-	 * 
-	 * final int[][] small = this.rgbData; final int[][] big = b.rgbData; final int
-	 * small_height = small.length; final int small_width = small[0].length; final
-	 * int small_height_minus_1 = small_height - 1; final int first_pixel =
-	 * small[0][0]; int[] cache; int[] cache_small; for (int y = y_start +
-	 * small_height_minus_1; y < y_stop; y += small_height) { //long h = hash(big,
-	 * x_start, y, small_width); for (int x = x_start; x < x_stop; x++) { if
-	 * (hashes.contains(hash(big, x_start, y, small_width))) { //
-	 * System.out.println("partial found at " + j + " " + i); gonext2: for (int l =
-	 * small_height_minus_1; l >= 0; l--) { if (big[y - l][x] == first_pixel) { for
-	 * (int yy = 0; yy < small_height; yy++) { cache = big[y + yy - l]; cache_small
-	 * = small[yy]; for (int xx = 0; xx < small_width; xx++) if (cache[x + xx] !=
-	 * cache_small[xx]) continue gonext2; } // System.out.println("MATCH!"); return
-	 * new MatrixPosition(x, y - l); }
-	 * 
-	 * } } //h -= big[y][x]; //h += big[y][x + small_width]; } }
-	 * 
-	 * return null; }
-	 */
-
 	public MatrixPosition findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
 		final int small_height = small.length;
 		final int small_width = small[0].length;
-		rate = 100 - rate;// similarity rate 95% is qual to 5% difference rate.
 		final long maxDiff = 3 * 255 * small_height * small_width;
-		final long maxBreakDiff = (long) ((rate / 100) * maxDiff);
+		//similarity rate 95% is equal to 5% difference rate.
+		//if differences reached this number, then no need to check the rest, continue to next position
+		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
 		long leastDifference = Long.MAX_VALUE;
 		MatrixPosition bestResultMatrixPosition = null;
 
@@ -210,7 +170,6 @@ public class Frag {
 			__columnscan: for (int x = x_start; x < x_stop; x++) {
 				if (row_cache_big[x] != first_pixel
 						|| big[y + small_height_minus_1][x + small_width_minus_1] != last_pixel)
-					// if (row_cache_big[x] != first_pixel)
 					continue __columnscan; // No first match
 
 				// There is a match for the first element in small
@@ -253,7 +212,6 @@ public class Frag {
 			__columnscan: for (int x = x_start; x < x_stop; x++) {
 				if (row_cache_big[x] != first_pixel
 						|| big[y + small_height_minus_1][x + small_width_minus_1] != last_pixel)
-					// if (row_cache_big[x] != first_pixel)
 					continue __columnscan; // No first match
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
@@ -270,7 +228,6 @@ public class Frag {
 				// If arrived here, then the small matches a region of big
 				if (result == null)
 					result = new ArrayList<MatrixPosition>();
-				// MatrixPosition result = new MatrixPosition();
 				result.add(new MatrixPosition(x, y));
 
 			}

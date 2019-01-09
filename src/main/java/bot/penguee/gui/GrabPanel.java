@@ -59,6 +59,7 @@ public class GrabPanel extends JPanel {
 
 	JLabel testDelayLabel;
 	private JLabel lblXAndY;
+	private JLabel lblHAndW;
 	private JPanel panel_pixel_color;
 	private JPanel grabPanelScreenshot;
 
@@ -95,9 +96,6 @@ public class GrabPanel extends JPanel {
 		grabCentral.setLayout(null);
 
 		grabPanelScreenshot = new JPanel() {
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -353,6 +351,7 @@ public class GrabPanel extends JPanel {
 				p2 = evt.getPoint();
 
 				if (p2.getX() != p1.getX() || p2.getY() != p1.getY()) {
+					lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 					repaintScreen();
 				}
 				// copy rectangle to clipboard in "x1, y1, x2, y2" format, works if CTRL is
@@ -393,6 +392,7 @@ public class GrabPanel extends JPanel {
 				lblXAndY.setText("X: " + evt.getX() + "   Y: " + evt.getY());
 				if (p2.x != p1.x || p2.y != p1.y) {
 					if ((p2.x - p1.x) > 0 && (p2.y - p1.y) > 0) {
+						lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 						imageFragment = getImage().getSubimage(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 
 						panel_fragment_zoom.setPreferredSize(new Dimension(imageFragment.getWidth() * previewScaleRate,
@@ -498,6 +498,12 @@ public class GrabPanel extends JPanel {
 		lblXAndY.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblXAndY.setBounds(110, 474, 184, 22);
 		grabCentral.add(lblXAndY);
+		
+		lblHAndW = new JLabel("H: ---   W: ---");
+		lblHAndW.setForeground(Color.WHITE);
+		lblHAndW.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblHAndW.setBounds(110, 496, 184, 22);
+		grabCentral.add(lblHAndW);
 
 		panel_pixel_color = new JPanel();
 		panel_pixel_color.setBorder(new CompoundBorder());
@@ -546,6 +552,7 @@ public class GrabPanel extends JPanel {
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
 								p2.setLocation(p2.x, p2.y - speed);
+								lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 							} else {
 								p1.setLocation(p1.x, p1.y - speed);
 								p2.setLocation(p2.x, p2.y - speed);
@@ -557,6 +564,7 @@ public class GrabPanel extends JPanel {
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
 								p2.setLocation(p2.x, p2.y + speed);
+								lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 							} else {
 								p1.setLocation(p1.x, p1.y + speed);
 								p2.setLocation(p2.x, p2.y + speed);
@@ -568,6 +576,7 @@ public class GrabPanel extends JPanel {
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
 								p2.setLocation(p2.x - speed, p2.y);
+								lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 							} else {
 								p1.setLocation(p1.x - speed, p1.y);
 								p2.setLocation(p2.x - speed, p2.y);
@@ -579,6 +588,7 @@ public class GrabPanel extends JPanel {
 						if (p1 != null && p2 != null) {
 							if (isCTRLdown) {
 								p2.setLocation(p2.x + speed, p2.y);
+								lblHAndW.setText("H: " + (p2.x-p1.x) + "  W: " + (p2.y-p1.y));
 							} else {
 								p1.setLocation(p1.x + speed, p1.y);
 								p2.setLocation(p2.x + speed, p2.y);

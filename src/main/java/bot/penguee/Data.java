@@ -27,7 +27,10 @@ public class Data {
 		// TODO Auto-generated constructor stub
 	}
 	
-
+	public static Object[] getFragmentKeys() {
+		return fragments.keySet().toArray();
+	}
+	
 	public static String getScriptFileName() {
 		return scriptFileName;
 	}

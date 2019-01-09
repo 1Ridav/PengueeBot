@@ -14,6 +14,10 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
@@ -165,7 +169,6 @@ public class Action {
 	public boolean find(String fragName) throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findPos(fragName, fragName) != null;
 	}
-	
 
 	public MatrixPosition findPos(String fragName)
 			throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
@@ -189,7 +192,6 @@ public class Action {
 			throws AWTException, FragmentNotLoadedException, ScreenNotGrabbedException {
 		return screen.find_all(fragName, customPosName);
 	}
-	
 
 	private boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2,
 			boolean expect) throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
@@ -263,22 +265,25 @@ public class Action {
 		Rectangle rect = screen.getRect();
 		return waitForHide(fragName, time, delay, 0, 0, (int) rect.getWidth(), (int) rect.getHeight());
 	}
-	
-	public boolean findSimilar(String fragName, double rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+
+	public boolean findSimilar(String fragName, double rate)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findSimilarPos(fragName, rate, fragName) != null;
 	}
-	
-	public MatrixPosition findSimilarPos(String fragName, double rate) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+
+	public MatrixPosition findSimilarPos(String fragName, double rate)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return findSimilarPos(fragName, rate, fragName);
 	}
-	
-	public MatrixPosition findSimilarPos(String fragName, double rate, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+
+	public MatrixPosition findSimilarPos(String fragName, double rate, String customName)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		MatrixPosition mp = screen.findSimilar(fragName, rate, customName);
 		if (mp != null)
 			lastCoord = mp;
 		return mp;
 	}
-	
+
 	public MatrixPosition recentPos() {
 		return lastCoord;
 	}
@@ -385,7 +390,12 @@ public class Action {
 	}
 
 	public int screenPixel(int x, int y) {
-		return screenImage().getRGB(x, y);
+		return screen.getPixel(x, y);
+	}
+
+	public byte[] screenPixelARGB(int x, int y) {
+		int p = screenPixel(x, y);
+		return new byte[] { (byte) (p >>> 24), (byte) (p >>> 16), (byte) (p >>> 8), (byte) p };
 	}
 
 	public BufferedImage fragImage(String name) {
@@ -428,6 +438,10 @@ public class Action {
 		new Frag(screenImage().getSubimage(p1.x, p1.y, w, h)).makeFile(name);
 	}
 
+	public Object[] listFragNames() {
+		return Data.getFragmentKeys();
+	}
+
 	// /////////////////////////////HELPER INTERNAL
 	// METHODS////////////////////////////
 
@@ -458,19 +472,22 @@ public class Action {
 		keyRelease(KeyEvent.VK_CONTROL, KeyEvent.VK_V);
 	}
 
-	/*
-	 * private String get() throws Exception { Clipboard systemClipboard =
-	 * getSystemClipboard(); DataFlavor dataFlavor = DataFlavor.stringFlavor;
-	 * 
-	 * if (systemClipboard.isDataFlavorAvailable(dataFlavor)) { Object text =
-	 * systemClipboard.getData(dataFlavor); return (String) text; }
-	 * 
-	 * return null; }
-	 */
 	private Clipboard getSystemClipboard() {
 		Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
 		Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
 		return systemClipboard;
+	}
+
+	public Method[] getAPI() {
+		List<Method> result = new ArrayList<Method>();
+		for (Method method : this.getClass().getDeclaredMethods()) {
+			int modifiers = method.getModifiers();
+			if (Modifier.isPublic(modifiers)) {
+				result.add(method);
+			}
+		}
+
+		return result.toArray(new Method[result.size()]);
 	}
 
 }

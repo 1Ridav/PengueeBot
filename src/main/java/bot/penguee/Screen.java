@@ -48,6 +48,10 @@ public class Screen {
 	Frag getFrag() {
 		return screenFrag;
 	}
+	
+	public int getPixel(int x, int y) {
+		return screenFrag.getRgbData()[y][x];
+	}
 
 	public Rectangle getRect() {
 		return screenRect;
