@@ -279,7 +279,7 @@ public class GrabPanel extends JPanel {
 		labelTestAllMono.setFont(new Font("Tahoma", Font.BOLD, 15));
 		labelTestAllMono.setBackground(new Color(0, 102, 102));
 		popupMenu_1.add(labelTestAllMono);
-
+		
 		JLabel lblNewLabel_1 = new ActiveJLabel("SAVE");
 		lblNewLabel_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -287,27 +287,30 @@ public class GrabPanel extends JPanel {
 				saveImage();
 			}
 		});
-
+		
 		lblNewLabel_1.setForeground(Color.WHITE);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_1.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/diskette.png")));
 		lblNewLabel_1.setBounds(288, 11, 107, 32);
 		grabUpper.add(lblNewLabel_1);
+		JPopupMenu popupMenu_2 = new JPopupMenu();
+		addPopup(lblNewLabel_1, popupMenu_2);
 
-		JLabel lblSaveMono = new ActiveJLabel("SAVE MONO");
+
+		ActiveJLabel lblSaveMono = new ActiveJLabel("Save MONO");
 		lblSaveMono.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				saveMonoImage();
 			}
 		});
-		lblSaveMono.setIcon(new ImageIcon(GrabPanel.class.getResource("/res/diskette.png")));
-		lblSaveMono.setForeground(Color.WHITE);
-		lblSaveMono.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblSaveMono.setBounds(423, 11, 164, 32);
-		grabUpper.add(lblSaveMono);
 
-		JLabel lblShowMono = new ActiveJLabel("SHOW MONO");
+		lblSaveMono.setActiveColor(new Color(0, 153, 153));
+		lblSaveMono.setForeground(new Color(0, 102, 102));
+		lblSaveMono.setFont(new Font("Tahoma", Font.BOLD, 18));
+		popupMenu_2.add(lblSaveMono);
+
+		JLabel lblShowMono = new ActiveJLabel("Show MONO");
 		lblShowMono.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -419,6 +422,9 @@ public class GrabPanel extends JPanel {
 				int y = evt.getY();
 				try {
 					lblXAndY.setText("X: " + x + "   Y: " + y);
+					if(x - 10 < 0 || y - 10 < 0) {
+						
+					}
 					imageCursorZoomFragment = getImage().getSubimage(x - 10, y - 10, 20, 20);
 					panel_cursor_zoom.repaint();
 				} catch (Exception e) {
@@ -682,7 +688,7 @@ public class GrabPanel extends JPanel {
 			String s = JOptionPane.showInputDialog(frame, "Fragment name...", "One colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
 			if (s != null)
-				new Frag(imageFragment).makeFile(s + "_((" + pixel_color_num + "))");
+				new FragMono(imageFragment, pixel_color_num).makeFile(s);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -708,7 +714,6 @@ public class GrabPanel extends JPanel {
 			// panel_fragment_zoom.repaint();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
@@ -779,7 +784,6 @@ public class GrabPanel extends JPanel {
 		}
 
 		return img;
-
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {

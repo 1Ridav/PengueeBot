@@ -249,12 +249,8 @@ public class ScreenGPU extends Screen {
 
 			for (int i = 0; i < al.size(); i++) {
 				MatrixPosition frag = al.get(i);
-				if (searchRectPos1.x <= frag.x && searchRectPos2.x >= frag.x && searchRectPos1.y <= frag.y
-						&& searchRectPos2.y >= frag.y) {
-
-				} else {
+				if (!searchRect.bounds(frag)) 
 					al.remove(i);
-				}
 			}
 		}
 

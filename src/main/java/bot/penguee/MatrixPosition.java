@@ -75,6 +75,10 @@ public class MatrixPosition {
 		return add(that);
 	}
 	
+	public boolean inside(MatrixRectangle rect) {
+		return rect.bounds(this);
+	}
+	
 
 	// set name to this position
 	public MatrixPosition setName(String name) {

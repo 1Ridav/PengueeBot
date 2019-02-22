@@ -18,8 +18,7 @@ public class Screen {
 	private HashMap<Frag, MatrixPosition> cache;
 
 	protected boolean searchInRegion = false;
-	protected MatrixPosition searchRectPos1 = null;
-	protected MatrixPosition searchRectPos2 = null;
+	protected MatrixRectangle searchRect = null;
 
 	private boolean useCache = Data.getUseInternalCache();
 
@@ -85,8 +84,10 @@ public class Screen {
 	}
 
 	public void setSearchRect(MatrixPosition mp1, MatrixPosition mp2) {
-		searchRectPos1 = mp1;
-		searchRectPos2 = mp2;
+		setSearchRect(new MatrixRectangle(mp1, mp2));
+	}
+	public void setSearchRect(MatrixRectangle mr) {
+		searchRect = mr;
 		searchInRegion = true;
 	}
 
@@ -95,8 +96,11 @@ public class Screen {
 		searchInRegion = false;
 	}
 
-	public MatrixPosition[] getSearchRect() {
-		return new MatrixPosition[] { searchRectPos1, searchRectPos2 };
+	public MatrixRectangle getSearchRect() {
+		if(searchInRegion)
+			return searchRect;
+		else
+			return null;
 	}
 
 	public boolean getSearchInRegion() {
@@ -114,8 +118,7 @@ public class Screen {
 		if (cachedPos != null) { // fragment was cached previously, ensure it is
 									// still there
 			if (searchInRegion) {
-				if (searchRectPos1.x <= cachedPos.x && searchRectPos2.x >= cachedPos.x
-						&& searchRectPos1.y <= cachedPos.y && searchRectPos2.y >= cachedPos.y) {
+				if (searchRect.bounds(cachedPos)) {
 					mp = smallFragment.findIn(screenFrag, cachedPos.x, cachedPos.y, cachedPos.x + 1, cachedPos.y + 1);
 				}
 			} else {
@@ -126,10 +129,10 @@ public class Screen {
 		if (mp == null) {// cache miss
 			int x_start, y_start, x_stop, y_stop;
 			if (searchInRegion) {
-				y_start = searchRectPos1.y;
-				x_start = searchRectPos1.x;
-				y_stop = searchRectPos2.y - smallFragment.getHeight() + 1;
-				x_stop = searchRectPos2.x - smallFragment.getWidth();
+				y_start = searchRect.p1.y;
+				x_start = searchRect.p1.x;
+				y_stop = searchRect.p2.y - smallFragment.getHeight() + 1;
+				x_stop = searchRect.p2.x - smallFragment.getWidth();
 
 			} else {
 				y_start = 0;
@@ -159,8 +162,7 @@ public class Screen {
 		if (cachedPos != null) { // fragment was cached previously, ensure it is
 									// still there
 			if (searchInRegion) {
-				if (searchRectPos1.x <= cachedPos.x && searchRectPos2.x >= cachedPos.x
-						&& searchRectPos1.y <= cachedPos.y && searchRectPos2.y >= cachedPos.y) {
+				if (searchRect.bounds(cachedPos)) {
 					mp = smallFragment.findIn(screenFrag, cachedPos.x, cachedPos.y, cachedPos.x + 1, cachedPos.y + 1);
 				}
 			} else {
@@ -172,10 +174,10 @@ public class Screen {
 		if (mp == null) {// cache miss
 			int x_start, y_start, x_stop, y_stop;
 			if (searchInRegion) {
-				y_start = searchRectPos1.y;
-				x_start = searchRectPos1.x;
-				y_stop = searchRectPos2.y - smallFragment.getHeight() + 1;
-				x_stop = searchRectPos2.x - smallFragment.getWidth();
+				y_start = searchRect.p1.y;
+				x_start = searchRect.p1.x;
+				y_stop = searchRect.p2.y - smallFragment.getHeight() + 1;
+				x_stop = searchRect.p2.x - smallFragment.getWidth();
 			} else {
 				y_start = 0;
 				x_start = 0;
@@ -202,10 +204,10 @@ public class Screen {
 			throw new ScreenNotGrabbedException();
 
 		if (searchInRegion) {
-			y_start = searchRectPos1.y;
-			x_start = searchRectPos1.x;
-			y_stop = searchRectPos2.y - smallFragment.getHeight() + 1;
-			x_stop = searchRectPos2.x - smallFragment.getWidth();
+			y_start = searchRect.p1.y;
+			x_start = searchRect.p1.x;
+			y_stop = searchRect.p2.y - smallFragment.getHeight() + 1;
+			x_stop = searchRect.p2.x - smallFragment.getWidth();
 
 		} else {
 			y_start = 0;
@@ -253,7 +255,6 @@ public class Screen {
 				return mp.setName(customName);
 			return null;
 		} else {
-			// System.out.println("CORE: Fragment " + name + " is not loaded");
 			throw new FragmentNotLoadedException(name);
 		}
 	}
@@ -272,7 +273,6 @@ public class Screen {
 					p.setName(customName);
 			return mp;
 		} else {
-			// System.out.println("CORE: Fragment " + name + " is not loaded");
 			throw new FragmentNotLoadedException(name);
 		}
 	}

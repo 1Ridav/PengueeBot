@@ -196,7 +196,7 @@ public class Action {
 	private boolean waitFor(String fragName, int time, int delay, MatrixPosition mp1, MatrixPosition mp2,
 			boolean expect) throws FragmentNotLoadedException, ScreenNotGrabbedException, Exception {
 		long timeStop = System.currentTimeMillis() + time;
-		MatrixPosition[] searchRectBackup = screen.getSearchRect();
+		MatrixRectangle searchRectBackup = screen.getSearchRect();
 		boolean searchInRegionBackup = screen.getSearchInRegion();
 		searchRect(mp1, mp2);
 		boolean result = false;
@@ -210,7 +210,7 @@ public class Action {
 			sleep(delay);
 		}
 		if (searchInRegionBackup)
-			searchRect(searchRectBackup[0], searchRectBackup[1]);
+			searchRect(searchRectBackup);
 		else
 			searchRect();
 		return result;
@@ -299,12 +299,16 @@ public class Action {
 	public void searchRect(MatrixPosition mp1, MatrixPosition mp2) {
 		screen.setSearchRect(mp1, mp2);
 	}
+	
+	public void searchRect(MatrixRectangle mr) {
+		screen.setSearchRect(mr);
+	}
 
 	public void searchRect() {
 		screen.setSearchRect();
 	}
 
-	public MatrixPosition[] getSearchRect() {
+	public MatrixRectangle getSearchRect() {
 		return screen.getSearchRect();
 	}
 

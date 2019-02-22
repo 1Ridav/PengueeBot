@@ -13,6 +13,8 @@ public class Data {
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
 	private static String colorRegex2 = ".*" + colorRegex + ".*";
+	private static String transparentRegex = "_[(]{2}[-]?[TRANSPARENT]+[)]{2}";
+	private static String transparentRegex2 = ".*" + transparentRegex + ".*";
 	static Screen screenObject = null;
 	private static String scriptFileName = "script.py";
 
@@ -26,54 +28,46 @@ public class Data {
 	public Data() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public static Object[] getFragmentKeys() {
 		return fragments.keySet().toArray();
 	}
-	
+
 	public static String getScriptFileName() {
 		return scriptFileName;
 	}
-
 
 	public static void setScriptFileName(String scriptFileName) {
 		Data.scriptFileName = scriptFileName;
 	}
 
-
 	public static boolean getForceUseGPU() {
 		return forceUseGPU;
 	}
-
 
 	public static void setForceUseGPU(boolean forceUseGPU) {
 		Data.forceUseGPU = forceUseGPU;
 	}
 
-
 	public static boolean getUseInternalCache() {
 		return useInternalCache;
 	}
-
 
 	public static void setUseInternalCache(boolean useInternalCache) {
 		Data.useInternalCache = useInternalCache;
 	}
 
-
 	public static String getXmxValue() {
 		return xmxValue;
 	}
 
-
 	public static void setXmxValue(String xmxValue) {
 		Data.xmxValue = xmxValue;
 	}
-	
+
 	public static ScriptQuickrunQueue getRecentScriptsList() {
 		return recentScriptsList;
 	}
-
 
 	public static HashMap<String, Frag> fragments() {
 		return fragments;
@@ -84,7 +78,7 @@ public class Data {
 		File f = new File(resourcesPath);
 		Data.absPath = f.getAbsolutePath();
 		loadFragments(f, true);
-	
+
 		if (failedToLoadFragmentsList != null) {
 			System.out.println("CORE: Error occured while loading " + failedToLoadFragmentsList.size()
 					+ " fragments. Here is the list:");
@@ -93,6 +87,7 @@ public class Data {
 			}
 		}
 	}
+
 	static void loadFragments() {
 		loadFragments(true);
 	}
@@ -103,18 +98,20 @@ public class Data {
 			if (fileEntry.isDirectory()) {
 				loadFragments(fileEntry, log);
 			} else {// is file
-				String s = fileEntry.getAbsolutePath().replace(absPath, "").replace(File.separator, ".")
-						.replace(".bmp", "").replaceAll(colorRegex, "");
-				s = s.substring(1);
-				if(log)
-				System.out.println(fileEntry.getName() + " " + s);
+				String key = fileEntry.getAbsolutePath().replace(absPath, "").replace(File.separator, ".")
+						.replace(".bmp", "").replace(".png", "").replaceAll(colorRegex, "").replaceAll(transparentRegex, "");
+				key = key.substring(1);//remove starting dot . character
+				if (log)
+					System.out.println(fileEntry.getName() + " " + key);
 				try {
-					if (fileEntry.getAbsolutePath().matches(colorRegex2))
-						fragments.put(s, new FragMono(fileEntry.getAbsolutePath()));
+					String absolutePath = fileEntry.getAbsolutePath();
+					if (absolutePath.matches(colorRegex2))
+						fragments.put(key, new FragMono(absolutePath));
+					else if (absolutePath.matches(transparentRegex2))
+						fragments.put(key, new FragTransparent(absolutePath));
 					else
-						fragments.put(s, new Frag(fileEntry.getAbsolutePath()));
+						fragments.put(key, new Frag(absolutePath));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					if (failedToLoadFragmentsList == null)
 						failedToLoadFragmentsList = new ArrayList<File>();

@@ -2,33 +2,22 @@ package bot.penguee;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class FragMono extends Frag {
-	private int monoColor = 0;
-	private int[][] monoXY_Map = null;
-
-	FragMono(String file) throws Exception {
-		super(file);
-		String color = file.substring(file.lastIndexOf("((") + 2,
-				file.lastIndexOf("))"));
-		monoColor = Integer.parseInt(color);
+public class FragTransparent extends Frag {
+	private int[][] monoXY_Map = null; //much faster than using array of objects
+	FragTransparent(String path) throws Exception {
+		super();
+		File f = new File(path);
+		image = ImageIO.read(f);
+		rgbData = loadFromFile(image);
 		prepareMonoPixelMap();
 	}
 	
-	public FragMono(BufferedImage image, int color) throws Exception {
-		super(image);
-		monoColor = color;
-		prepareMonoPixelMap();
-	}
-	
-	public void makeFile(String name) throws Exception {
-		super.makeFile(name + "_((" + monoColor + "))");
-	}
-
 	private void prepareMonoPixelMap() {
 		int[] row_cache = null;
 		final int line = rgbData.length;
@@ -40,7 +29,7 @@ public class FragMono extends Frag {
 		for (int y = 0; y < line; y++) {
 			row_cache = rgbData[y];
 			for (int x = 0; x < column; x++)
-				if (row_cache[x] == monoColor)
+				if (row_cache[x] != 0)
 					al.add(new Point(x, y));
 		}
 
@@ -51,20 +40,51 @@ public class FragMono extends Frag {
 			monoXY_Map[1][i] = (int) p.getY();
 		}
 	}
-	
-	public MatrixPosition findSimilarIn(FragTransparent b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
-		return null;
+
+	protected int[][] loadFromFile(BufferedImage image) throws Exception {
+		final byte[] pixels = ((DataBufferByte) image.getData().getDataBuffer()).getData();
+		final int width = image.getWidth();
+		image.getType();
+
+		if (rgbData == null)
+			rgbData = new int[image.getHeight()][width];
+
+		switch (image.getType()) {
+		case BufferedImage.TYPE_4BYTE_ABGR: // PNG
+			for (int pixel = 0, row = 0; pixel < pixels.length; row++)
+				for (int col = 0; col < width; col++, pixel += 4) {
+					// SET ALPHA TO 255, NO TRANSPARENCY
+					if (pixels[pixel] != -1) { // not 255(0xFF), then it is transparent
+						rgbData[row][col] = 0;
+					} else {
+						rgbData[row][col] = (int) 0xFF000000 + ((int) pixels[pixel + 1] & 0xFF)
+								+ (((int) pixels[pixel + 2] & 0xFF) << 8) + (((int) pixels[pixel + 3] & 0xFF) << 16);
+					}
+				}
+			break;
+		default:
+			throw new Exception();
+		}
+		return rgbData;
 	}
 
-	@Override
+	public void makeFile(String name) throws Exception {
+		super.makeFile(name + "_((TRANSPARENT))");
+	}
+
+	public MatrixPosition findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
+		return null;
+	}
+	
 	public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop,
 			int y_stop) {
 		final int[][] big = b.rgbData;
+		final int[][] small = rgbData;
 		final int[] monoY = monoXY_Map[1];
 		final int[] monoX = monoXY_Map[0];
 		final int jumpX = monoX[0];
 		final int jumpY = monoY[0];
-		final int first_pixel = monoColor;
+		final int first_pixel = small[jumpY][jumpX];
 		final int pixelMapLen = monoX.length;
 
 		int[] row_cache_big = null;
@@ -76,23 +96,24 @@ public class FragMono extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != first_pixel)
+					if (big[y + monoY[yy]][x + monoX[yy]] != small[monoY[yy]][monoX[yy]])
 						continue __columnscan;
 				return new MatrixPosition(x, y);
 			}
 		}
 		return null;
 	}
+	
 
-	@Override
 	public MatrixPosition[] findAllIn(Frag b, int x_start, int y_start,
 			int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
+		final int[][] small = rgbData;
 		final int[] monoY = monoXY_Map[1];
 		final int[] monoX = monoXY_Map[0];
 		final int jumpX = monoX[0];
 		final int jumpY = monoY[0];
-		final int first_pixel = monoColor;
+		final int first_pixel = small[jumpY][jumpX];;
 		final int pixelMapLen = monoX.length;
 
 		ArrayList<MatrixPosition> result = null;
@@ -106,7 +127,7 @@ public class FragMono extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != first_pixel)
+					if (big[y + monoY[yy]][x + monoX[yy]] != small[monoY[yy]][monoX[yy]])
 						continue __columnscan;
 				// If arrived here, then the small matches a region of big
 				if (result == null)
@@ -120,5 +141,4 @@ public class FragMono extends Frag {
 		}
 		return matrix_position_list;
 	}
-
 }

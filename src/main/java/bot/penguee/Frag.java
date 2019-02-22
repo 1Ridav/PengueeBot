@@ -12,8 +12,13 @@ public class Frag {
 	protected int[][] rgbData = null;
 	protected BufferedImage image = null;
 
-	Frag(String file) throws Exception {
-		image = ImageIO.read(new File(file));
+	Frag() {
+
+	}
+
+	Frag(String path) throws Exception {
+		File f = new File(path);
+		image = ImageIO.read(f);
 		rgbData = loadFromFile(image);
 	}
 
@@ -35,11 +40,11 @@ public class Frag {
 	}
 
 	public int getWidth() {
-		return image.getWidth();
+		return rgbData[0].length;
 	}
 
 	public int getHeight() {
-		return image.getHeight();
+		return rgbData.length;
 	}
 
 	public MatrixPosition center() {
@@ -69,21 +74,32 @@ public class Frag {
 		return rgbData;
 	}
 
-	// USED FOR BMP/PNG BUFFERED_IMAGE
-	private int[][] loadFromFile(BufferedImage image) {
+	protected int[][] loadFromFile(BufferedImage image) throws Exception {
 		final byte[] pixels = ((DataBufferByte) image.getData().getDataBuffer()).getData();
 		final int width = image.getWidth();
+		image.getType();
 
 		if (rgbData == null)
 			rgbData = new int[image.getHeight()][width];
 
-		for (int pixel = 0, row = 0; pixel < pixels.length; row++)
-			for (int col = 0; col < width; col++, pixel += 3)
-				rgbData[row][col] = -16777216 + ((int) pixels[pixel] & 0xFF) + (((int) pixels[pixel + 1] & 0xFF) << 8)
-						+ (((int) pixels[pixel + 2] & 0xFF) << 16); // 255
-																	// alpha, r
-																	// g b;
+		switch (image.getType()) {
+		case BufferedImage.TYPE_3BYTE_BGR: // BMP files
+			for (int pixel = 0, row = 0; pixel < pixels.length; row++)
+				for (int col = 0; col < width; col++, pixel += 3)
+					rgbData[row][col] = 0xFF000000 + ((int) pixels[pixel] & 0xFF)
+							+ (((int) pixels[pixel + 1] & 0xFF) << 8) + (((int) pixels[pixel + 2] & 0xFF) << 16);
+			break;
+		case BufferedImage.TYPE_4BYTE_ABGR: // PNG
+			for (int pixel = 0, row = 0; pixel < pixels.length; row++)
+				for (int col = 0; col < width; col++, pixel += 4)
+					// IF ALPHA IS BIGGER THAN 0, THEN SET TO 255, ELSE TRANSPARENT
+					rgbData[row][col] = 0xFF000000 + ((int) pixels[pixel + 1] & 0xFF)
+							+ (((int) pixels[pixel + 2] & 0xFF) << 8) + (((int) pixels[pixel + 3] & 0xFF) << 16);
 
+			break;
+		default:
+			throw new Exception();
+		}
 		return rgbData;
 	}
 
@@ -98,9 +114,9 @@ public class Frag {
 			s = "";
 		}
 		File ff = new File(f.getAbsolutePath() + File.separator + s,
-				name.substring(name.lastIndexOf(".") + 1, name.length()) + ".bmp");
+				name.substring(name.lastIndexOf(".") + 1, name.length()) + ".png");
 		ff.mkdirs();
-		ImageIO.write(image, "bmp", ff);
+		ImageIO.write(image, "png", ff);
 	}
 
 	public MatrixPosition findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
@@ -110,8 +126,9 @@ public class Frag {
 		final int small_height = small.length;
 		final int small_width = small[0].length;
 		final long maxDiff = 3 * 255 * small_height * small_width;
-		//similarity rate 95% is equal to 5% difference rate.
-		//if differences reached this number, then no need to check the rest, continue to next position
+		// similarity rate 95% is equal to 5% difference rate.
+		// if differences reached this number, then no need to check the rest, continue
+		// to next position
 		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
 		long leastDifference = Long.MAX_VALUE;
 		MatrixPosition bestResultMatrixPosition = null;
@@ -240,4 +257,42 @@ public class Frag {
 		return null;
 	}
 
+	public MatrixPosition findTransparentIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
+		// precalculate all frequently used data
+		final int[][] small = this.rgbData;
+		final int[][] big = b.rgbData;
+		final int small_height = small.length;
+		final int small_width = small[0].length;
+		final int small_height_minus_1 = small_height - 1;
+		final int small_width_minus_1 = small_width - 1;
+		final int first_pixel = small[0][0];
+		final int last_pixel = small[small_height_minus_1][small_width_minus_1];
+
+		int[] row_cache_big = null;
+		int[] row_cache_big2 = null;
+		int[] row_cache_small = null;
+		for (int y = y_start; y < y_stop; y++) {
+			row_cache_big = big[y];
+			__columnscan: for (int x = x_start; x < x_stop; x++) {
+				// if alpha channel differ, then check
+
+				// There is a match for the first element in small
+				// Check if all the elements in small matches those in big
+				for (int yy = 0; yy < small_height; yy++) {
+					row_cache_big2 = big[y + yy];
+					row_cache_small = small[yy];
+					for (int xx = 0; xx < small_width; xx++) {
+						// If there is at least one difference, there is no
+						// match
+						if (((row_cache_big2[x + xx] ^ row_cache_small[xx]) & 0xFF000000) == 0)
+							if (row_cache_big2[x + xx] != row_cache_small[xx])
+								continue __columnscan;
+					}
+				}
+				// If arrived here, then the small matches a region of big
+				return new MatrixPosition(x, y);
+			}
+		}
+		return null;
+	}
 }
