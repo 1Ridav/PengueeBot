@@ -19,9 +19,6 @@ import bot.penguee.GlobalProperties;
 public class SettingsPanel extends JPanel {
 	Frame frame;
 
-	/**
-	 * Create the panel.
-	 */
 	public SettingsPanel(Frame frame) {
 		this.frame = frame;
 		init();

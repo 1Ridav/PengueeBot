@@ -36,9 +36,7 @@ import bot.penguee.MatrixPosition;
 import bot.penguee.Screen;
 
 public class GrabPanel extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private BufferedImage image;
 	private Point p1 = null;
