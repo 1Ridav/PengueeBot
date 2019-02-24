@@ -3,15 +3,26 @@ package bot.penguee;
 public class Region {
 	final public Position p1, p2;
 
-	Region(Position p1, Position p2) {
+	public Region(Position p1, Position p2) {
 		this.p1 = p1;
 		this.p2 = p2;
 	}
 
-	/**TODO
+	public Region(Position p1, int w, int h) {
+		this.p1 = p1;
+		this.p2 = p1.add(w, h);
+	}
+
+	public Region(int x1, int y1, int x2, int y2) {
+		this.p1 = new Position(x1, y1);
+		this.p2 = new Position(x2, y2);
+	}
+
+	/**
+	 * TODO
 	 * 
-	 * Check if this Region is inbounds of (surrounded by) other
-	 * MatrixRectangle object
+	 * Check if this Region is inbounds of (surrounded by) other MatrixRectangle
+	 * object
 	 * 
 	 * @param other
 	 *            Region object
