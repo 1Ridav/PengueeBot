@@ -9,7 +9,7 @@ public class Position {
 	public String name = null;
 
 	/**
-	 * Create a simple MatrixPosition object
+	 * Create a simple Position object
 	 * 
 	 * @param x
 	 *            X axis value
@@ -22,7 +22,7 @@ public class Position {
 	}
 
 	/**
-	 * Create a complete MatrixPosition object
+	 * Create a complete Position object
 	 * 
 	 * @param x
 	 *            X axis value
@@ -38,10 +38,10 @@ public class Position {
 	}
 
 	/**
-	 * Create a clone MatrixPosition object
+	 * Create a clone Position object
 	 * 
 	 * @param that
-	 *            MatrixPosition object to be cloned
+	 *            Position object to be cloned
 	 */
 	public Position(Position that) {
 		this.x = that.x;
@@ -88,14 +88,14 @@ public class Position {
 
 	// add coords from current position, return new MatrixPosition
 	/**
-	 * Create a new MatrixPosition object which X and Y axis values generated from
+	 * Create a new Position object which X and Y axis values generated from
 	 * this plus that
 	 * 
 	 * @param x
 	 *            X axis value
 	 * @param y
 	 *            Y axis value
-	 * @return New MatrixPosition with position values this.x + x, this.y + y
+	 * @return New Position with position values this.x + x, this.y + y
 	 */
 	public Position add(int x, int y) {
 		return new Position(this.x + x, this.y + y);
@@ -107,8 +107,8 @@ public class Position {
 	 * this plus that
 	 * 
 	 * @param that
-	 *            MatrixPosition object
-	 * @return New MatrixPosition with position values this.x + that.x, this.y +
+	 *            Position object
+	 * @return New Position with position values this.x + that.x, this.y +
 	 *         that.y
 	 */
 	public Position add(Position that) {
@@ -124,7 +124,7 @@ public class Position {
 	 *            X axis value
 	 * @param y
 	 *            Y axis value
-	 * @return New MatrixPosition with position values this.x - x, this.y - y
+	 * @return New Position with position values this.x - x, this.y - y
 	 */
 	public Position sub(int x, int y) {
 		return new Position(this.x - x, this.y - y);
@@ -132,41 +132,20 @@ public class Position {
 
 	// substract coords from current position, return new MatrixPosition
 	/**
-	 * Create a new MatrixPosition object which X and Y axis values generated from
+	 * Create a new Position object which X and Y axis values generated from
 	 * this minus that
 	 * 
 	 * @param that
-	 *            MatrixPosition object
-	 * @return New MatrixPosition
+	 *            Position object
+	 * @return New Position
 	 */
 	public Position sub(Position that) {
 		return new Position(this.x - that.x, this.y - that.y);
 	}
 
-	/**
-	 * @deprecated
-	 * @param x
-	 *            x axis coord
-	 * @param y
-	 *            y axis coord
-	 * @return New MatrixPosition with coordinates mp1 + mp2
-	 */
-	public Position relative(int x, int y) {
-		return add(x, y);
-	}
 
 	/**
-	 * @deprecated
-	 * @param that
-	 *            MatrixPosition which coords will be added to current mp
-	 * @return New MatrixPosition with coordinates mp1 + mp2
-	 */
-	public Position relative(Position that) {
-		return add(that);
-	}
-
-	/**
-	 * Check if this matrix position is inbounds of Region
+	 * Check if this position is inbounds of Region
 	 * 
 	 * @param rect
 	 *            Region
@@ -182,7 +161,7 @@ public class Position {
 	 * 
 	 * @param name
 	 *            Your custom name
-	 * @return Current MatrixPosition
+	 * @return Current Position
 	 */
 	public Position setName(String name) {
 		this.name = name;
@@ -195,7 +174,7 @@ public class Position {
 	 * Check if two position objects are identical
 	 * 
 	 * @param that
-	 *            Another MatrixPosition object you are trying to compare
+	 *            Another Position object you are trying to compare
 	 * @return true or false
 	 */
 	public boolean equals(Position that) {

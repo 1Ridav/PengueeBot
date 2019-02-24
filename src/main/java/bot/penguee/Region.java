@@ -8,13 +8,13 @@ public class Region {
 		this.p2 = p2;
 	}
 
-	/**
+	/**TODO
 	 * 
-	 * Check if this MatrixRectangle is inbounds of (surrounded by) other
+	 * Check if this Region is inbounds of (surrounded by) other
 	 * MatrixRectangle object
 	 * 
 	 * @param other
-	 *            MatrixRectangle object
+	 *            Region object
 	 * @return true or false
 	 */
 	public boolean inbounds(Region other) {
@@ -22,7 +22,7 @@ public class Region {
 	}
 
 	/**
-	 * Check if this MatrixRectangle bounds that point
+	 * Check if this Region bounds that point
 	 * 
 	 * @param point
 	 *            Position object
@@ -35,7 +35,7 @@ public class Region {
 	}
 
 	/**
-	 * Check if this MatrixRectangle bounds that point
+	 * Check if this Region bounds that point
 	 * 
 	 * @param x
 	 *            X axis value

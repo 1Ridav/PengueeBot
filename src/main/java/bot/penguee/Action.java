@@ -317,7 +317,7 @@ public class Action {
 	// /////////////////////FIND//////////////////////////////////////////
 	/**
 	 * Find exact match of the selected fragment on the screen, move mouse cursor to
-	 * the center of that fragment position and click on left mouse button Tip: This
+	 * the center of that fragment position and click on left mouse button. Tip: This
 	 * method store last Position, that can be accessed via recentPos() method
 	 * 
 	 * @param fragName
@@ -367,7 +367,7 @@ public class Action {
 	}
 
 	/**
-	 * Find exact match of the selected fragment on the screen Tip: This method
+	 * Find exact match of the selected fragment on the screen. Tip: This method
 	 * store last Position, that can be accessed via recentPos() method
 	 * 
 	 * @param fragName
@@ -408,7 +408,7 @@ public class Action {
 
 	/**
 	 * Tip: This method store last Position, that can be accessed via recentPos()
-	 * method Find exact match of the selected fragment on the screen and return
+	 * method. Find exact match of the selected fragment on the screen and return
 	 * position on the screen
 	 * 
 	 * @param fragName
@@ -535,7 +535,7 @@ public class Action {
 	/**
 	 * Wait for particular fragment appear on the screen, continuously capture the
 	 * screen and search for exact matching fragment on the screen. Will return
-	 * true, if fragment has appeared, false if fragment was not found until timeout
+	 * true, if fragment has appeared, false if fragment was not found until timeout.
 	 * Tip: This method store last Position, that can be accessed via recentPos()
 	 * method
 	 * 
@@ -1091,7 +1091,7 @@ public class Action {
 
 	// ///////////SCREEN METHODS///////////////////////
 	/**
-	 * Grab the screenshot and transform it to int matrix for future fragment
+	 * Grab a screenshot and transform it to int matrix for future fragment
 	 * searches, take a full screen image, pretty slow operation
 	 * 
 	 * @throws Exception
@@ -1102,8 +1102,8 @@ public class Action {
 	}
 
 	/**
-	 * Grab the screenshot and transform it to int matrix for future fragment
-	 * searches, pretty slow operation, speed depends on screen size. Tip: Smaller
+	 * Grab a screenshot and transform it to int matrix for future fragment
+	 * searches, pretty slow operation, speed depends on region size. Tip: Smaller
 	 * area being captured faster than huge one, but dependency is not linear
 	 * 
 	 * @param x1
@@ -1122,8 +1122,8 @@ public class Action {
 	}
 
 	/**
-	 * Grab the screenshot and transform it to int matrix for future fragment
-	 * searches, pretty slow operation, speed depends on screen size. Tips: Smaller
+	 * Grab a screenshot and transform it to int matrix for future fragment
+	 * searches, pretty slow operation, speed depends on region size. Tips: Smaller
 	 * area being captured faster than huge one, but dependency is not linear
 	 * 
 	 * @param mp
@@ -1140,8 +1140,8 @@ public class Action {
 	}
 
 	/**
-	 * Grab the screenshot and transform it to int matrix for future fragment
-	 * searches, pretty slow operation, speed depends on screen size. Tips: Smaller
+	 * Grab a screenshot and transform it to int matrix for future fragment
+	 * searches, pretty slow operation, speed depends on region size. Tips: Smaller
 	 * area being captured faster than huge one, but dependency is not linear
 	 * 
 	 * @param p1
@@ -1156,8 +1156,8 @@ public class Action {
 	}
 
 	/**
-	 * Grab the screenshot and transform it to int matrix for future fragment
-	 * searches, pretty slow operation, speed depends on screen size. Tips: Smaller
+	 * Grab a screenshot and transform it to int matrix for future fragment
+	 * searches, pretty slow operation, speed depends on region size. Tips: Smaller
 	 * area being captured faster than huge one, but dependency is not linear
 	 * 
 	 * @param rect

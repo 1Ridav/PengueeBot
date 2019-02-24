@@ -3,10 +3,10 @@
 	<title></title>
 </head>
 <body>
-<h2 style="text-align: center;"><span style="font-size:26px;"><span style="font-family: tahoma,geneva,sans-serif;">Update 1.10.34 is now released!</span></span></h2>
+<h2 style="text-align: center;"><span style="font-size:26px;"><span style="font-family: tahoma,geneva,sans-serif;">Update 1.10.35 is now released!</span></span></h2>
 
-<p><span style="font-size:16px;">Update to the latest version by clicking the update button bottom-left corner.</span></p>
-
+<p><span style="font-size:16px;">Update to the latest version by clicking the update button.</span></p>
+<p><span style="font-size:16px;">MatrixPosition and MatrixRectangle are deprecated since 1.10.34, use Position and Region objects</span></p>
 <p><span style="font-size:16px;">Patch notes: <a href="https://github.com/1Ridav/PengueeBot/wiki/Patch-notes">link</a></span></p>
 
 <ul>
