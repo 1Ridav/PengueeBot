@@ -32,7 +32,7 @@ import javax.swing.border.CompoundBorder;
 
 import bot.penguee.Frag;
 import bot.penguee.FragMono;
-import bot.penguee.MatrixPosition;
+import bot.penguee.Position;
 import bot.penguee.Screen;
 
 public class GrabPanel extends JPanel {
@@ -53,7 +53,7 @@ public class GrabPanel extends JPanel {
 	private JPanel panel_fragment_zoom;
 	private JScrollPane scrollPane;
 	Frag testFrag;
-	MatrixPosition testFragMP;
+	Position testFragMP;
 
 	JLabel testDelayLabel;
 	private JLabel lblXAndY;
@@ -103,8 +103,8 @@ public class GrabPanel extends JPanel {
 				if (p1 != null && p2 != null)
 					g.drawRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 				if (testFragMP != null) {
-					MatrixPosition c = testFrag.center();
-					MatrixPosition mp = testFragMP.sub(c.x, c.y);
+					Position c = testFrag.center();
+					Position mp = testFragMP.sub(c.x, c.y);
 					g.setColor(Color.RED);
 					g.drawRect(mp.x, mp.y, testFrag.getWidth(), testFrag.getHeight());
 				}
@@ -211,7 +211,7 @@ public class GrabPanel extends JPanel {
 				try {
 					testFrag = new Frag(copyImage(imageFragment));
 					long t1 = System.nanoTime();
-					MatrixPosition[] list = scr.find_all(testFrag);
+					Position[] list = scr.find_all(testFrag);
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();
@@ -261,7 +261,7 @@ public class GrabPanel extends JPanel {
 					showMonoImage();
 					testFrag = new FragMono(copyImage(imageFragment), pixel_color_num);
 					long t1 = System.nanoTime();
-					MatrixPosition[] list = scr.find_all(testFrag);
+					Position[] list = scr.find_all(testFrag);
 					long t2 = System.nanoTime();
 					testDelayLabel.setText(((t2 - t1) / 1000000) + " ms");
 					grabPanelScreenshot.repaint();

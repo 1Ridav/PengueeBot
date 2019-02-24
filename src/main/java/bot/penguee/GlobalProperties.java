@@ -26,7 +26,6 @@ public class GlobalProperties {
 			String[] scriptsList = p.getProperty("recent_scripts").split(":::");
 			Data.getRecentScriptsList().add(scriptsList);
 
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			create = true;

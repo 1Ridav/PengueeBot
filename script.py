@@ -15,7 +15,12 @@ import java.awt.event
 from bisect import bisect_left
 
 a = Action()
-print("This is english")
-print("Это на русском")
-print(u"This is unicode english")
-print(u"Это юникод на русском")
+#a.sleep(5000)
+a.grab()
+#a.searchRect(3, 143, 409, 470)
+mp = a.findPos("penguin")
+if mp:
+	print(mp.x, mp.y)
+	a.mouseMove(mp)
+else:
+	print("FAIL")

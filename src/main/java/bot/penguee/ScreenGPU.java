@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import org.jocl.CL;
 import org.jocl.Pointer;
@@ -135,24 +134,24 @@ public class ScreenGPU extends Screen {
 	}
 
 	private int[] flat(int[][] array) {
-		//FOR JAVA 1.8
-		//return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
-		
-		//FOR JAVA 1.7  ALLOW TO RUN ON WINDOWS XP
+		// FOR JAVA 1.8
+		// return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
+
+		// FOR JAVA 1.7 ALLOW TO RUN ON WINDOWS XP
 		int[] buff = new int[array.length * array[0].length];
 		int x_len = array[0].length;
 		int row_cache;
 		int[] row_cache2;
-		for(int y = 0; y < array.length; y++) {
+		for (int y = 0; y < array.length; y++) {
 			row_cache = y * x_len;
 			row_cache2 = array[y];
-			for(int x = 0; x < x_len; x++) {
+			for (int x = 0; x < x_len; x++) {
 				buff[row_cache + x] = row_cache2[x];
 			}
 		}
 		return buff;
 	}
-	
+
 	@Override
 	public void grab() throws Exception {
 		super.grab();
@@ -209,8 +208,8 @@ public class ScreenGPU extends Screen {
 
 	}
 
-	MatrixPosition[] findAll(String key) throws ScreenNotGrabbedException {
-		if(screenFrag == null)
+	Position[] findAll(String key) throws ScreenNotGrabbedException {
+		if (screenFrag == null)
 			throw new ScreenNotGrabbedException();
 		Frag f = Data.fragments().get(key);
 		int width = f.getRgbData()[0].length;
@@ -237,42 +236,42 @@ public class ScreenGPU extends Screen {
 		clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, resultArraySize * Sizeof.cl_int,
 				resultFromGPUArrayPointer, 0, null, null);
 		// System.out.println(Arrays.toString(resultFromGPUArray));
-		ArrayList<MatrixPosition> al = null;
-		// MatrixPosition result = new MatrixPosition();
+		ArrayList<Position> al = null;
+		// Position result = new Position();
 		for (int i = 0; i < resultFromGPUArray.length && resultFromGPUArray[i] != -1; i += 2) {
 			if (al == null)
-				al = new ArrayList<MatrixPosition>();
-			al.add(new MatrixPosition(resultFromGPUArray[i], resultFromGPUArray[i + 1]));
+				al = new ArrayList<Position>();
+			al.add(new Position(resultFromGPUArray[i], resultFromGPUArray[i + 1]));
 		}
 
 		if (searchInRegion && al != null) {
 
 			for (int i = 0; i < al.size(); i++) {
-				MatrixPosition frag = al.get(i);
-				if (!searchRect.bounds(frag)) 
+				Position frag = al.get(i);
+				if (!searchRect.bounds(frag))
 					al.remove(i);
 			}
 		}
 
-		MatrixPosition mpList[] = null;
+		Position mpList[] = null;
 
 		if (al != null)
-			mpList = al.toArray(new MatrixPosition[0]);
+			mpList = al.toArray(new Position[0]);
 		return mpList;
 	}
 
 	@Override
-	MatrixPosition find(String key) throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		MatrixPosition[] mp = findAll(key);
-		MatrixPosition result = null;
+	Position find(String key) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		Position[] mp = findAll(key);
+		Position result = null;
 		if (mp != null)
 			result = mp[0];
 		return result;
 	}
 
 	@Override
-	MatrixPosition find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException{
-		MatrixPosition mp = find(name);
+	Position find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		Position mp = find(name);
 		if (mp != null)
 			return mp.setName(customName);
 
@@ -280,27 +279,26 @@ public class ScreenGPU extends Screen {
 	}
 
 	@Override
-	MatrixPosition[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		MatrixPosition mp[] = find_all(name);
+	Position[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		Position mp[] = find_all(name);
 		if (mp != null)
 			for (int i = 0; i < mp.length; i++)
 				mp[i].setName(customName);
 		return mp;
 	}
 	/*
-	 * public MatrixPosition[] go() { /* // Execute the kernel
+	 * public Position[] go() { /* // Execute the kernel
 	 * clEnqueueNDRangeKernel(commandQueue, kernel, 2, null, global_work_size,
 	 * local_work_size, 0, null, null);
 	 * 
 	 * // Read the output data clEnqueueReadBuffer(commandQueue, memObjects[2],
 	 * CL_TRUE, 0, resultArraySize Sizeof.cl_int, resultFromGPUArrayPointer, 0,
 	 * null, null); //System.out.println(Arrays.toString(resultFromGPUArray));
-	 * ArrayList al = null; // MatrixPosition result = new MatrixPosition(); for(int
-	 * i = 0; i < resultFromGPUArray.length && resultFromGPUArray[i]!=-1; i+=2){
-	 * if(al == null) al = new ArrayList(); al.add(new
-	 * MatrixPosition(resultFromGPUArray[i], resultFromGPUArray[i+1])); }
-	 * MatrixPosition mpList[] = null; if(al != null) mpList = (MatrixPosition[])
-	 * al.toArray(new MatrixPosition[0]);
+	 * ArrayList al = null; // Position result = new Position(); for(int i = 0; i <
+	 * resultFromGPUArray.length && resultFromGPUArray[i]!=-1; i+=2){ if(al == null)
+	 * al = new ArrayList(); al.add(new Position(resultFromGPUArray[i],
+	 * resultFromGPUArray[i+1])); } Position mpList[] = null; if(al != null) mpList
+	 * = (Position[]) al.toArray(new Position[0]);
 	 * 
 	 * // Release kernel, program, and memory objects
 	 * 

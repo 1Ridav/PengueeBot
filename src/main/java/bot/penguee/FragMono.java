@@ -13,18 +13,17 @@ public class FragMono extends Frag {
 
 	FragMono(String file) throws Exception {
 		super(file);
-		String color = file.substring(file.lastIndexOf("((") + 2,
-				file.lastIndexOf("))"));
+		String color = file.substring(file.lastIndexOf("((") + 2, file.lastIndexOf("))"));
 		monoColor = Integer.parseInt(color);
 		prepareMonoPixelMap();
 	}
-	
+
 	public FragMono(BufferedImage image, int color) throws Exception {
 		super(image);
 		monoColor = color;
 		prepareMonoPixelMap();
 	}
-	
+
 	public void makeFile(String name) throws Exception {
 		super.makeFile(name + "_((" + monoColor + "))");
 	}
@@ -51,14 +50,13 @@ public class FragMono extends Frag {
 			monoXY_Map[1][i] = (int) p.getY();
 		}
 	}
-	
-	public MatrixPosition findSimilarIn(FragTransparent b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
+
+	public Position findSimilarIn(FragTransparent b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
 		return null;
 	}
 
 	@Override
-	public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop,
-			int y_stop) {
+	public Position findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
 		final int[] monoY = monoXY_Map[1];
 		final int[] monoX = monoXY_Map[0];
@@ -78,15 +76,14 @@ public class FragMono extends Frag {
 				for (int yy = 0; yy < pixelMapLen; yy++)
 					if (big[y + monoY[yy]][x + monoX[yy]] != first_pixel)
 						continue __columnscan;
-				return new MatrixPosition(x, y);
+				return new Position(x, y);
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public MatrixPosition[] findAllIn(Frag b, int x_start, int y_start,
-			int x_stop, int y_stop) {
+	public Position[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
 		final int[] monoY = monoXY_Map[1];
 		final int[] monoX = monoXY_Map[0];
@@ -95,8 +92,8 @@ public class FragMono extends Frag {
 		final int first_pixel = monoColor;
 		final int pixelMapLen = monoX.length;
 
-		ArrayList<MatrixPosition> result = null;
-		MatrixPosition matrix_position_list[] = null;
+		ArrayList<Position> result = null;
+		Position matrix_position_list[] = null;
 		int[] row_cache_big = null;
 		for (int y = y_start; y < y_stop; y++) {
 			row_cache_big = big[y + jumpY];
@@ -110,13 +107,12 @@ public class FragMono extends Frag {
 						continue __columnscan;
 				// If arrived here, then the small matches a region of big
 				if (result == null)
-					result = new ArrayList<MatrixPosition>();
-				result.add(new MatrixPosition(x, y));
+					result = new ArrayList<Position>();
+				result.add(new Position(x, y));
 			}
 		}
 		if (result != null) {
-			matrix_position_list = result
-					.toArray(new MatrixPosition[0]);
+			matrix_position_list = result.toArray(new Position[0]);
 		}
 		return matrix_position_list;
 	}

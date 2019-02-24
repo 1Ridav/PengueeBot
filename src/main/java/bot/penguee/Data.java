@@ -99,8 +99,9 @@ public class Data {
 				loadFragments(fileEntry, log);
 			} else {// is file
 				String key = fileEntry.getAbsolutePath().replace(absPath, "").replace(File.separator, ".")
-						.replace(".bmp", "").replace(".png", "").replaceAll(colorRegex, "").replaceAll(transparentRegex, "");
-				key = key.substring(1);//remove starting dot . character
+						.replace(".bmp", "").replace(".png", "").replaceAll(colorRegex, "")
+						.replaceAll(transparentRegex, "");
+				key = key.substring(1);// remove starting dot . character
 				if (log)
 					System.out.println(fileEntry.getName() + " " + key);
 				try {

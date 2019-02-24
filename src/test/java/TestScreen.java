@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 import org.junit.Test;
 
 import bot.penguee.Frag;
-import bot.penguee.MatrixPosition;
+import bot.penguee.Position;
 import bot.penguee.Screen;
 
 public class TestScreen {
@@ -26,7 +26,7 @@ public class TestScreen {
 			BufferedImage bf = screen.getImage();
 			Frag fragment = new Frag(copyImage(bf.getSubimage(50, 50, 40, 60)));
 
-			MatrixPosition mp = screen.find(fragment);
+			Position mp = screen.find(fragment);
 			assertNotNull(mp);
 			assertEquals(mp.x, 70);
 			assertEquals(mp.y, 80);
@@ -47,17 +47,17 @@ public class TestScreen {
 			BufferedImage bf = screen.getImage();
 			Frag fragment = new Frag(copyImage(bf.getSubimage(50, 50, 40, 60)));
 			screen.setSearchRect(0, 0, 200, 200);
-			MatrixPosition mp = screen.find(fragment);
+			Position mp = screen.find(fragment);
 			assertNotNull(mp);
 			assertEquals(mp.x, 70);
 			assertEquals(mp.y, 80);
 
 			screen.setSearchRect(200, 200, 400, 400);
-			MatrixPosition mp2 = screen.find(fragment);
+			Position mp2 = screen.find(fragment);
 			assertNull(mp2);
 
 			screen.setSearchRect();
-			MatrixPosition mp3 = screen.find(fragment);
+			Position mp3 = screen.find(fragment);
 			assertNotNull(mp);
 			assertEquals(mp.x, 70);
 			assertEquals(mp.y, 80);

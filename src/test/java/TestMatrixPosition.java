@@ -12,14 +12,14 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import bot.penguee.MatrixPosition;
+import bot.penguee.Position;
 
 public class TestMatrixPosition {
 	@Test
 	public void testConstructor1() {
 		int x = 500;
 		int y = 700;
-		MatrixPosition mp = new MatrixPosition(x, y);
+		Position mp = new Position(x, y);
 		
 		assertEquals(x, mp.x);
 		assertEquals(y, mp.y);
@@ -31,7 +31,7 @@ public class TestMatrixPosition {
 		int x = 500;
 		int y = 700;
 		String myCustomName = "myCustomName";
-		MatrixPosition mp = new MatrixPosition(x, y, myCustomName);
+		Position mp = new Position(x, y, myCustomName);
 
 		assertEquals(x, mp.x);
 		assertEquals(y, mp.y);
@@ -43,8 +43,8 @@ public class TestMatrixPosition {
 		int x = 500;
 		int y = 700;
 		String myCustomName = "myCustomName";
-		MatrixPosition mp = new MatrixPosition(x, y, myCustomName);
-		MatrixPosition mp2 = new MatrixPosition(mp);
+		Position mp = new Position(x, y, myCustomName);
+		Position mp2 = new Position(mp);
 
 		assertNotNull(mp2.x);
 		assertNotNull(mp2.y);
@@ -59,7 +59,7 @@ public class TestMatrixPosition {
 	public void testConstructor4() {
 		int x = 500;
 		int y = 700;
-		MatrixPosition mp = new MatrixPosition(new Point(x, y));
+		Position mp = new Position(new Point(x, y));
 
 		assertEquals(mp.x, x);
 		assertEquals(mp.y, y);
@@ -70,7 +70,7 @@ public class TestMatrixPosition {
 	public void testConstructor5() {
 		int x = -1;
 		int y = -1;
-		MatrixPosition mp = new MatrixPosition();
+		Position mp = new Position();
 
 		assertEquals(mp.x, x);
 		assertEquals(mp.y, y);
@@ -81,7 +81,7 @@ public class TestMatrixPosition {
 	public void testGetX() {
 		int x = 500;
 		int y = 700;
-		MatrixPosition mp = new MatrixPosition(x, y);
+		Position mp = new Position(x, y);
 
 		assertEquals(mp.getX(), x);
 	}
@@ -90,7 +90,7 @@ public class TestMatrixPosition {
 	public void testGetY() {
 		int x = 500;
 		int y = 700;
-		MatrixPosition mp = new MatrixPosition(x, y);
+		Position mp = new Position(x, y);
 
 		assertEquals(mp.getY(), y);
 	}
@@ -100,7 +100,7 @@ public class TestMatrixPosition {
 		int x = 500;
 		int y = 700;
 		String myCustomName = "myCustomName";
-		MatrixPosition mp = new MatrixPosition(x, y, myCustomName);
+		Position mp = new Position(x, y, myCustomName);
 
 		assertEquals(mp.getName(), myCustomName);
 	}
@@ -111,8 +111,8 @@ public class TestMatrixPosition {
 		int y = 700;
 		int offsetX = 100;
 		int offsetY = 200;
-		MatrixPosition mp = new MatrixPosition(x, y);
-		MatrixPosition result = mp.add(offsetX, offsetY);
+		Position mp = new Position(x, y);
+		Position result = mp.add(offsetX, offsetY);
 		assertEquals(mp.x + offsetX, result.x);
 		assertEquals(mp.y + offsetY, result.y);
 	}
@@ -123,9 +123,9 @@ public class TestMatrixPosition {
 		int y = 700;
 		int offsetX = 100;
 		int offsetY = 200;
-		MatrixPosition mp = new MatrixPosition(x, y);
-		MatrixPosition offsetMP = new MatrixPosition(offsetX, offsetY);
-		MatrixPosition result = mp.add(offsetMP);
+		Position mp = new Position(x, y);
+		Position offsetMP = new Position(offsetX, offsetY);
+		Position result = mp.add(offsetMP);
 
 		assertEquals(mp.x + offsetX, result.x);
 		assertEquals(mp.y + offsetY, result.y);
@@ -137,8 +137,8 @@ public class TestMatrixPosition {
 		int y = 700;
 		int offsetX = 100;
 		int offsetY = 200;
-		MatrixPosition mp = new MatrixPosition(x, y);
-		MatrixPosition result = mp.sub(offsetX, offsetY);
+		Position mp = new Position(x, y);
+		Position result = mp.sub(offsetX, offsetY);
 		assertEquals(mp.x - offsetX, result.x);
 		assertEquals(mp.y - offsetY, result.y);
 	}
@@ -149,9 +149,9 @@ public class TestMatrixPosition {
 		int y = 700;
 		int offsetX = 100;
 		int offsetY = 200;
-		MatrixPosition mp = new MatrixPosition(x, y);
-		MatrixPosition offsetMP = new MatrixPosition(offsetX, offsetY);
-		MatrixPosition result = mp.sub(offsetMP);
+		Position mp = new Position(x, y);
+		Position offsetMP = new Position(offsetX, offsetY);
+		Position result = mp.sub(offsetMP);
 
 		assertEquals(mp.x - offsetX, result.x);
 		assertEquals(mp.y - offsetY, result.y);
@@ -163,7 +163,7 @@ public class TestMatrixPosition {
 		int y = 700;
 		String myCustomName = "myCustomName";
 		String myCustomName2 = "myCustomName2";
-		MatrixPosition mp = new MatrixPosition(x, y, myCustomName);
+		Position mp = new Position(x, y, myCustomName);
 		mp.setName(myCustomName2);
 		
 		assertEquals(mp.name, myCustomName2);
@@ -176,11 +176,11 @@ public class TestMatrixPosition {
 		int offsetX = 100;
 		int offsetY = 200;
 		String myCustomName = "myCustomName";
-		MatrixPosition mp = new MatrixPosition(x, y, myCustomName);
-		MatrixPosition mp_equal = new MatrixPosition(x, y, myCustomName);
-		MatrixPosition mp2 = new MatrixPosition(x+offsetX, y, myCustomName);
-		MatrixPosition mp3 = new MatrixPosition(x, y + offsetY, myCustomName);
-		MatrixPosition mp4 = new MatrixPosition(x+offsetX, y, myCustomName+"000");
+		Position mp = new Position(x, y, myCustomName);
+		Position mp_equal = new Position(x, y, myCustomName);
+		Position mp2 = new Position(x+offsetX, y, myCustomName);
+		Position mp3 = new Position(x, y + offsetY, myCustomName);
+		Position mp4 = new Position(x+offsetX, y, myCustomName+"000");
 		
 		assertTrue(mp.equals(mp_equal));
 		assertFalse(mp.equals(mp2));

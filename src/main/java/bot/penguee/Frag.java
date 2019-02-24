@@ -47,8 +47,8 @@ public class Frag {
 		return rgbData.length;
 	}
 
-	public MatrixPosition center() {
-		return new MatrixPosition(getWidth() / 2, getHeight() / 2);
+	public Position center() {
+		return new Position(getWidth() / 2, getHeight() / 2);
 	}
 
 	// USED FOR ROBOT SCREENSHOT BUFFERED_IMAGE
@@ -119,7 +119,7 @@ public class Frag {
 		ImageIO.write(image, "png", ff);
 	}
 
-	public MatrixPosition findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
+	public Position findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
@@ -131,7 +131,7 @@ public class Frag {
 		// to next position
 		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
 		long leastDifference = Long.MAX_VALUE;
-		MatrixPosition bestResultMatrixPosition = null;
+		Position bestResultMatrixPosition = null;
 
 		int[] row_cache_big = null;
 		int[] row_cache_small = null;
@@ -149,10 +149,10 @@ public class Frag {
 				}
 
 				if (diff == 0)
-					return new MatrixPosition(x, y); // full match
+					return new Position(x, y); // full match
 				else if (diff < leastDifference) { // found better match
 					leastDifference = diff;
-					bestResultMatrixPosition = new MatrixPosition(x, y);
+					bestResultMatrixPosition = new Position(x, y);
 				}
 			}
 		}
@@ -168,7 +168,7 @@ public class Frag {
 		return (i + (i >> 31)) ^ (i >> 31);
 	}
 
-	public MatrixPosition findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
+	public Position findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
@@ -203,15 +203,15 @@ public class Frag {
 					}
 				}
 				// If arrived here, then the small matches a region of big
-				return new MatrixPosition(x, y);
+				return new Position(x, y);
 			}
 		}
 		return null;
 	}
 
-	public MatrixPosition[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
+	public Position[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
-		ArrayList<MatrixPosition> result = null;
+		ArrayList<Position> result = null;
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
 		final int small_height = small.length;
@@ -244,14 +244,14 @@ public class Frag {
 				}
 				// If arrived here, then the small matches a region of big
 				if (result == null)
-					result = new ArrayList<MatrixPosition>();
-				result.add(new MatrixPosition(x, y));
+					result = new ArrayList<Position>();
+				result.add(new Position(x, y));
 
 			}
 		}
 
 		if (result != null) {
-			return (MatrixPosition[]) result.toArray(new MatrixPosition[0]);
+			return (Position[]) result.toArray(new Position[0]);
 		}
 
 		return null;
