@@ -159,12 +159,12 @@ public class Frag {
 		return bestResultMatrixPosition;
 	}
 
-	private static int pixelDiffARGB(int rgb1, int rgb2) {// A channel being ignored
+	protected static int pixelDiffARGB(int rgb1, int rgb2) {// A channel being ignored
 		return abs(((rgb1 >> 16) & 0xff) - ((rgb2 >> 16) & 0xff)) + abs(((rgb1 >> 8) & 0xff) - ((rgb2 >> 8) & 0xff))
 				+ abs((rgb1 & 0xff) - (rgb2 & 0xff));
 	}
 
-	private static int abs(int i) {
+	protected static int abs(int i) {
 		return (i + (i >> 31)) ^ (i >> 31);
 	}
 

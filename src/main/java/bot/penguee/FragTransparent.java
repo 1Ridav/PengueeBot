@@ -9,17 +9,17 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class FragTransparent extends Frag {
-	private int[][] monoXY_Map = null; // much faster than using array of objects
+	private int[][] XY_Map = null; // much faster than using array of objects
 
 	FragTransparent(String path) throws Exception {
 		super();
 		File f = new File(path);
 		image = ImageIO.read(f);
 		rgbData = loadFromFile(image);
-		prepareMonoPixelMap();
+		preparePixelMap();
 	}
 
-	private void prepareMonoPixelMap() {
+	private void preparePixelMap() {
 		int[] row_cache = null;
 		final int line = rgbData.length;
 		final int column = rgbData[0].length;
@@ -34,11 +34,11 @@ public class FragTransparent extends Frag {
 					al.add(new Point(x, y));
 		}
 
-		monoXY_Map = new int[2][al.size()];
+		XY_Map = new int[2][al.size()];
 		for (int i = 0; i < al.size(); i++) {
 			Point p = al.get(i);
-			monoXY_Map[0][i] = (int) p.getX();
-			monoXY_Map[1][i] = (int) p.getY();
+			XY_Map[0][i] = (int) p.getX();
+			XY_Map[1][i] = (int) p.getY();
 		}
 	}
 
@@ -74,18 +74,48 @@ public class FragTransparent extends Frag {
 	}
 
 	public Position findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
-		return null;
+		// precalculate all frequently used data
+		final int[][] small = this.rgbData;
+		final int[][] big = b.rgbData;
+		final long maxDiff = 3 * 255 * XY_Map[0].length;
+		// similarity rate 95% is equal to 5% difference rate.
+		// if differences reached this number, then no need to check the rest, continue
+		// to next position
+		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
+		long leastDifference = Long.MAX_VALUE;
+		Position bestResultMatrixPosition = null;
+		
+		final int[] rowY = XY_Map[1];
+		final int[] rowX = XY_Map[0];
+		final int pixelMapLen = rowX.length;
+		for (int y = y_start; y < y_stop; y++) {
+			__columnscan: for (int x = x_start; x < x_stop; x++) {
+				long diff = 0;// sum difference values
+				for (int yy = 0; yy < pixelMapLen; yy++)
+					diff += pixelDiffARGB(big[y + rowY[yy]][x + rowX[yy]], small[rowY[yy]][rowX[yy]]);
+				if (diff > maxBreakDiff)
+					continue __columnscan; // no match
+				
+				if (diff == 0)
+					return new Position(x, y); // full match
+				else if (diff < leastDifference) { // found better match
+					leastDifference = diff;
+					bestResultMatrixPosition = new Position(x, y);
+				}
+			}
+		}
+		return bestResultMatrixPosition;
 	}
 
 	public Position findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
 		final int[][] small = rgbData;
-		final int[] monoY = monoXY_Map[1];
-		final int[] monoX = monoXY_Map[0];
-		final int jumpX = monoX[0];
-		final int jumpY = monoY[0];
+		final int[] rowY = XY_Map[1];
+		final int[] rowX = XY_Map[0];
+		final int jumpX = rowX[0];
+		final int jumpY = rowY[0];
 		final int first_pixel = small[jumpY][jumpX];
-		final int pixelMapLen = monoX.length;
+		final int pixelMapLen = rowX.length;
 
 		int[] row_cache_big = null;
 		for (int y = y_start; y < y_stop; y++) {
@@ -96,7 +126,7 @@ public class FragTransparent extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != small[monoY[yy]][monoX[yy]])
+					if (big[y + rowY[yy]][x + rowX[yy]] != small[rowY[yy]][rowX[yy]])
 						continue __columnscan;
 				return new Position(x, y);
 			}
@@ -107,13 +137,13 @@ public class FragTransparent extends Frag {
 	public Position[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
 		final int[][] small = rgbData;
-		final int[] monoY = monoXY_Map[1];
-		final int[] monoX = monoXY_Map[0];
-		final int jumpX = monoX[0];
-		final int jumpY = monoY[0];
+		final int[] rowY = XY_Map[1];
+		final int[] rowX = XY_Map[0];
+		final int jumpX = rowX[0];
+		final int jumpY = rowY[0];
 		final int first_pixel = small[jumpY][jumpX];
 		;
-		final int pixelMapLen = monoX.length;
+		final int pixelMapLen = rowX.length;
 
 		ArrayList<Position> result = null;
 		Position matrix_position_list[] = null;
@@ -126,7 +156,7 @@ public class FragTransparent extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != small[monoY[yy]][monoX[yy]])
+					if (big[y + rowY[yy]][x + rowX[yy]] != small[rowY[yy]][rowX[yy]])
 						continue __columnscan;
 				// If arrived here, then the small matches a region of big
 				if (result == null)
