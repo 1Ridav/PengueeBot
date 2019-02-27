@@ -4,11 +4,8 @@
 """
 #USAGE EXAMPLE
 #IF THIS FILE UNDER libs DIRECTORY
-import sys
-sys.path.append("libs")
+from libs import globallistener as gl
 #IF THIS FILE UNDER libs DIRECTORY
-
-import globallistener as gl
 
 isMousePressed = False
 
@@ -23,6 +20,7 @@ def mouseReleased(e):
     isMousePressed = False
 
 eventclass = gl.init()
+#NOW YOU CAN OVERRIDE CLASS METHODS
 eventclass.nativeMousePressed = mousePressed
 eventclass.nativeMouseReleased = mouseReleased
 
@@ -32,18 +30,13 @@ while True:
   else:
     a.sleep(100)
 
+#CLEANUP
+gl.finalize()
 """
 
 
-
-"""
-#IF THIS FILE UNDER libs DIRECTORY
 import sys
-sys.path.append("sys.path.append("libs/jnativehook-1.1.4.jar")")
-#IF THIS FILE UNDER libs DIRECTORY
-"""
-import sys
-sys.path.append("libs/jnativehook-1.1.4.jar")
+sys.path.append("jnativehook-1.1.4.jar")
 
 import org.jnativehook.GlobalScreen as GlobalScreen
 import org.jnativehook.NativeHookException as NativeHookException

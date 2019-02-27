@@ -6,8 +6,7 @@
 USAGE EXAMPLE:
 
 #IF THIS FILE UNDER libs DIRECTORY
-import sys
-sys.path.append("libs")
+from libs import keymap
 #IF THIS FILE UNDER libs DIRECTORY
 
 

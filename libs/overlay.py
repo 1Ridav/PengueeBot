@@ -2,16 +2,22 @@
 USAGE EXAMPLE:
 
 #IF THIS FILE UNDER libs DIRECTORY
-import sys
-sys.path.append("libs")
+from libs import overlay
 #IF THIS FILE UNDER libs DIRECTORY
 
 
-import keymap, overlay
 import java.awt.Color as Color
 
-#                               x    y     text   font_size   color
-overlay.OverlayText(None).init(100, 100, "test", 48.0, Color.RED)
+#                                        x    y   text   font_size   color
+myText = overlay.OverlayText(None).init(100, 100, "test", 48.0, Color.RED)
+
+myText.text("Text updated")
+
+#                x    y
+myText.move(500, 400) 
+
+#Remove overlay object
+myText.dispose() 
 """
 
 
@@ -46,7 +52,7 @@ class OverlayText(java.awt.Window):
     self.setVisible(False)
     self.setVisible(True)
 
-  def position(self, x, y):
+  def move(self, x, y):
     self.__x = x
     self.__y = y
     #repaint or revalidate does not work, so used this horrible solution 

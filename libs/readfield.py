@@ -5,8 +5,7 @@
 USAGE EXAMPLE:
 
 #IF THIS FILE UNDER libs DIRECTORY
-import sys
-sys.path.append("libs")
+from libs import readfield
 #IF THIS FILE UNDER libs DIRECTORY
 
 #THIS IS USED FOR READING FIELD TEXT VIA SEARCHING FOR A PREDEFINED DICTIONARY, 
@@ -25,7 +24,7 @@ a.grab()
 rf.init(a)
 mydict = {"zero":"0","one":"1","two":"2","three":"3","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9", "slash":"/", "dot":"."}
 
-a.searchRect(MatrixPosition(1, 1), MatrixPosition(100, 30)) #LIMIT SEARCH RECTANGLE, here you specify field position on your screen
+a.searchRect(Position(1, 1), Position(100, 30)) #LIMIT SEARCH RECTANGLE, here you specify field position on your screen
 mystring = rf.readField(mydict, "folder1.subfolder2.")
 """
 
