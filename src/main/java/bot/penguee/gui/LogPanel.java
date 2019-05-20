@@ -87,7 +87,7 @@ public class LogPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				runScript((String)Data.getRecentScriptsList().getFirst());
+				runScript(Data.getScriptFileName());
 			}
 		});
 		labelRun.setIcon(new ImageIcon(LogPanel.class.getResource("/res/play.png")));
