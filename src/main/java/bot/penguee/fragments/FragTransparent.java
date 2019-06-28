@@ -1,4 +1,4 @@
-package bot.penguee;
+package bot.penguee.fragments;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class FragTransparent extends Frag {
-	private int[][] XY_Map = null; // much faster than using array of objects
+import bot.penguee.Position;
 
-	FragTransparent(String path) throws Exception {
+public class FragTransparent extends Frag {
+	private int[] x_map = null, y_map = null; // much faster than using array of objects
+
+	public FragTransparent(String path) throws Exception {
 		super();
 		File f = new File(path);
 		image = ImageIO.read(f);
@@ -34,15 +36,17 @@ public class FragTransparent extends Frag {
 					al.add(new Point(x, y));
 		}
 
-		XY_Map = new int[2][al.size()];
+		x_map = new int[al.size()];
+		y_map = new int[al.size()];
 		for (int i = 0; i < al.size(); i++) {
 			Point p = al.get(i);
-			XY_Map[0][i] = (int) p.getX();
-			XY_Map[1][i] = (int) p.getY();
+			x_map[i] = (int) p.getX();
+			y_map[i] = (int) p.getY();
 		}
 	}
 
-	protected int[][] loadFromFile(BufferedImage image) throws Exception {
+	@Override
+	public int[][] loadFromFile(BufferedImage image) throws Exception {
 		final byte[] pixels = ((DataBufferByte) image.getData().getDataBuffer()).getData();
 		final int width = image.getWidth();
 		image.getType();
@@ -69,25 +73,26 @@ public class FragTransparent extends Frag {
 		return rgbData;
 	}
 
+	@Override
 	public void makeFile(String name) throws Exception {
 		super.makeFile(name + "_((TRANSPARENT))");
 	}
 
+	@Override
 	public Position findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
 		// precalculate all frequently used data
 		final int[][] small = this.rgbData;
 		final int[][] big = b.rgbData;
-		final long maxDiff = 3 * 255 * XY_Map[0].length;
+		final int[] rowY = y_map;
+		final int[] rowX = x_map;
+		final int pixelMapLen = rowX.length;
+
+		final long maxDiff = 3 * 255 * pixelMapLen;
 		// similarity rate 95% is equal to 5% difference rate.
 		// if differences reached this number, then no need to check the rest, continue
 		// to next position
 		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
-		long leastDifference = Long.MAX_VALUE;
-		Position bestResultMatrixPosition = null;
-		
-		final int[] rowY = XY_Map[1];
-		final int[] rowX = XY_Map[0];
-		final int pixelMapLen = rowX.length;
+
 		for (int y = y_start; y < y_stop; y++) {
 			__columnscan: for (int x = x_start; x < x_stop; x++) {
 				long diff = 0;// sum difference values
@@ -95,23 +100,19 @@ public class FragTransparent extends Frag {
 					diff += pixelDiffARGB(big[y + rowY[yy]][x + rowX[yy]], small[rowY[yy]][rowX[yy]]);
 				if (diff > maxBreakDiff)
 					continue __columnscan; // no match
-				
-				if (diff == 0)
-					return new Position(x, y); // full match
-				else if (diff < leastDifference) { // found better match
-					leastDifference = diff;
-					bestResultMatrixPosition = new Position(x, y);
-				}
+
+				return new Position(x, y);
 			}
 		}
-		return bestResultMatrixPosition;
+		return null;
 	}
 
+	@Override
 	public Position findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
 		final int[][] small = rgbData;
-		final int[] rowY = XY_Map[1];
-		final int[] rowX = XY_Map[0];
+		final int[] rowY = y_map;
+		final int[] rowX = x_map;
 		final int jumpX = rowX[0];
 		final int jumpY = rowY[0];
 		final int first_pixel = small[jumpY][jumpX];
@@ -134,15 +135,19 @@ public class FragTransparent extends Frag {
 		return null;
 	}
 
+	@Override
 	public Position[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
+		// the idea is to jump according to the
+		// transparency map. check only non transparent pixels, assume transparent
+		// pixels as a match
 		final int[][] big = b.rgbData;
 		final int[][] small = rgbData;
-		final int[] rowY = XY_Map[1];
-		final int[] rowX = XY_Map[0];
+		final int[] rowY = y_map;
+		final int[] rowX = x_map;
 		final int jumpX = rowX[0];
 		final int jumpY = rowY[0];
 		final int first_pixel = small[jumpY][jumpX];
-		;
+
 		final int pixelMapLen = rowX.length;
 
 		ArrayList<Position> result = null;

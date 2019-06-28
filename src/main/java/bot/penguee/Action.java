@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
+import bot.penguee.fragments.Frag;
 
 public class Action {
 	private Robot robot = null;
@@ -45,7 +46,7 @@ public class Action {
 			try {
 				Thread.sleep(ms);
 			} catch (InterruptedException e) {
-
+				
 			}
 		}
 	}
@@ -895,6 +896,7 @@ public class Action {
 	public Position findSimilarPos(String fragName, double rate, String customName)
 			throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Position mp = screen.findSimilar(fragName, rate, customName);
+
 		if (mp != null)
 			lastCoord = mp;
 		return mp;

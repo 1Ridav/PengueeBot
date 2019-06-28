@@ -21,15 +21,15 @@ public class Region {
 	/**
 	 * TODO
 	 * 
-	 * Check if this Region is inbounds of (surrounded by) other MatrixRectangle
+	 * Check if this Region bounds (surround) other Region
 	 * object
 	 * 
-	 * @param other
+	 * @param that
 	 *            Region object
 	 * @return true or false
 	 */
-	public boolean inbounds(Region other) {
-		return false;
+	public boolean bounds(Region that) {
+		return !(this.p1.x > that.p1.x || this.p1.y > that.p1.y || this.p2.x < that.p2.x || this.p2.y < that.p2.y);
 	}
 
 	/**
@@ -40,9 +40,7 @@ public class Region {
 	 * @return true or false
 	 */
 	public boolean bounds(Position point) {
-		if (p1.x > point.x || p2.x < point.x || p1.y > point.y || p2.y < point.y)
-			return false;
-		return true;
+		return bounds(point.x, point.y);
 	}
 
 	/**
@@ -55,8 +53,12 @@ public class Region {
 	 * @return true or false
 	 */
 	public boolean bounds(int x, int y) {
-		if (p1.x > x || p2.x < x || p1.y > y || p2.y < y)
+		if (this.p1.x > x || this.p2.x < x || this.p1.y > y || this.p2.y < y)
 			return false;
 		return true;
+	}
+	
+	public boolean equals(Region that) { //check x and y values only, position names are not needed at all
+		return !(this.p1.x != that.p1.x || this.p1.y != that.p1.y || this.p2.x != that.p2.x || this.p2.y != that.p2.y); 
 	}
 }

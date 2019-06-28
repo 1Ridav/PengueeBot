@@ -4,11 +4,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import bot.penguee.fragments.Frag;
+import bot.penguee.fragments.FragMono;
+import bot.penguee.fragments.FragTransparent;
 import bot.penguee.gui.ScriptQuickrunQueue;
+import bot.penguee.scripting.ScriptEngine;
+import bot.penguee.scripting.jython.JythonVM;
 
 public class Data {
 	String s = new File("").getAbsolutePath();
-	static final String resourcesPath = new File("").getAbsolutePath() + File.separator + "frag";
+	public static final String resourcesPath = new File("").getAbsolutePath() + File.separator + "frag";
 	private static HashMap<String, Frag> fragments = new HashMap<String, Frag>();
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
@@ -18,7 +23,7 @@ public class Data {
 	static Screen screenObject = null;
 	private static String scriptFileName = "script.py";
 
-	static JythonVM jython = null;
+	static ScriptEngine scriptEngine = null;
 	private static boolean forceUseGPU = false;
 	private static boolean useInternalCache = true;
 	private static ArrayList<File> failedToLoadFragmentsList = null;
@@ -26,7 +31,7 @@ public class Data {
 	private static String xmxValue;
 
 	public Data() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public static Object[] getFragmentKeys() {

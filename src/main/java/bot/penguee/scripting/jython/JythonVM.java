@@ -1,8 +1,11 @@
-package bot.penguee;
+package bot.penguee.scripting.jython;
 
 import org.python.util.PythonInterpreter;
 
-class JythonVM {
+import bot.penguee.scripting.ScriptEngine;
+import bot.penguee.scripting.ScriptEngineInterface;
+
+public class JythonVM implements ScriptEngineInterface{
 	private boolean isJythonVMLoaded = false;
 	private Object jythonLoad = new Object();
 	private PythonInterpreter pi = null;
@@ -11,7 +14,7 @@ class JythonVM {
 		// TODO Auto-generated constructor stub
 	}
 
-	void load() {
+	public void load() {
 		System.out.println("CORE: Loading JythonVM...");
 		pi = new PythonInterpreter();
 		isJythonVMLoaded = true;
@@ -21,7 +24,7 @@ class JythonVM {
 		}
 	}
 
-	void run(String script) throws Exception {
+	public void run(String script) throws Exception {
 		System.out.println("CODE: Waiting for JythonVM to load");
 		if (!isJythonVMLoaded)
 			synchronized (jythonLoad) {

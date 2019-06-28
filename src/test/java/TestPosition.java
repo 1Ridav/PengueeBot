@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import bot.penguee.Position;
 
-public class TestMatrixPosition {
+public class TestPosition {
 	@Test
 	public void testConstructor1() {
 		int x = 500;

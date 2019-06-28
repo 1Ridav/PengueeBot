@@ -12,9 +12,9 @@ import java.awt.image.BufferedImage;
 
 import org.junit.Test;
 
-import bot.penguee.Frag;
 import bot.penguee.Position;
 import bot.penguee.Screen;
+import bot.penguee.fragments.Frag;
 
 public class TestScreen {
 	@Test

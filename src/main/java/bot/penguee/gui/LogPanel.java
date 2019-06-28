@@ -153,6 +153,7 @@ public class LogPanel extends JPanel {
 			ArrayList<String> params = new ArrayList<String>();
 
 			params.add("java");
+			params.add("-XX:+UseG1GC");
 			params.add("-Xmx" + Data.getXmxValue() + "M");
 
 			// params.add("-Dsun.java2d.noddraw=true");

@@ -1,7 +1,8 @@
 package bot.penguee;
 
 import bot.penguee.gui.GUI;
-
+import bot.penguee.scripting.ScriptEngine;
+//I did not want to use Spring Boot, so some 
 public class Main {
 	private static boolean consoleMode = false;
 
@@ -31,8 +32,8 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					Data.jython = new JythonVM();
-					Data.jython.load();
+					Data.scriptEngine = new ScriptEngine();
+					Data.scriptEngine.load();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,9 +50,8 @@ public class Main {
 		System.out.println("CORE: Done. " + Data.fragments().size() + " loaded");
 
 		try {
-			Data.jython.run(Data.getScriptFileName());
+			Data.scriptEngine.run(Data.getScriptFileName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("CORE: Failed to run script " + Data.getScriptFileName());
 		}

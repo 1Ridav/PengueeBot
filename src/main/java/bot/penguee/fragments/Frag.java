@@ -1,4 +1,4 @@
-package bot.penguee;
+package bot.penguee.fragments;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class Frag {
+import bot.penguee.Data;
+import bot.penguee.Position;
+
+public class Frag implements FragmentInterface{
 	protected int[][] rgbData = null;
 	protected BufferedImage image = null;
 
@@ -16,7 +19,7 @@ public class Frag {
 
 	}
 
-	Frag(String path) throws Exception {
+	public Frag(String path) throws Exception {
 		File f = new File(path);
 		image = ImageIO.read(f);
 		rgbData = loadFromFile(image);
@@ -52,7 +55,7 @@ public class Frag {
 	}
 
 	// USED FOR ROBOT SCREENSHOT BUFFERED_IMAGE
-	int[][] getIntRGB(BufferedImage image) {
+	public int[][] getIntRGB(BufferedImage image) {
 		final int[] pixels = ((DataBufferInt) image.getData().getDataBuffer()).getData();
 		final int width = image.getWidth();
 		final int height = image.getHeight();
@@ -64,7 +67,7 @@ public class Frag {
 		return rgbData;
 	}
 
-	int[][] getIntRGB(BufferedImage image, int x, int y) {
+	public int[][] getIntRGB(BufferedImage image, int x, int y) {
 		final int[] pixels = ((DataBufferInt) image.getData().getDataBuffer()).getData();
 		final int width = image.getWidth();
 		final int height = image.getHeight();
@@ -74,10 +77,9 @@ public class Frag {
 		return rgbData;
 	}
 
-	protected int[][] loadFromFile(BufferedImage image) throws Exception {
+	public int[][] loadFromFile(BufferedImage image) throws Exception {
 		final byte[] pixels = ((DataBufferByte) image.getData().getDataBuffer()).getData();
 		final int width = image.getWidth();
-		image.getType();
 
 		if (rgbData == null)
 			rgbData = new int[image.getHeight()][width];
@@ -130,8 +132,7 @@ public class Frag {
 		// if differences reached this number, then no need to check the rest, continue
 		// to next position
 		final long maxBreakDiff = (long) ((1 - rate) * maxDiff);
-		long leastDifference = Long.MAX_VALUE;
-		Position bestResultMatrixPosition = null;
+
 
 		int[] row_cache_big = null;
 		int[] row_cache_small = null;
@@ -147,19 +148,13 @@ public class Frag {
 							continue __columnscan; // no match
 					}
 				}
-
-				if (diff == 0)
-					return new Position(x, y); // full match
-				else if (diff < leastDifference) { // found better match
-					leastDifference = diff;
-					bestResultMatrixPosition = new Position(x, y);
-				}
+				return new Position(x, y); 
 			}
 		}
-		return bestResultMatrixPosition;
+		return null;
 	}
 
-	protected static int pixelDiffARGB(int rgb1, int rgb2) {// A channel being ignored
+	protected static int pixelDiffARGB(int rgb1, int rgb2) {// channel A is being ignored
 		return abs(((rgb1 >> 16) & 0xff) - ((rgb2 >> 16) & 0xff)) + abs(((rgb1 >> 8) & 0xff) - ((rgb2 >> 8) & 0xff))
 				+ abs((rgb1 & 0xff) - (rgb2 & 0xff));
 	}

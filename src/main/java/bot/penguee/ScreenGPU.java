@@ -41,6 +41,7 @@ import org.jocl.cl_program;
 
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
+import bot.penguee.fragments.Frag;
 
 public class ScreenGPU extends Screen {
 

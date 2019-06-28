@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
+import bot.penguee.fragments.Frag;
 
 public class Screen {
 	protected final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());

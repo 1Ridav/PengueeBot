@@ -1,31 +1,50 @@
-package bot.penguee;
+package bot.penguee.fragments;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
+import bot.penguee.Position;
 
 public class FragMono extends Frag {
 	private int monoColor = 0;
-	private int[][] monoXY_Map = null;
+	private int[] x_map = null, y_map = null;// best for performance, but not much readable usage
+	final int height, width;
 
-	FragMono(String file) throws Exception {
+	public FragMono(String file) throws Exception {
 		super(file);
 		String color = file.substring(file.lastIndexOf("((") + 2, file.lastIndexOf("))"));
 		monoColor = Integer.parseInt(color);
 		prepareMonoPixelMap();
+		this.height = rgbData.length;
+		this.width = rgbData[0].length;
+		this.rgbData = null;
 	}
 
 	public FragMono(BufferedImage image, int color) throws Exception {
 		super(image);
 		monoColor = color;
 		prepareMonoPixelMap();
+
+		// we don't need rgbData matrix anymore
+		this.height = rgbData.length;
+		this.width = rgbData[0].length;
+		this.rgbData = null;
 	}
 
+	@Override
+	public int getWidth() {
+		return width;
+	}
+
+	@Override
+	public int getHeight() {
+		return height;
+	}
+
+	@Override
 	public void makeFile(String name) throws Exception {
-		super.makeFile(name + "_((" + monoColor + "))");
+		super.makeFile(new StringBuilder(name).append("_((").append(monoColor).append("))").toString());
 	}
 
 	private void prepareMonoPixelMap() {
@@ -34,36 +53,38 @@ public class FragMono extends Frag {
 		final int column = rgbData[0].length;
 		ArrayList<Point> al = new ArrayList<Point>();
 
-		// Point first = null;
-
 		for (int y = 0; y < line; y++) {
 			row_cache = rgbData[y];
 			for (int x = 0; x < column; x++)
 				if (row_cache[x] == monoColor)
 					al.add(new Point(x, y));
 		}
-
-		monoXY_Map = new int[2][al.size()];
+		// convert array of objects to an array of primitives to make it more cache
+		// friendly
+		x_map = new int[al.size()];
+		y_map = new int[al.size()];
 		for (int i = 0; i < al.size(); i++) {
 			Point p = al.get(i);
-			monoXY_Map[0][i] = (int) p.getX();
-			monoXY_Map[1][i] = (int) p.getY();
+			x_map[i] = (int) p.getX();
+			y_map[i] = (int) p.getY();
 		}
 	}
 
-	public Position findSimilarIn(FragTransparent b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
-		return null;
+	@Override
+	public Position findSimilarIn(Frag b, double rate, int x_start, int y_start, int x_stop, int y_stop) {
+		return null;// This method is not implemented due to this has no meaning. Mono fragments use
+					// exact matching
 	}
 
 	@Override
 	public Position findIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
-		final int[] monoY = monoXY_Map[1];
-		final int[] monoX = monoXY_Map[0];
-		final int jumpX = monoX[0];
-		final int jumpY = monoY[0];
+		final int[] rowY = y_map;
+		final int[] rowX = x_map;
+		final int jumpX = rowX[0];
+		final int jumpY = rowY[0];
 		final int first_pixel = monoColor;
-		final int pixelMapLen = monoX.length;
+		final int pixelMapLen = rowX.length;
 
 		int[] row_cache_big = null;
 		for (int y = y_start; y < y_stop; y++) {
@@ -74,7 +95,7 @@ public class FragMono extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != first_pixel)
+					if (big[y + rowY[yy]][x + rowX[yy]] != first_pixel)
 						continue __columnscan;
 				return new Position(x, y);
 			}
@@ -85,12 +106,12 @@ public class FragMono extends Frag {
 	@Override
 	public Position[] findAllIn(Frag b, int x_start, int y_start, int x_stop, int y_stop) {
 		final int[][] big = b.rgbData;
-		final int[] monoY = monoXY_Map[1];
-		final int[] monoX = monoXY_Map[0];
-		final int jumpX = monoX[0];
-		final int jumpY = monoY[0];
+		final int[] rowY = y_map;
+		final int[] rowX = x_map;
+		final int jumpX = rowX[0];
+		final int jumpY = rowY[0];
 		final int first_pixel = monoColor;
-		final int pixelMapLen = monoX.length;
+		final int pixelMapLen = rowX.length;
 
 		ArrayList<Position> result = null;
 		Position matrix_position_list[] = null;
@@ -103,7 +124,7 @@ public class FragMono extends Frag {
 				// There is a match for the first element in small
 				// Check if all the elements in small matches those in big
 				for (int yy = 0; yy < pixelMapLen; yy++)
-					if (big[y + monoY[yy]][x + monoX[yy]] != first_pixel)
+					if (big[y + rowY[yy]][x + rowX[yy]] != first_pixel)
 						continue __columnscan;
 				// If arrived here, then the small matches a region of big
 				if (result == null)
