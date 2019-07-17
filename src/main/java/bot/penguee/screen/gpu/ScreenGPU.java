@@ -1,4 +1,4 @@
-package bot.penguee;
+package bot.penguee.screen.gpu;
 
 import static org.jocl.CL.CL_CONTEXT_PLATFORM;
 import static org.jocl.CL.CL_DEVICE_TYPE_ALL;
@@ -6,6 +6,7 @@ import static org.jocl.CL.CL_MEM_COPY_HOST_PTR;
 import static org.jocl.CL.CL_MEM_READ_ONLY;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
 import static org.jocl.CL.CL_TRUE;
+import static org.jocl.CL.CL_SUCCESS;
 import static org.jocl.CL.clBuildProgram;
 import static org.jocl.CL.clCreateBuffer;
 import static org.jocl.CL.clCreateCommandQueue;
@@ -15,11 +16,19 @@ import static org.jocl.CL.clCreateProgramWithSource;
 import static org.jocl.CL.clEnqueueNDRangeKernel;
 import static org.jocl.CL.clEnqueueReadBuffer;
 import static org.jocl.CL.clEnqueueWriteBuffer;
+import static org.jocl.CL.clEnqueueWriteBufferRect;
 import static org.jocl.CL.clGetDeviceIDs;
 import static org.jocl.CL.clGetPlatformIDs;
 import static org.jocl.CL.clSetKernelArg;
 
+import java.awt.AWTException;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.image.RenderedImage;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -34,17 +43,24 @@ import org.jocl.cl_command_queue;
 import org.jocl.cl_context;
 import org.jocl.cl_context_properties;
 import org.jocl.cl_device_id;
+import org.jocl.cl_event;
 import org.jocl.cl_kernel;
 import org.jocl.cl_mem;
 import org.jocl.cl_platform_id;
 import org.jocl.cl_program;
 
+import bot.penguee.Data;
+import bot.penguee.Position;
+import bot.penguee.Region;
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
 import bot.penguee.fragments.Frag;
+import bot.penguee.screen.ScreenEngineInterface;
 
-public class ScreenGPU extends Screen {
-
+public class ScreenGPU implements ScreenEngineInterface {
+	private final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	Robot robot;
+	BufferedImage screenImage;
 	private int resultArraySize = 100;
 
 	private int resultFromGPUArray[] = new int[resultArraySize];
@@ -65,10 +81,17 @@ public class ScreenGPU extends Screen {
 	private Pointer kernelInstrArrayPointer;
 	private int[] bigMatrixArray;
 
+	private boolean searchInRegion = false;
+	private Region searchRect = null;
+
 	HashMap<String, cl_mem> fragMemObjects = new HashMap<String, cl_mem>();
 
-	ScreenGPU() {
-		super();
+	public ScreenGPU() {
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 
 		String programSource = null;
 		try (InputStream in = getClass().getResourceAsStream("/kernel/main.cl")) {
@@ -134,7 +157,7 @@ public class ScreenGPU extends Screen {
 		loadFragments();
 	}
 
-	private int[] flat(int[][] array) {
+	private int[] flatten(int[][] array) {
 		// FOR JAVA 1.8
 		// return Stream.of(array).flatMapToInt(Arrays::stream).toArray();
 
@@ -155,50 +178,50 @@ public class ScreenGPU extends Screen {
 
 	@Override
 	public void grab() throws Exception {
-		super.grab();
-		loadScreenshotToGPU();
-	}
-
-	private void loadScreenshotToGPU() {
-		int[][] matrix = screenFrag.getRgbData();
-		int width = matrix[0].length;
-		for (int i = 0; i < matrix.length; i++)
-			System.arraycopy(matrix[i], 0, bigMatrixArray, width * i, width);
-
-		clEnqueueWriteBuffer(commandQueue, memObjects[0], CL_TRUE, 0, bigMatrixArray.length * Sizeof.cl_int,
-				bigMatrixPointer, 0, null, null);
+		screenImage = robot.createScreenCapture(screenRect);
+		final int pixels[] = ((DataBufferInt) screenImage.getData().getDataBuffer()).getData();
+		clEnqueueWriteBuffer(commandQueue, memObjects[0], CL_TRUE, 0, pixels.length * Sizeof.cl_int, Pointer.to(pixels),
+				0, null, null);
 	}
 
 	@Override
-	void grab(Rectangle rect) throws Exception {
-		super.grab(rect);
-		loadScreenshotToGPU();
+	public void grab(Rectangle rect) throws Exception {
+
+		// ADD UPDATE CHECK, IT MAY FAIL SOMETIMES
+		if (screenImage == null) {
+			grab();
+			return;
+		}
+		screenImage = robot.createScreenCapture(rect);
+		final int pixels[] = ((DataBufferInt) screenImage.getData().getDataBuffer()).getData();
+		long[] buffer_origin = new long[] { rect.x * Sizeof.cl_int, rect.y, 0 }; // setup initial offsets
+		long[] host_origin = new long[] { 0, 0, 0 }; // screenshot data has no offsets
+		long[] region = new long[] { rect.width * Sizeof.cl_int, rect.height, 1 }; // set rectangle bounds
+		int result = clEnqueueWriteBufferRect(commandQueue, memObjects[0], CL_TRUE, buffer_origin, host_origin, region,
+				(long) (screenRect.width * Sizeof.cl_int), (long) 0, (long) (rect.width * Sizeof.cl_int), (long) 0,
+				Pointer.to(pixels), 0, null, null);
+		if (result != CL_SUCCESS)
+			throw new Exception(String.valueOf(result).concat(" screenshot update error occured"));
 	}
 
-	@Override
 	void loadFragments() {
 		for (String k : Data.fragments().keySet()) {
 			Frag smallFrag = Data.fragments().get(k);// get fragment
-			int[] smallMatrix = flat(smallFrag.getRgbData());// copy rgbData to
-																// 1d
-			// buffer
-			Pointer smallPointer = Pointer.to(smallMatrix); // create a pointer
-															// to that 1d buffer
+			int[] smallMatrix = flatten(smallFrag.getRgbData());// copy rgbData to
+																// 1d buffer
 			// load data to GPU
 			cl_mem memObj = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-					Sizeof.cl_int * smallMatrix.length, smallPointer, null);
+					Sizeof.cl_int * smallMatrix.length, Pointer.to(smallMatrix), null);
 			// get pointer to data on GPU
 			fragMemObjects.put(k, memObj);
 		}
 	}
 
-	public void createBuffers() {
-		bigMatrixArray = new int[screenRect.width * screenRect.height];
-		// load data
-		bigMatrixPointer = Pointer.to(bigMatrixArray); // create a pointer to
-														// that 1d buffer
+	private void createBuffers() {
+		// main screenshot array always change, so pointer is being created at a grab()
+		// call
 		memObjects[0] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-				Sizeof.cl_int * bigMatrixArray.length, bigMatrixPointer, null);
+				Sizeof.cl_int * screenRect.width * screenRect.height, Pointer.to(new int[] { 0 }), null);
 		resultFromGPUArrayPointer = Pointer.to(resultFromGPUArray);
 		kernelInstrArrayPointer = Pointer.to(kernel_instruction_buffers);
 
@@ -209,8 +232,8 @@ public class ScreenGPU extends Screen {
 
 	}
 
-	Position[] findAll(String key) throws ScreenNotGrabbedException {
-		if (screenFrag == null)
+	private Position[] findAll(String key) throws ScreenNotGrabbedException {
+		if (screenImage == null)
 			throw new ScreenNotGrabbedException();
 		Frag f = Data.fragments().get(key);
 		int width = f.getRgbData()[0].length;
@@ -261,7 +284,6 @@ public class ScreenGPU extends Screen {
 		return mpList;
 	}
 
-	@Override
 	Position find(String key) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Position[] mp = findAll(key);
 		Position result = null;
@@ -271,8 +293,9 @@ public class ScreenGPU extends Screen {
 	}
 
 	@Override
-	Position find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		Position mp = find(name);
+	public Position find(String fragName, String customName)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		Position mp = find(fragName);
 		if (mp != null)
 			return mp.setName(customName);
 
@@ -280,12 +303,19 @@ public class ScreenGPU extends Screen {
 	}
 
 	@Override
-	Position[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		Position mp[] = find_all(name);
+	public Position[] find_all(String fragName, String customName)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		Position mp[] = find_all(fragName);
 		if (mp != null)
 			for (int i = 0; i < mp.length; i++)
 				mp[i].setName(customName);
 		return mp;
+	}
+
+	@Override
+	public Position[] find_all(String fragName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		// TODO Auto-generated method stub
+		return find_all(fragName, fragName);
 	}
 	/*
 	 * public Position[] go() { /* // Execute the kernel
@@ -321,4 +351,62 @@ public class ScreenGPU extends Screen {
 	// System.out.println("Result: "+Arrays.toString(resultFromGPUArray));
 	// return mpList;
 	// }
+
+	@Override
+	public Position findSimilar(String fragName, double rate, String customName)
+			throws FragmentNotLoadedException, ScreenNotGrabbedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Region getSearchRect() {
+		if (searchInRegion)
+			return searchRect;
+		else
+			return null;
+	}
+
+	@Override
+	public boolean getSearchInRegion() {
+		return searchInRegion;
+	}
+
+	@Override
+	public Rectangle getRect() {
+		return screenRect;
+	}
+
+	@Override
+	public void setSearchRect(int x1, int y1, int x2, int y2) {
+		setSearchRect(new Region(x1, y1, x2, y2));
+	}
+
+	@Override
+	public void setSearchRect(Region mr) {
+		searchRect = mr;
+		searchInRegion = true;
+	}
+
+	@Override
+	public void setSearchRect() {
+		searchInRegion = false;
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		// TODO Auto-generated method stub
+		return screenImage;
+	}
+
+	@Override
+	public int getPixel(int x, int y) {
+		return bigMatrixArray[y * screenRect.width + x];
+	}
+
+	@Override
+	public void setSearchRect(Position p1, Position p2) {
+		// TODO Auto-generated method stub
+		setSearchRect(new Region(p1, p2));
+	}
 }

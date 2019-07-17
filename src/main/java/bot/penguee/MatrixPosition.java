@@ -6,6 +6,7 @@ import java.awt.Point;
  * Use Position class, this class is needed for backwards compatibility (to be able to run old scripts)
  *
  */
+@Deprecated
 public class MatrixPosition extends Position {
 
 	public MatrixPosition(int x, int y) {
@@ -40,6 +41,7 @@ public class MatrixPosition extends Position {
 	 *            y axis coord
 	 * @return New MatrixPosition with coordinates mp1 + mp2
 	 */
+	@Deprecated
 	public Position relative(int x, int y) {
 		return add(x, y);
 	}
@@ -50,6 +52,7 @@ public class MatrixPosition extends Position {
 	 *            MatrixPosition which coords will be added to current mp
 	 * @return New MatrixPosition with coordinates mp1 + mp2
 	 */
+	@Deprecated
 	public Position relative(Position that) {
 		return add(that);
 	}

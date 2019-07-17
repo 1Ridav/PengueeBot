@@ -61,7 +61,7 @@ public class GlobalProperties {
 		}
 	}
 
-	static void create() {
+	private static void create() {
 		boolean reload = false;
 		try (FileOutputStream fis = new FileOutputStream(configFile)) {
 			Properties p = new Properties();

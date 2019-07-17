@@ -15,6 +15,7 @@ public class FragTransparent extends Frag {
 
 	public FragTransparent(String path) throws Exception {
 		super();
+		type = FragmentInterface.type.transparent;
 		File f = new File(path);
 		image = ImageIO.read(f);
 		rgbData = loadFromFile(image);
@@ -27,8 +28,6 @@ public class FragTransparent extends Frag {
 		final int column = rgbData[0].length;
 		ArrayList<Point> al = new ArrayList<Point>();
 
-		// Point first = null;
-
 		for (int y = 0; y < line; y++) {
 			row_cache = rgbData[y];
 			for (int x = 0; x < column; x++)
@@ -40,8 +39,8 @@ public class FragTransparent extends Frag {
 		y_map = new int[al.size()];
 		for (int i = 0; i < al.size(); i++) {
 			Point p = al.get(i);
-			x_map[i] = (int) p.getX();
-			y_map[i] = (int) p.getY();
+			x_map[i] = p.x;
+			y_map[i] = p.y;
 		}
 	}
 

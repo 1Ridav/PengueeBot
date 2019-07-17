@@ -1,4 +1,4 @@
-package bot.penguee;
+package bot.penguee.screen.cpu;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
@@ -7,23 +7,27 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import bot.penguee.Data;
+import bot.penguee.Position;
+import bot.penguee.Region;
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
 import bot.penguee.fragments.Frag;
+import bot.penguee.screen.ScreenEngineInterface;
 
-public class Screen {
-	protected final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+public class Screen implements ScreenEngineInterface{
+	private final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 	private BufferedImage image = null;
-	protected Frag screenFrag = null;
+	private Frag screenFrag = null;
 	private Robot robot;
 	private HashMap<Frag, Position> cache;
 
-	protected boolean searchInRegion = false;
-	protected Region searchRect = null;
+	private boolean searchInRegion = false;
+	private Region searchRect = null;
 
 	private boolean useCache = Data.getUseInternalCache();
 
-	Screen() {
+	public Screen() {
 		cache = new HashMap<Frag, Position>();
 		try {
 			robot = new Robot();
@@ -45,10 +49,6 @@ public class Screen {
 		return image;
 	}
 
-	Frag getFrag() {
-		return screenFrag;
-	}
-
 	public int getPixel(int x, int y) {
 		return screenFrag.getRgbData()[y][x];
 	}
@@ -68,7 +68,7 @@ public class Screen {
 		}
 	}
 
-	void grab(Rectangle rect) throws Exception {
+	public void grab(Rectangle rect) throws Exception {
 
 		if (screenFrag == null) {
 			grab();
@@ -79,7 +79,7 @@ public class Screen {
 		}
 	}
 
-	// SETS RECTANGLE WHERE FRAGMENS BEING SEARCHED
+	// SET RECTANGLE WHERE FRAGMENS BEING SEARCHED
 	public void setSearchRect(int x1, int y1, int x2, int y2) {
 		setSearchRect(new Position(x1, y1), new Position(x2, y2));
 	}
@@ -232,7 +232,7 @@ public class Screen {
 		return findSimilar(name, rate, name);
 	}
 
-	Position findSimilar(String name, double rate, String customName)
+	public Position findSimilar(String name, double rate, String customName)
 			throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Frag f = Data.fragments().get(name);
 		if (f != null) {
@@ -249,7 +249,7 @@ public class Screen {
 		return find(name, name);
 	}
 
-	Position find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public Position find(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Frag f = Data.fragments().get(name);
 		if (f != null) {
 			Position mp = find(f);
@@ -261,11 +261,11 @@ public class Screen {
 		}
 	}
 
-	Position[] find_all(String name) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public Position[] find_all(String name) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		return find_all(name, name);
 	}
 
-	Position[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
+	public Position[] find_all(String name, String customName) throws FragmentNotLoadedException, ScreenNotGrabbedException {
 		Frag f = Data.fragments().get(name);
 		if (f != null) {
 			Position mp[] = find_all(f);
@@ -277,10 +277,4 @@ public class Screen {
 			throw new FragmentNotLoadedException(name);
 		}
 	}
-
-	void loadFragments() {// need to remove soon
-		// TODO Auto-generated method stub
-
-	}
-
 }

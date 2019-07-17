@@ -17,22 +17,20 @@ import java.io.IOException;
 import bot.penguee.exception.FragmentNotLoadedException;
 import bot.penguee.exception.ScreenNotGrabbedException;
 import bot.penguee.fragments.Frag;
+import bot.penguee.screen.ScreenEngine;
+import bot.penguee.screen.ScreenEngineInterface;
 
 public class Action {
 	private Robot robot = null;
-	private Screen screen = null;
+	private ScreenEngineInterface screen;
 	private Position lastCoord = null;
 	private int mouseDelay = 10;
 	private int keyboardDelay = 10;
 
-	public Action() {
-		try {
-			screen = Data.getForceUseGPU() ? new ScreenGPU() : new Screen();
-			robot = new Robot();
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
+	public Action() throws AWTException {
 
+		screen = new ScreenEngine();
+		robot = new Robot();
 	}
 
 	// simplify thread sleep method, to be used in a script
@@ -46,7 +44,7 @@ public class Action {
 			try {
 				Thread.sleep(ms);
 			} catch (InterruptedException e) {
-				
+
 			}
 		}
 	}
@@ -318,8 +316,8 @@ public class Action {
 	// /////////////////////FIND//////////////////////////////////////////
 	/**
 	 * Find exact match of the selected fragment on the screen, move mouse cursor to
-	 * the center of that fragment position and click on left mouse button. Tip: This
-	 * method store last Position, that can be accessed via recentPos() method
+	 * the center of that fragment position and click on left mouse button. Tip:
+	 * This method store last Position, that can be accessed via recentPos() method
 	 * 
 	 * @param fragName
 	 *            Regular fragment name you are trying to find on the screen
@@ -536,9 +534,9 @@ public class Action {
 	/**
 	 * Wait for particular fragment appear on the screen, continuously capture the
 	 * screen and search for exact matching fragment on the screen. Will return
-	 * true, if fragment has appeared, false if fragment was not found until timeout.
-	 * Tip: This method store last Position, that can be accessed via recentPos()
-	 * method
+	 * true, if fragment has appeared, false if fragment was not found until
+	 * timeout. Tip: This method store last Position, that can be accessed via
+	 * recentPos() method
 	 * 
 	 * @param fragName
 	 *            Regular fragment name you are trying to find on the screen
@@ -964,7 +962,7 @@ public class Action {
 	 *            Searching limit bounds (bottom right corner)
 	 */
 	public void searchRect(Position mp1, Position mp2) {
-		screen.setSearchRect(mp1, mp2);
+		screen.setSearchRect(mp1.x, mp1.y, mp2.x, mp2.y);
 	}
 
 	/**

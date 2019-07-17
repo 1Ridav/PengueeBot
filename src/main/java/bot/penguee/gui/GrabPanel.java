@@ -31,9 +31,9 @@ import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 
 import bot.penguee.Position;
-import bot.penguee.Screen;
 import bot.penguee.fragments.Frag;
 import bot.penguee.fragments.FragMono;
+import bot.penguee.screen.cpu.Screen;
 
 public class GrabPanel extends JPanel {
 

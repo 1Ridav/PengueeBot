@@ -4,6 +4,7 @@ package bot.penguee;
  * Use Region class, this class is needed for backwards compatibility  (to be able to run old scripts)
  *
  */
+@Deprecated
 public class MatrixRectangle extends Region {
 	
 	public MatrixRectangle(Position p1, Position p2) {

@@ -9,10 +9,11 @@ import bot.penguee.Position;
 public class FragMono extends Frag {
 	private int monoColor = 0;
 	private int[] x_map = null, y_map = null;// best for performance, but not much readable usage
-	final int height, width;
+	private final int height, width;
 
 	public FragMono(String file) throws Exception {
 		super(file);
+		type = FragmentInterface.type.mono;
 		String color = file.substring(file.lastIndexOf("((") + 2, file.lastIndexOf("))"));
 		monoColor = Integer.parseInt(color);
 		prepareMonoPixelMap();
@@ -23,6 +24,7 @@ public class FragMono extends Frag {
 
 	public FragMono(BufferedImage image, int color) throws Exception {
 		super(image);
+		type = FragmentInterface.type.mono;
 		monoColor = color;
 		prepareMonoPixelMap();
 
@@ -65,8 +67,8 @@ public class FragMono extends Frag {
 		y_map = new int[al.size()];
 		for (int i = 0; i < al.size(); i++) {
 			Point p = al.get(i);
-			x_map[i] = (int) p.getX();
-			y_map[i] = (int) p.getY();
+			x_map[i] = (int) p.x;
+			y_map[i] = (int) p.y;
 		}
 	}
 

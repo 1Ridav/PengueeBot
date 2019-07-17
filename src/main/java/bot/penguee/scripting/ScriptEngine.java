@@ -3,7 +3,7 @@ import bot.penguee.scripting.jython.*;
 
 public class ScriptEngine implements ScriptEngineInterface{
 
-	ScriptEngineInterface se;
+	private ScriptEngineInterface se;
 	public ScriptEngine() {
 		se = new JythonVM();
 	}

@@ -14,23 +14,26 @@ import bot.penguee.Position;
 public class Frag implements FragmentInterface{
 	protected int[][] rgbData = null;
 	protected BufferedImage image = null;
-
+	protected FragmentInterface.type type = null;
 	Frag() {
-
+		type = FragmentInterface.type.standard;
 	}
 
 	public Frag(String path) throws Exception {
+		type = FragmentInterface.type.standard;
 		File f = new File(path);
 		image = ImageIO.read(f);
 		rgbData = loadFromFile(image);
 	}
 
 	public Frag(BufferedImage bi) throws Exception {
+		type = FragmentInterface.type.standard;
 		image = bi;
 		getIntRGB(bi);
 	}
 
 	Frag(int[][] rgb) throws Exception {
+		type = FragmentInterface.type.standard;
 		rgbData = rgb;
 	}
 
@@ -159,7 +162,7 @@ public class Frag implements FragmentInterface{
 				+ abs((rgb1 & 0xff) - (rgb2 & 0xff));
 	}
 
-	protected static int abs(int i) {
+	private static int abs(int i) {
 		return (i + (i >> 31)) ^ (i >> 31);
 	}
 

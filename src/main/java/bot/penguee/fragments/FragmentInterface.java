@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 
 import bot.penguee.Position;
 
-public interface FragmentInterface {
+interface FragmentInterface {
+	public enum type {standard, mono, transparent};
+	
 	public BufferedImage getImage();
 
 	public int getWidth();

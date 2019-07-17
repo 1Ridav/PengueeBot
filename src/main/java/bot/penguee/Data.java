@@ -8,8 +8,8 @@ import bot.penguee.fragments.Frag;
 import bot.penguee.fragments.FragMono;
 import bot.penguee.fragments.FragTransparent;
 import bot.penguee.gui.ScriptQuickrunQueue;
+import bot.penguee.screen.cpu.Screen;
 import bot.penguee.scripting.ScriptEngine;
-import bot.penguee.scripting.jython.JythonVM;
 
 public class Data {
 	String s = new File("").getAbsolutePath();
