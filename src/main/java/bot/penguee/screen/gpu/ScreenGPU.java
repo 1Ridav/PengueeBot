@@ -5,8 +5,8 @@ import static org.jocl.CL.CL_DEVICE_TYPE_ALL;
 import static org.jocl.CL.CL_MEM_COPY_HOST_PTR;
 import static org.jocl.CL.CL_MEM_READ_ONLY;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
-import static org.jocl.CL.CL_TRUE;
 import static org.jocl.CL.CL_SUCCESS;
+import static org.jocl.CL.CL_TRUE;
 import static org.jocl.CL.clBuildProgram;
 import static org.jocl.CL.clCreateBuffer;
 import static org.jocl.CL.clCreateCommandQueue;
@@ -22,13 +22,11 @@ import static org.jocl.CL.clGetPlatformIDs;
 import static org.jocl.CL.clSetKernelArg;
 
 import java.awt.AWTException;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.awt.image.RenderedImage;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -43,7 +41,6 @@ import org.jocl.cl_command_queue;
 import org.jocl.cl_context;
 import org.jocl.cl_context_properties;
 import org.jocl.cl_device_id;
-import org.jocl.cl_event;
 import org.jocl.cl_kernel;
 import org.jocl.cl_mem;
 import org.jocl.cl_platform_id;
@@ -257,7 +254,7 @@ public class ScreenGPU implements ScreenEngineInterface {
 		clEnqueueNDRangeKernel(commandQueue, kernel, 2, null, global_work_size, null, 0, null, null);
 
 		// Read the output data
-		clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, resultArraySize * Sizeof.cl_int,
+		clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0,  resultArraySize* Sizeof.cl_int,
 				resultFromGPUArrayPointer, 0, null, null);
 		// System.out.println(Arrays.toString(resultFromGPUArray));
 		ArrayList<Position> al = null;
@@ -281,6 +278,8 @@ public class ScreenGPU implements ScreenEngineInterface {
 
 		if (al != null)
 			mpList = al.toArray(new Position[0]);
+			for(Position item : mpList)
+				item.add(f.center());
 		return mpList;
 	}
 
@@ -289,6 +288,7 @@ public class ScreenGPU implements ScreenEngineInterface {
 		Position result = null;
 		if (mp != null)
 			result = mp[0];
+
 		return result;
 	}
 
@@ -305,7 +305,7 @@ public class ScreenGPU implements ScreenEngineInterface {
 	@Override
 	public Position[] find_all(String fragName, String customName)
 			throws FragmentNotLoadedException, ScreenNotGrabbedException {
-		Position mp[] = find_all(fragName);
+		Position mp[] = findAll(fragName);
 		if (mp != null)
 			for (int i = 0; i < mp.length; i++)
 				mp[i].setName(customName);
@@ -400,8 +400,11 @@ public class ScreenGPU implements ScreenEngineInterface {
 	}
 
 	@Override
-	public int getPixel(int x, int y) {
-		return bigMatrixArray[y * screenRect.width + x];
+	public int getPixel(int x, int y)  {
+		int result[] = new int[1];
+		clEnqueueReadBuffer(commandQueue, memObjects[0], CL_TRUE, (y * screenRect.width + x) * Sizeof.cl_int,  result.length * Sizeof.cl_int,
+				Pointer.to(result), 0, null, null);
+		return result[0];
 	}
 
 	@Override

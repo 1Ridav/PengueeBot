@@ -2,7 +2,7 @@
 USAGE EXAMPLE:
 
 #IF THIS FILE UNDER libs DIRECTORY
-from libs import overlay
+from modules import overlay
 #IF THIS FILE UNDER libs DIRECTORY
 
 

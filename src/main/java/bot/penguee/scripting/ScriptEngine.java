@@ -1,5 +1,5 @@
 package bot.penguee.scripting;
-import bot.penguee.scripting.jython.*;
+import bot.penguee.scripting.jython.JythonVM;
 
 public class ScriptEngine implements ScriptEngineInterface{
 

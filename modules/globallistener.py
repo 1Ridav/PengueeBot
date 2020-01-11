@@ -4,7 +4,7 @@
 """
 #USAGE EXAMPLE
 #IF THIS FILE UNDER libs DIRECTORY
-from libs import globallistener as gl
+from modules import globallistener as gl
 #IF THIS FILE UNDER libs DIRECTORY
 
 isMousePressed = False
@@ -93,6 +93,7 @@ class GlobalEventListener(NativeKeyListener, NativeMouseInputListener, NativeMou
 
 __gs = None
 def init():
+  global __gs
   __gs = GlobalScreen.getInstance()
   __gs.registerNativeHook()
   __eventListener = GlobalEventListener()
@@ -103,5 +104,6 @@ def init():
   return __eventListener
 
 def finalize():
+  global __gs
   __gs.unregisterNativeHook()
 

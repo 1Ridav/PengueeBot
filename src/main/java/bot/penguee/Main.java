@@ -2,6 +2,9 @@ package bot.penguee;
 
 import bot.penguee.gui.GUI;
 import bot.penguee.scripting.ScriptEngine;
+
+import java.io.File;
+import java.nio.file.Paths;
 //I did not want to use Spring Boot, so some 
 public class Main {
 	private static boolean consoleMode = false;
@@ -15,6 +18,11 @@ public class Main {
 				Data.setScriptFileName(args[++i]);
 			} else if (args[i].equals("-forceUseGPU")) {
 				Data.setForceUseGPU(true);
+			} else if (args[i].equals("-fragments")) {
+				if (Paths.get(args[i+1]).isAbsolute())
+					Data.setFragmentsPath(args[i+1]);
+				else
+					Data.setFragmentsPath(new File("").getAbsolutePath() + File.separator + args[i+1]);
 			}
 		}
 		new Main();

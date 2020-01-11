@@ -109,7 +109,7 @@ public class Frag implements FragmentInterface{
 	}
 
 	public void makeFile(String name) throws Exception {
-		File f = new File(Data.resourcesPath);
+		File f = new File(Data.getFragmentsPath());
 		name = name.trim();
 		String s;
 		if (name.contains(".")) {

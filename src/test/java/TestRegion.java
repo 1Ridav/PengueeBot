@@ -1,9 +1,8 @@
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import bot.penguee.Position;
 import bot.penguee.Region;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestRegion {
 

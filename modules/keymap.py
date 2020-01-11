@@ -6,7 +6,7 @@
 USAGE EXAMPLE:
 
 #IF THIS FILE UNDER libs DIRECTORY
-from libs import keymap
+from modules import keymap
 #IF THIS FILE UNDER libs DIRECTORY
 
 

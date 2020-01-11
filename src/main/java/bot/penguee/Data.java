@@ -13,7 +13,8 @@ import bot.penguee.scripting.ScriptEngine;
 
 public class Data {
 	String s = new File("").getAbsolutePath();
-	public static final String resourcesPath = new File("").getAbsolutePath() + File.separator + "frag";
+	//Default fragments path value could be overriden in Main
+	private static String fragmentsPath = new File("").getAbsolutePath() + File.separator + "frag";
 	private static HashMap<String, Frag> fragments = new HashMap<String, Frag>();
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
@@ -32,6 +33,13 @@ public class Data {
 
 	public Data() {
 
+	}
+	
+	public static String getFragmentsPath() {
+		return fragmentsPath;
+	}
+	public static void setFragmentsPath(String path) {
+		Data.fragmentsPath = path;
 	}
 
 	public static Object[] getFragmentKeys() {
@@ -80,7 +88,7 @@ public class Data {
 
 	static void loadFragments(boolean log) {
 
-		File f = new File(resourcesPath);
+		File f = new File(Data.getFragmentsPath());
 		Data.absPath = f.getAbsolutePath();
 		loadFragments(f, true);
 

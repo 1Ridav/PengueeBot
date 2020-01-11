@@ -1,9 +1,7 @@
 package bot.penguee.scripting.jython;
 
-import org.python.util.PythonInterpreter;
-
-import bot.penguee.scripting.ScriptEngine;
 import bot.penguee.scripting.ScriptEngineInterface;
+import org.python.util.PythonInterpreter;
 
 public class JythonVM implements ScriptEngineInterface{
 	private boolean isJythonVMLoaded = false;
@@ -31,6 +29,8 @@ public class JythonVM implements ScriptEngineInterface{
 				jythonLoad.wait();
 			}
 		System.out.println("CORE: Running " + script + "...\n\n");
+		pi.exec("import sys");
+		pi.exec("sys.path.append(\"./\")");
 		pi.execfile(script);
 		System.out.println("CORE: Script execution finished.");
 	}
