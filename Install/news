@@ -3,7 +3,7 @@
 	<title></title>
 </head>
 <body>
-<h2 style="text-align: center;"><span style="font-size:26px;"><span style="font-family: tahoma,geneva,sans-serif;">Update 1.10.37 is now released!</span></span></h2>
+<h2 style="text-align: center;"><span style="font-size:26px;"><span style="font-family: tahoma,geneva,sans-serif;">Update 1.10.39 is now released!</span></span></h2>
 
 <p><span style="font-size:16px;">Update to the latest version by clicking the update button.</span></p>
 <p><span style="font-size:16px;">MatrixPosition and MatrixRectangle are deprecated since 1.10.35, use Position and Region objects</span></p>
@@ -16,15 +16,5 @@
 	<li><span style="font-size:16px;">Wiki <a href="https://github.com/1Ridav/PengueeBot/wiki">page</a></span></li>
 </ul>
 
-<p><span style="font-size:16px;">Support author</span></p>
-
-<p><span style="font-size:16px;">Donate:</span></p>
-
-<ul>
-	<li><span style="font-size:16px;">Webmoney:</span></li>
-	<li><span style="font-size:16px;">WME: E169563136502</span></li>
-	<li><span style="font-size:16px;">WMZ: Z349748353724</span></li>
-    <li><span style="font-size:16px;">WMX: X582553165059</span></li>
-</ul>
 </body>
 </html>
