@@ -64,6 +64,7 @@ public class GrabPanel extends JPanel {
 	private boolean isCTRLdown;
 	private boolean isALTdown;
 	private boolean isSHIFTdown;
+	private boolean disableKeyEvents;
 
 	GrabPanel(JFrame frame) {
 		this.frame = frame;
@@ -537,6 +538,9 @@ public class GrabPanel extends JPanel {
 
 			@Override
 			public boolean dispatchKeyEvent(KeyEvent e) {
+				if(disableKeyEvents)
+					return false;
+
 				int speed = 1;
 				if(isSHIFTdown)
 					speed = 10;
@@ -668,6 +672,7 @@ public class GrabPanel extends JPanel {
 	}
 
 	private void saveImage() {
+		disableKeyEvents = true;
 		try {
 			String s = JOptionPane.showInputDialog(frame, "Fragment name...", "Colored fragment",
 					JOptionPane.PLAIN_MESSAGE);
@@ -678,9 +683,11 @@ public class GrabPanel extends JPanel {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(frame, "Error occured while trying to save");
 		}
+		disableKeyEvents = false;
 	}
 
 	private void saveMonoImage() {
+		disableKeyEvents = true;
 		try {
 			imageFragment = optimizeMonoImage(imageFragment);
 			String s = JOptionPane.showInputDialog(frame, "Fragment name...", "One colored fragment",
@@ -692,6 +699,7 @@ public class GrabPanel extends JPanel {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(frame, "Error occured while trying to save");
 		}
+		disableKeyEvents = false;
 	}
 
 	private void showMonoImage() {
