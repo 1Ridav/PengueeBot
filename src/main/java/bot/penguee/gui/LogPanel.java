@@ -154,11 +154,6 @@ public class LogPanel extends JPanel {
 			params.add("java");
 			params.add("-XX:+UseG1GC");
 			params.add("-Xmx" + Data.getXmxValue() + "M");
-			params.add("-XX:+UseCompressedOops");
-			// params.add("-Dsun.java2d.noddraw=true");
-			// params.add("-Dsun.java2d.d3d=false");
-			// params.add("-Dsun.java2d.opengl=false");
-			// params.add("-Dsun.java2d.pmoffscreen=false")
 			params.add("-Dfile.encoding=UTF8");
 			params.add("-classpath");
 			params.add(pathToJar);
