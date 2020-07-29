@@ -5,7 +5,9 @@ import bot.penguee.scripting.ScriptEngine;
 
 import java.io.File;
 import java.nio.file.Paths;
-//I did not want to use Spring Boot, so some 
+import java.util.Arrays;
+
+//I did not want to use Spring Boot, so some
 public class Main {
 	private static boolean consoleMode = false;
 
@@ -23,6 +25,10 @@ public class Main {
 					Data.setFragmentsPath(args[i+1]);
 				else
 					Data.setFragmentsPath(new File("").getAbsolutePath() + File.separator + args[i+1]);
+			} else if (args[i].equals("-args")) {
+				//first -args value will be overriden later, don't worry
+				String[] scriptArgs = Arrays.copyOfRange(args, i, args.length);
+				Data.setScriptArgs(scriptArgs);
 			}
 		}
 		new Main();
@@ -40,8 +46,7 @@ public class Main {
 			@Override
 			public void run() {
 				try {
-					Data.scriptEngine = new ScriptEngine();
-					Data.scriptEngine.load();
+					Data.initScriptEngine().load();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -58,7 +63,7 @@ public class Main {
 		System.out.println("CORE: Done. " + Data.fragments().size() + " loaded");
 
 		try {
-			Data.scriptEngine.run(Data.getScriptFileName());
+			Data.scriptEngine.run(Data.getScriptFileName(), Data.getScriptArgs());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("CORE: Failed to run script " + Data.getScriptFileName());

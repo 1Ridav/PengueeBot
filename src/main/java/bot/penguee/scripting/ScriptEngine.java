@@ -12,7 +12,7 @@ public class ScriptEngine implements ScriptEngineInterface{
 		se.load();
 	}
 
-	public void run(String script) throws Exception {
-		se.run(script);
+	public void run(String script, String[] args) throws Exception {
+		se.run(script, args);
 	}
 }

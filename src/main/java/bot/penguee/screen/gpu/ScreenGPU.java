@@ -400,11 +400,11 @@ public class ScreenGPU implements ScreenEngineInterface {
 	}
 
 	@Override
-	public int getPixel(int x, int y)  {
+	public long getPixel(int x, int y)  {
 		int result[] = new int[1];
 		clEnqueueReadBuffer(commandQueue, memObjects[0], CL_TRUE, (y * screenRect.width + x) * Sizeof.cl_int,  result.length * Sizeof.cl_int,
 				Pointer.to(result), 0, null, null);
-		return result[0];
+		return Integer.toUnsignedLong(result[0]);
 	}
 
 	@Override

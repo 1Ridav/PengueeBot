@@ -1192,7 +1192,7 @@ public class Action {
 	 *            Y axis value
 	 * @return signed 32 bit ARGB (Alpha Red Greeb Blue), 0xFFFFFFFF equals to -1
 	 */
-	public int screenPixel(int x, int y) {
+	public long screenPixel(int x, int y) {
 		return screen.getPixel(x, y);
 	}
 
@@ -1203,10 +1203,10 @@ public class Action {
 	 *            X axis value
 	 * @param y
 	 *            Y axis value
-	 * @return signed 4 byte ARGB (Alpha Red Greeb Blue), 0xFF equals to -1
+	 * @return signed 4 byte ARGB (Alpha Red Greeb Blue)
 	 */
 	public byte[] screenPixelARGB(int x, int y) {
-		int p = screenPixel(x, y);
+		long p = screenPixel(x, y);
 		return new byte[] { (byte) (p >>> 24), (byte) (p >>> 16), (byte) (p >>> 8), (byte) p };
 	}
 

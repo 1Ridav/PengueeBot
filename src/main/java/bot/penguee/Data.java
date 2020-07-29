@@ -24,6 +24,7 @@ public class Data {
 	static Screen screenObject = null;
 	private static String scriptFileName = "script.py";
 
+
 	static ScriptEngine scriptEngine = null;
 	private static boolean forceUseGPU = false;
 	private static boolean useInternalCache = true;
@@ -34,7 +35,7 @@ public class Data {
 	public Data() {
 
 	}
-	
+	private static String[] scriptArgs = null;
 	public static String getFragmentsPath() {
 		return fragmentsPath;
 	}
@@ -53,7 +54,16 @@ public class Data {
 	public static void setScriptFileName(String scriptFileName) {
 		Data.scriptFileName = scriptFileName;
 	}
-
+	public static void setScriptArgs(String [] args){
+		scriptArgs = args;
+	}
+	public static String[] getScriptArgs(){
+		return scriptArgs;
+	}
+	public static ScriptEngine initScriptEngine(){
+		scriptEngine = new ScriptEngine();
+		return scriptEngine;
+	}
 	public static boolean getForceUseGPU() {
 		return forceUseGPU;
 	}
@@ -107,6 +117,9 @@ public class Data {
 
 	private static void loadFragments(File folder, boolean log) {
 		System.out.println(folder.getAbsolutePath());
+		if (!folder.exists())
+			folder.mkdir();
+
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
 				loadFragments(fileEntry, log);

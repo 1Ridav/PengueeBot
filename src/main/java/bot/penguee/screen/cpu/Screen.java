@@ -49,8 +49,8 @@ public class Screen implements ScreenEngineInterface{
 		return image;
 	}
 
-	public int getPixel(int x, int y) {
-		return screenFrag.getRgbData()[y][x];
+	public long getPixel(int x, int y) {
+		return Integer.toUnsignedLong(screenFrag.getRgbData()[y][x]);
 	}
 
 	public Rectangle getRect() {

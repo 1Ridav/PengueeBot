@@ -22,15 +22,23 @@ public class JythonVM implements ScriptEngineInterface{
 		}
 	}
 
-	public void run(String script) throws Exception {
+	public void run(String script, String[] args) throws Exception {
 		System.out.println("CODE: Waiting for JythonVM to load");
 		if (!isJythonVMLoaded)
 			synchronized (jythonLoad) {
 				jythonLoad.wait();
 			}
 		System.out.println("CORE: Running " + script + "...\n\n");
+
 		pi.exec("import sys");
 		pi.exec("sys.path.append(\"./\")");
+		if (args != null) {
+			args[0] = script;
+			pi.exec("sys.argv = []");
+			for (String arg : args)
+				pi.exec("sys.argv.append(\'" + arg + "\')");
+		}
+
 		pi.execfile(script);
 		System.out.println("CORE: Script execution finished.");
 	}

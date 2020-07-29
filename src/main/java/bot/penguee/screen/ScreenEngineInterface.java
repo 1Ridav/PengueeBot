@@ -38,7 +38,7 @@ public interface ScreenEngineInterface {
 
 	BufferedImage getImage();
 
-	int getPixel(int x, int y);
+	long getPixel(int x, int y);
 
 
 }

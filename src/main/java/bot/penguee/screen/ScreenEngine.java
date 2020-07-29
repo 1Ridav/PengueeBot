@@ -88,7 +88,7 @@ public class ScreenEngine implements ScreenEngineInterface {
 	}
 
 	@Override
-	public int getPixel(int x, int y) {
+	public long getPixel(int x, int y) {
 		return se.getPixel(x, y);
 	}
 
