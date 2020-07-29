@@ -1,18 +1,30 @@
 # PengueeBot
 Read Wiki and manuals
 
+This is an automation tool, you can use it to develop
+  * game bots
+  * testing automation
+  * things that need to be automated, but you don't know how to do it via source codes or API
 
-java -jar PengueeBot.jar
 
--nogui ##run software in console mode
 
--script <ScriptFileName> ##run specified script
+CONSOLE PARAMETERS:
+
+EXAMPLE:
+
+#an example how to run this software in console mode using specific scriptname and pass some arguments to the script itself
+
+java -jar PengueeBot.jar -nogui -script myscript.py -args script_arg1 script_arg2
+
+-__nogui__                                OPTIONAL                        ##run software in console mode
+
+-__script__ <ScriptFileName>              OPTIONAL, DEFAULT ./script.py   ##run specified script
   
--forceUseGPU force use GPGPU to search for fragments on screen. (Alpha test)
+-__forceUseGPU__                          OPTIONAL                        ##force use GPGPU to search for fragments on screen. (Alpha test)
 
--fragments <CUSTOM FRAGMENTS DIRECTORY PATH>
+-__fragments__ <PATH>                     OPTIONAL, DEFAULT "frag"        ##set custom fragments directory
   
--args <SCRIPT_ARG!> <SCRIPT_ARG2>... ##set this at THE END ONLY.
+-__args__ <SCRIPT_ARG!> <SCRIPT_ARG2>...  OPTIONAL                        ##Here you can set arguments you want to be passed to script. Set this at THE END ONLY.
 
 Linux/Unix systems require to specify full path to .jar package, otherwise fragments being misloaded from user home directory
 
