@@ -113,9 +113,8 @@ public class SettingsPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Data.setXmxValue(String.valueOf(ramSlider.getValue()));
-				Data.setForceUseGPU(forceGPUToggle.isSelected() ? true: false);
-				Data.setUseInternalCache(useCacheToggle.isSelected() ? true
-						: false);
+				Data.setForceUseGPU(forceGPUToggle.isSelected());
+				Data.setUseInternalCache(useCacheToggle.isSelected());
 				GlobalProperties.save();
 			}
 		});

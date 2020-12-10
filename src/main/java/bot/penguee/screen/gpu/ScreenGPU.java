@@ -21,10 +21,7 @@ import static org.jocl.CL.clGetDeviceIDs;
 import static org.jocl.CL.clGetPlatformIDs;
 import static org.jocl.CL.clSetKernelArg;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.InputStream;
@@ -55,7 +52,7 @@ import bot.penguee.fragments.Frag;
 import bot.penguee.screen.ScreenEngineInterface;
 
 public class ScreenGPU implements ScreenEngineInterface {
-	private final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	private final Rectangle screenRect = getScreenRect();
 	Robot robot;
 	BufferedImage screenImage;
 	private int resultArraySize = 100;
@@ -152,6 +149,14 @@ public class ScreenGPU implements ScreenEngineInterface {
 
 		createBuffers();
 		loadFragments();
+	}
+
+	private static Rectangle getScreenRect(){
+		//This method return a total screen rectangle. eg double monitors
+		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())
+			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+		return screenRect;
 	}
 
 	private int[] flatten(int[][] array) {

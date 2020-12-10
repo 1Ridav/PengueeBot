@@ -1,15 +1,6 @@
 package bot.penguee.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -112,7 +103,7 @@ public class GrabPanel extends JPanel {
 			}
 
 		};
-		Rectangle rect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+		Rectangle rect = this.scr.getRect();
 		grabPanelScreenshot.setPreferredSize(new Dimension(rect.width, rect.height));
 		JScrollPane grabPanelInternalScroller = new JScrollPane(grabPanelScreenshot);
 		grabPanelInternalScroller.setBounds(0, 0, 834, 430);

@@ -1,9 +1,6 @@
 package bot.penguee.screen.cpu;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -16,7 +13,7 @@ import bot.penguee.fragments.Frag;
 import bot.penguee.screen.ScreenEngineInterface;
 
 public class Screen implements ScreenEngineInterface{
-	private final Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	private final Rectangle screenRect = getScreenRect();
 	private BufferedImage image = null;
 	private Frag screenFrag = null;
 	private Robot robot;
@@ -43,6 +40,14 @@ public class Screen implements ScreenEngineInterface{
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static Rectangle getScreenRect(){
+		//This method return a total screen rectangle. eg double monitors
+		Rectangle screenRect = new Rectangle(0, 0, 0, 0);
+		for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())
+			screenRect = screenRect.union(gd.getDefaultConfiguration().getBounds());
+		return screenRect;
 	}
 
 	public BufferedImage getImage() {

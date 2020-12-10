@@ -42,11 +42,12 @@ public class Main {
 	}
 
 	private void runConsoleMode() {
+		Data.initScriptEngine();
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
 				try {
-					Data.initScriptEngine().load();
+					Data.scriptEngine.load();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

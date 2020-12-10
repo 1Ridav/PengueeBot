@@ -19,9 +19,8 @@ public class Data {
 	private static String absPath;
 	private static String colorRegex = "_[(]{2}[-]?[0-9]+[)]{2}";
 	private static String colorRegex2 = ".*" + colorRegex + ".*";
-	private static String transparentRegex = "_[(]{2}[-]?[TRANSPARENT]+[)]{2}";
+	private static String transparentRegex = "_[(]{2}TRANSPARENT[)]{2}";
 	private static String transparentRegex2 = ".*" + transparentRegex + ".*";
-	static Screen screenObject = null;
 	private static String scriptFileName = "script.py";
 
 

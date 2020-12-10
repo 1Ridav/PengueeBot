@@ -39,10 +39,8 @@ buildscript {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    
-    //compile group: 'org.python', name: 'jython-standalone', version: '2.7.1'
-    compile group: 'org.python', name: 'jython-standalone', version: '2.7.2b2'
-    //compile 'org.jocl:jocl:0.1.9'
+
+    compile group: 'org.python', name: 'jython-standalone', version: '2.7.2'
     compile 'org.jocl:jocl:2.0.1'
 }
 

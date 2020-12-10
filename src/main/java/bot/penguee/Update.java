@@ -16,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Update {
-	public final static String version = "1.10.41";
+	public final static String version = "1.10.42";
 	private static String versionURL = "https://raw.githubusercontent.com/1Ridav/PengueeBot/master/Install/version";
 	private static String downloadURL = "https://github.com/1Ridav/PengueeBot/releases/download/v";
 	private static String newsURL = "https://raw.githubusercontent.com/1Ridav/PengueeBot/master/Install/news";
